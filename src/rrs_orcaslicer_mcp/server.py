@@ -19,6 +19,7 @@ from . import (
     projects,
     settings as profile_settings,
     project_settings,
+    project_geometry,
     gcode,
 )
 from .batches import Batches
@@ -337,6 +338,74 @@ def create_server() -> FastMCP:
             expected_source_sha256,
             metadata_member=metadata_member,
             metadata_text=text,
+        )
+
+    @mcp.tool()
+    def project_geometry_read(
+        path: str, member: str = "3D/3dmodel.model", offset: int = 0, limit: int = 50
+    ) -> dict[str, Any]:
+        """Inspect mesh IDs, component references and build transforms in a 3MF member."""
+        return project_geometry.inspect(files, path, member, offset, limit)
+
+    @mcp.tool()
+    def project_transform_write(
+        source: str,
+        destination: str,
+        expected_source_sha256: str,
+        matrix: list[float],
+        target: str = "build",
+        index: int = 0,
+        object_id: str | None = None,
+        member: str = "3D/3dmodel.model",
+    ) -> dict[str, Any]:
+        """Set a build/component affine transform in a NEW 3MF; original and painting survive.
+
+        Matrix uses 3MF's 12-number row-vector order: 3x3 linear part then XYZ
+        translation in model units. Component changes affect ALL referencing instances.
+        Read project_geometry_read and source SHA first. Requires reslicing/reopening.
+        """
+        return project_geometry.set_transform(
+            files,
+            source,
+            destination,
+            expected_source_sha256,
+            matrix,
+            target,
+            index,
+            object_id,
+            member,
+        )
+
+    @mcp.tool()
+    def project_painting_read(
+        source: str,
+        object_id: str,
+        member: str = "3D/3dmodel.model",
+        offset: int = 0,
+        limit: int = 100,
+    ) -> dict[str, Any]:
+        """Read triangle IDs, indices and support/seam/material/fuzzy paint trees."""
+        return project_geometry.painting_read(files, source, object_id, member, offset, limit)
+
+    @mcp.tool()
+    def project_painting_write(
+        source: str,
+        destination: str,
+        expected_source_sha256: str,
+        object_id: str,
+        kind: str,
+        changes: list[dict[str, Any]],
+        member: str = "3D/3dmodel.model",
+    ) -> dict[str, Any]:
+        """Paint explicit triangles in a NEW 3MF, preserving other channels and topology.
+
+        kind: support/seam/material/fuzzy_skin. Each change has triangle (0-based)
+        and either state (0 none, 1 enforcer, 2 blocker; material 1..16 filament slot),
+        or mask (validated Orca hex subdivision tree; null clears channel).
+        Inspect member/object IDs and SHA first. Affects all uses of that mesh.
+        """
+        return project_geometry.painting_write(
+            files, source, destination, expected_source_sha256, object_id, kind, changes, member
         )
 
     @mcp.tool()

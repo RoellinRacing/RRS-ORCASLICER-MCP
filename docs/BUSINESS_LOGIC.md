@@ -147,3 +147,25 @@ Datei-Recovery führt keine native Mutation erneut aus. Kurz blockierte atomare
 Dateiwechsel unter Windows werden begrenzt wiederholt. Scheitert das Speichern der
 Erfolgsquittung nach einer angewendeten Änderung, bleibt das Ergebnis unklar und
 das gestartete Journal erhalten; es wird keine falsche Fehlerquittung erzeugt.
+
+## Revision-bound project geometry and facet painting
+
+3MF build/component transforms are explicit 12-number row-vector matrices in the
+model's declared unit. Replace (do not silently compose) a transform after reading
+its current value and the source SHA256. A component edit affects every instance
+referencing it. Reflections are valid, singular/nonfinite transforms are rejected.
+No topology or triangle order changes, so existing facet trees stay meaningful.
+
+Painting targets a mesh by archive member + object ID + 0-based triangle index.
+Support/seam/fuzzy states are the native enum (0 none, 1/2 per upstream enum);
+material states are explicit filament slots, conservatively capped at 16 for older
+readers. Subtriangle masks are parsed as reversed-nibble trees with validated node
+arity and state bounds, rather than accepted as arbitrary hex. Clearing one channel
+preserves every other channel and unknown triangle attribute. Shared meshes change
+for every referring component. Slot existence is an engine/profile validation,
+not proven by archive syntax checks.
+
+Edits always produce a new .3mf. They check the source checksum before publication,
+reject ambiguous ZIP members, retain opaque payloads, and remove cached slicing
+outputs/references. New files must be reopened and resliced; they do not mutate the
+running GUI or its undo stack. Native import validation is separate evidence.

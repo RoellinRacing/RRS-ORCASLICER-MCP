@@ -47,3 +47,13 @@ for recovery; never resubmit an indeterminate mutation under a fresh ID blindly.
 The user intends to contact the upstream team personally. No message/issue/PR was
 sent. Suggested discussion and factual draft: docs/UPSTREAM_CONTACT.md,
 https://github.com/OrcaSlicer/OrcaSlicer/discussions/14878.
+
+## Extension checkpoint — project geometry and painting
+
+Completed locally: four typed tools for 3MF geometry inspection, build/component
+transform replacement, painting inspection and channel-specific triangle/subtriangle
+painting. Source/payload preservation, stale-output invalidation, revision checks,
+invalid paint trees and atomic validation covered. `python -m pytest -q`: 48 passed.
+Generation source: project_geometry.py; no expensive native work repeated.
+Next: native reopen/reslice evidence, detailed host reads and synchronous slicing
+observations; then reconcile calibration/device gaps. No complete-API claim.

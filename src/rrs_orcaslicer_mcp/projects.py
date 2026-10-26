@@ -152,3 +152,60 @@ def patch(
     result = inspect(files, str(dst), metadata_member)
     result.update(requires_reslice=True, removed_slice_artifacts=sorted(removed))
     return result
+
+
+def rewrite(
+    files: Files, source: str, destination: str, expected: str, replacements: dict[str, bytes]
+) -> dict:
+    """Publish a new revision-bound archive; remove all affected slicing caches."""
+    import shutil
+
+    src, dst = files.path(source, True), files.path(destination)
+    if src == dst or dst.exists() or dst.suffix.lower() != ".3mf":
+        raise ValueError("Choose a new .3mf destination")
+    if digest(src) != expected:
+        raise ValueError("Source changed; inspect again")
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    fd, temporary = tempfile.mkstemp(dir=dst.parent, suffix=".3mf")
+    os.close(fd)
+    try:
+        with zipfile.ZipFile(src) as before, zipfile.ZipFile(temporary, "w") as after:
+            entries = before.infolist()
+            names = {i.filename for i in entries}
+            if len(names) != len(entries):
+                raise ValueError("Ambiguous archive: duplicate member names")
+            if not replacements or not set(replacements) <= names:
+                raise ValueError("Only existing archive members can be replaced")
+            if sum(i.file_size for i in entries) > 2 * 1024**3:
+                raise ValueError("Expanded archive exceeds 2 GiB")
+            removed = {n for n in names if generated_member(n)}
+            after.comment = before.comment
+            for info in entries:
+                if info.filename in removed:
+                    continue
+                if info.filename in replacements:
+                    after.writestr(info, replacements[info.filename])
+                elif info.filename in (
+                    "Metadata/model_settings.config",
+                    "Metadata/_rels/model_settings.config.rels",
+                    "[Content_Types].xml",
+                ):
+                    if info.file_size > 32 * 1024**2:
+                        raise ValueError("XML metadata exceeds 32 MiB")
+                    after.writestr(
+                        info, clear_slice_references(info.filename, before.read(info), removed)
+                    )
+                else:
+                    with before.open(info) as inp, after.open(info, "w") as out:
+                        shutil.copyfileobj(inp, out, 1024 * 1024)
+        if digest(src) != expected:
+            raise ValueError("Source changed during editing; inspect again")
+        os.link(temporary, dst)
+    finally:
+        Path(temporary).unlink(missing_ok=True)
+    return {
+        "path": str(dst),
+        "sha256": digest(dst),
+        "requires_reslice": True,
+        "removed_slice_artifacts": sorted(removed),
+    }
