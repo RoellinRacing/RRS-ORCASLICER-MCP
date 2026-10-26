@@ -49,7 +49,7 @@ Maschinenlesbare Ergebnisse: [Slicing](evidence/real-slicing.json) und
 [MCP-Roundtrip](evidence/mcp-roundtrip.json). Die Erzeugungsskripte sind beigefügt.
 G-Code-Hashes können wegen Versions-/Zeitmetadaten bei einem neuen Lauf abweichen.
 
-## Noch kein Nachweis
+## Noch kein Nachweis im damaligen Stand 0.1.1
 
 Die lokale Prüfung umfasst keinen physischen Druck, keine Druckerverbindung,
 keine GUI-Aktionen und keinen praktischen Windows-/macOS-Lauf. Die CI-Matrix prüft
@@ -122,3 +122,34 @@ Pluginhash oder fehlender Erfolgsnachweis verhindert den Paketbau.
 Ein erfolgreicher nativer Linuxlauf beweist keine native Windows-/macOS-GUI-Prüfung
 und keine vollständige Orca-Funktionsabdeckung. Der aktuelle Hostnachweis ist erst
 mit diesem Bericht und dem erfolgreichen CI-Lauf abgeschlossen.
+
+## Abgeschlossener nativer Host- und Release-Nachweis 0.3.0
+
+[CI-Lauf 40288598146](https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/actions/runs/40288598146)
+ist vollständig erfolgreich: **43 Tests je Matrixeintrag** unter Windows, macOS und
+Linux mit Python 3.11/3.13, echtes Slicing mit 2.4.2, eingebetteter Host und Paketbau.
+Der native Test lief im offiziellen Linux-Nightly **2.5.0-dev, Build 2dfcba39**,
+mit aktiviertem Audit und ohne Drucker-/Kontoanmeldung.
+
+Nachgewiesene Ergebnisse:
+
+- Ein geladenes Modell; Prozess-Wände von `2` auf `5`, über MCP danach auf `6`.
+- Druckerwert `machine_max_speed_z=13`, Filamentwert `filament_flow_ratio=0.98`.
+- Dieselbe Request-ID liefert dieselbe Quittung; eine ungültige native Änderungsgruppe
+  erhält den vorherigen Wandwert.
+- Neue 3MF-Kopie mit ungespeichertem `wall_loops=5` (26432 Bytes); Projektpfad und
+  Dirty-Zustände bleiben vor/nach dem Kopieren gleich. Die Datei enthält keinen
+  behaupteten Drucknachweis.
+
+[Originaler Hostbericht mit Hashes](evidence/host-0.3.0.json). Die nativen
+Resultatflags werden unverändert weitergegeben, einschliesslich des vom Host
+gelieferten Filament-`dirty=false`; daraus wird kein automatisches Speichern
+abgeleitet. Das Plugin verwendet den offiziellen einfachen Script-Worker, keinen
+eigenen asyncio-Loop und keine vorab genehmigten Audit-Berechtigungen.
+
+Release **v0.3.0** stammt aus `de282ab59b013dd80806de4be59e2aebe61186a0`.
+Alle vier veröffentlichten Dateien wurden erneut heruntergeladen und mit den
+öffentlichen SHA256SUMS sowie den GitHub-Asset-Digests verglichen. ZIP und Wheel
+sind integer; Plugin und native Evidenz stimmen mit der Veröffentlichung überein.
+[Release-Prüfung](evidence/github-release-0.3.0.json). Das veröffentlichte Wheel
+wurde zusätzlich separat installiert und bestand ebenfalls alle 43 Tests.

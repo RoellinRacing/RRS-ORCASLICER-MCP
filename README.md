@@ -3,9 +3,10 @@
 Separate MCP-Schnittstelle für **OrcaSlicer**. OrcaSlicer bleibt unverändert installiert;
 der Server läuft daneben auf demselben Computer. Windows, macOS und Linux werden
 auf Python-Ebene unterstützt. Der echte Slicing-Nachweis dieser Veröffentlichung
-wurde mit der offiziellen **Linux-Version 2.4.2** durchgeführt.
+wurde mit der offiziellen **Linux-Version 2.4.2** durchgeführt. Das optionale
+Host-Plugin wurde zusätzlich in **2.5.0-dev, Build 2dfcba39 (Linux)** geprüft.
 
-## Neu in 0.3.0: offizielles Host-Plugin
+## Neu in 0.3.0: Plugin für Orcas offiziellen Python-Host
 
 39 MCP-Werkzeuge. Das optionale `rrs_orcaslicer_bridge.py` verbindet den externen
 Server über Orcas offizielles Python-Plugin-System mit der laufenden Anwendung:
@@ -31,7 +32,7 @@ Vorprüfung, unabhängiger Profilexport, G-Code-Zusammenfassungen sowie Stapel-S
 mit Wiederholungsschutz und Abbruch. Die bestehende 0.1.1-Anbindung bleibt erhalten.
 
 **Noch keine vollständige API für jede Orca-Funktion.** Die tatsächliche Abdeckung,
-GUI-Funktionen und noch nicht integrierten offiziellen Plugin-APIs sind in
+GUI-Funktionen und noch nicht integrierten Funktionen sind in
 [FEATURE_COVERAGE.md](docs/FEATURE_COVERAGE.md) und per `feature_coverage` ausgewiesen.
 Der vorbereitete [Kontakt zum OrcaSlicer-Team](docs/UPSTREAM_CONTACT.md) nennt die
 passende offizielle Plugin-Diskussion. Dort wurde noch nichts gepostet.
@@ -46,6 +47,7 @@ passende offizielle Plugin-Diskussion. Dort wurde noch nichts gepostet.
 | Einstellungen | Beliebige JSON-Schlüssel und Werte; neue/unbekannte Schlüssel werden erhalten |
 | Profile | Drucker, Filamente, Prozesse, Vererbung, Suche, gesicherte Änderungen |
 | 3MF | Projektsettings sowie vorhandene JSON/XML-Metadaten für Objekte und Platten; Modelle, Bemalung und unbekannte Inhalte bleiben erhalten; alte Slicing-Caches werden entfernt |
+| Live-Host | Optionales Script-Plugin: Presets lesen/ändern, Modell abfragen, Projektkopie exportieren |
 | Oberfläche | Optional: Starten, Fokussieren, Screenshot, Maus, Tastatur und Unicode-Texteingabe |
 | Aufträge | Warteschlange, Protokoll, Status, Zeitlimit, Prozessabbruch, Zustand nach Neustart |
 

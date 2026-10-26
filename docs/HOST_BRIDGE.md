@@ -1,6 +1,6 @@
 # Official Orca host bridge
 
-This is an optional **official Python Script plugin**, installed through Orca's
+This is an optional **Script plugin for Orca's official Python host**, installed through Orca's
 Plugins dialog. The MCP server remains a separate process. Neither component
 patches Orca or loads private C++ symbols. The plugin has no third-party Python
 dependencies, socket listener, arbitrary expression evaluator or printer endpoint.

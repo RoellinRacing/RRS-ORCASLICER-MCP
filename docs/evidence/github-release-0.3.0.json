@@ -1,0 +1,20 @@
+{
+  "status": "succeeded",
+  "release": "https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/releases/tag/v0.3.0",
+  "source_commit": "de282ab59b013dd80806de4be59e2aebe61186a0",
+  "checksums": {
+    "rrs-orcaslicer-mcp-0.3.0.zip": "350aa9d3d960477086ffbb0ae975b1bae5534df726d9ee50233bef25e7419ee6",
+    "rrs_orcaslicer_bridge.py": "e3bdda34d5ebe7b320ae2b8858696706e86aed2621ee1a71281ff7d98771560b",
+    "rrs_orcaslicer_mcp-0.3.0-py3-none-any.whl": "abbbd23579a702a484020526ffe7282b550b35915f013dc09174a75fc84272e2",
+    "rrs_orcaslicer_mcp-0.3.0.tar.gz": "17ead59c5b72a1371f26c8f039fab7107069a0aae64fe07418e87bb18b5aba13"
+  },
+  "zip_integrity": "passed",
+  "wheel_plugin_matches": "passed",
+  "native_evidence_in_source_archives": true,
+  "verified_at_utc": "2026-10-26T07:59:44Z",
+  "published_wheel_tests": {
+    "passed": 43,
+    "output": "wheel-tests-0.3.0.txt",
+    "wheel_sha256": "abbbd23579a702a484020526ffe7282b550b35915f013dc09174a75fc84272e2"
+  }
+}

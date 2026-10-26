@@ -1,131 +1,49 @@
-# Published checkpoint — 0.2.0
+# Published checkpoint — 0.3.0
 
-Last successful step: GitHub Actions 40278472600 passed all six Windows/macOS/Linux
-Python 3.11/3.13 matrix entries (25 tests each), official OrcaSlicer 2.4.2 reference
-slicing, global-settings MCP roundtrip and the new object/plate/profile/batch tests.
-Version 0.2.0 public release published; downloaded ZIP checksum and integrity passed.
+Last successful step: GitHub Actions 40288598146 passed all six Windows/macOS/Linux
+Python 3.11/3.13 matrix entries (43 tests each), official OrcaSlicer 2.4.2 reference
+slicing and project/profile/batch checks, real embedded-host integration and package
+build. Public release files were downloaded and checksum/archive checks passed.
+The actual published wheel was separately installed and all 43 tests passed.
 
-Release source commit: 735a5f0e4d18beeda71e86ffacb13431a09b5da7.
+Release source commit: de282ab59b013dd80806de4be59e2aebe61186a0.
 Repository: https://github.com/RoellinRacing/RRS-ORCASLICER-MCP
-Release: https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/releases/tag/v0.2.0
-CI: https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/actions/runs/40278472600
-ZIP SHA256: 739e3821f25cce76ff39c6db4fa3cb2b697db90dbf35d6ccdd67311e6d695174
+Release: https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/releases/tag/v0.3.0
+CI: https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/actions/runs/40288598146
+ZIP SHA256: 350aa9d3d960477086ffbb0ae975b1bae5534df726d9ee50233bef25e7419ee6
+Plugin SHA256: e3bdda34d5ebe7b320ae2b8858696706e86aed2621ee1a71281ff7d98771560b
 
-Saved results/files:
-- 30 MCP tools, including direct object/part/plate settings and profile helpers.
-- batches.py: durable manifests, input fingerprints, idempotency and cancellation.
-- gcode.py: streamed declared statistics and explicit temperature commands.
-- project_settings.py/settings.py: semantic settings and flattened profile export.
-- tests/test_extensions.py and scripts/verify_extensions.py: new reproducible tests.
-- docs/evidence/extensions-0.2.0.json, wheel-tests-0.2.0.txt,
-  github-release-0.2.0.json: actual local/wheel/public-release validation results.
-- docs/BUSINESS_LOGIC.md: behavior and reasons; FEATURE_COVERAGE.md and packaged
-  coverage.json explicitly describe supported families and remaining gaps.
-- docs/UPSTREAM_CONTACT.md: official contact location and reviewed factual draft.
-- Public release assets: ZIP, wheel, source tarball and SHA256SUMS.
+## Saved implementation and evidence
 
-User's full goal remains broader than this release. Complete semantic coverage is
-NOT achieved: painting, calibration, live model/preset APIs and printer/cloud
-integration remain explicit gaps. GUI input is not proof of full API coverage.
-Official experimental plugin APIs exist at upstream source revision
-5817a76da6a783a992009c8f3aa6cd6b88efc9b8. No embedded host bridge has been implemented
-or tested, and no every-version guarantee is claimed.
+- 39 MCP tools: existing independent CLI/file tools and nine optional host tools.
+- host_bridge/: versioned mailbox, GUI reads, official Script-worker transactions,
+  duplicate suppression, conservative timeout recovery and bounded atomic writes.
+- Generated standalone rrs_orcaslicer_bridge.py, shipped in wheel/source/ZIP and as
+  a separate release asset; build_host_plugin.py --check verifies its source.
+- Native host: official Linux nightly 2.5.0-dev build 2dfcba39. Real reads, updates
+  to process/printer/filament, invalid-setting rejection, duplicate receipt reuse,
+  unsaved-settings export and public MCP stdio calls succeeded with audit enabled.
+- docs/evidence/host-0.3.0.json, github-release-0.3.0.json and
+  wheel-tests-0.3.0.txt contain completed results.
+- HOST_BRIDGE.md, BUSINESS_LOGIC.md and MAINTAINER_REVIEW.md document threading,
+  target/slot semantics, persistence, indeterminate outcomes and native limits.
+- Reviewed/fixed real issues: missing native user-profile version metadata,
+  transient Windows journal replacement locks, receipt failure after applied
+  effects, and unnecessary asyncio socket permissions. Regression coverage saved.
 
-Next development step: test a matching official nightly and its host API, then
-connect live capabilities individually with actual operation-level evidence.
-Consult docs/FEATURE_COVERAGE.md before implementing. Reuse saved source catalog,
-reference models and completed results; do not regenerate them without a reason.
+## Remaining scope and next step
 
-Contact location for the user's intended later discussion:
-https://github.com/OrcaSlicer/OrcaSlicer/discussions/14878
-No upstream message, comment or PR has been posted.
+Complete semantic coverage is NOT achieved. Live geometry/painting mutation,
+calibration, slicing hooks and physical printer/cloud control remain explicit gaps.
+No every-version guarantee is claimed. Older Orca versions can retain CLI/file
+workflows; the optional plugin requires a compatible background Script host.
+Windows/macOS native GUI operations were not tested. No physical print was started.
 
-# Active extension — official host plugin
+For further work, use docs/FEATURE_COVERAGE.md and the saved reference artifacts.
+Add capabilities only when an actual supported API and operation-level proof exist.
+Do not repeat reference generation without a reason. Retained mailboxes are useful
+for recovery; never resubmit an indeterminate mutation under a fresh ID blindly.
 
-Saved base checked: c2bf2baa8dc1c462ac149eaab4cfad054c9b69c6, clean origin.
-Official source 5817a76da6a783a992009c8f3aa6cd6b88efc9b8 reviewed:
-PluginHostApp/Model/Presets/Ui, Script async design, registry and permission docs.
-Architecture: single-file official Script plugin + local file mailbox; GUI callbacks
-perform model/preset reads and project export, Script worker performs staged preset
-transactions. External stdio MCP remains separate. No arbitrary Python execution.
-Nightly AppImage downloaded (2.5.0-dev). Local Xvfb cannot bind display sockets in
-this execution environment; a real GUI test must run in GitHub Actions, with an
-isolated data directory. Do not claim embedded-host validation until that test passes.
-Next: implement shared protocol, client, plugin adapter, generation and real-host
-verification scripts; test, review business rules, publish a new version.
-
-Implementation checkpoint: shared versioned protocol, external HostClient and
-allowlisted HostService implemented; generated dependency-free official plugin
-builds and passes source consistency/lint checks. 36 tests pass, including thread
-separation, redaction, timeout receipts, duplicate prevention, limits and export roots.
-Real-host verification script and isolated GitHub Actions job saved before execution.
-Next: inspect real GUI result; fix any observed host/API mismatch before release.
-
-Native CI 40283327912: all six 36-test matrix jobs and stable engine checks passed.
-Host fixture failed before GUI startup: nightly moved system profiles from loose
-JSON to .opc caches. Adjusted fixture to reuse the successfully generated stable
-3MF/profiles artifact, which also tests loading an existing 2.4.2 project in nightly.
-No reverse engineering or modification of the host's cache format is needed.
-Additional review fixes: invalid mailbox entries cannot starve valid requests;
-request expiry must be finite/bounded; symlink checks precede directory creation;
-MCP project-export retries can retrieve existing receipts. Local tests extended.
-
-Review/packaging checkpoint: 39 tests pass. Added filament slot/shared-preset tests,
-standalone artifact consistency checks and maintainer-facing protocol/business notes.
-Host test now also exercises the public stdio MCP wrappers and all preset categories.
-Native run 40283792526 reached GUI startup, but its screenshot helper did not detect
-Xvfb as X11. Set XDG_SESSION_TYPE=x11 in the disposable test job. This is a test-
-fixture issue, not evidence of a passing embedded-host integration.
-Version 0.3.0 prepared; package release remains gated on the native host job.
-
-Native run 40284916201 captured a real startup screenshot: Orca paused at its
-system CA-certificate selection dialog before opening the editor. Configure the
-isolated runner's standard SSL_CERT_FILE (no TLS checks disabled) and provide an
-X11 window manager for stable keyboard focus. GUI/host API success still pending.
-All six 39-test platform jobs and the stable-engine checks passed.
-
-Code review strengthened native export verification: the copied 3MF must contain
-the unsaved wall setting and must preserve project filename/dirty state. Runtime
-coverage/docs now distinguish the implemented host operations from remaining
-geometry, painting, calibration, slicing-hook and device gaps. Contact draft updated
-with factual implementation details; no upstream post sent.
-
-Native run 40285359025 proved plugin discovery/loading on official Python 3.12,
-but revealed that flattened vendor JSON lacked mandatory version metadata for
-Orca user presets. Fixed profile_export: preserve valid version or require explicit
-profile_version, require native preset type, validate before writing. Regression
-coverage now 40 passing tests. Native fixture uses versioned user presets and the
-reference STL to avoid the unrelated customized-3MF safety dialog. Next: run native
-GUI verification and record actual host mutations/export evidence before release.
-
-Wheel 0.3.0 installed separately and all 40 tests passed. All six platform CI
-configurations for 1642ee7 also passed. Run 40286557688 is still installing stable
-engine dependencies. Added bounded apt network timeouts and native evidence
-packaging: release sources will contain actual CI report/hash bound to plugin.
-
-Run 40287100915: all platform/stable-engine checks passed. Native GUI now loads
-the versioned user profiles and model successfully. Its Linux title bar exposes
-Plugins under the More icon beside File, so Alt-F was not the correct entry.
-Adjusted only the disposable UI driver and corrected installation instructions.
-Nightly also needs an extrusion reset in the fixture printer's layer G-code; added
-it to the isolated no-device profile, preserving the stable source artifact.
-
-Driver review against the shipped official PluginsDialog JS/CSS found that Run is
-an icon-only control, and OCR misreads the custom File title. Use the active test
-window's observed More position, search by the unique capability name (official
-search auto-expands), then require one small Run-color region before clicking.
-These coordinates/colors are disposable CI-driver details, not product API logic.
-
-Windows 3.13 CI exposed transient NTFS replacement denial while the client reads
-a journal. Added bounded retries for only Win32 sharing/access errors; native
-operations are never retried. Review also separated native failures from receipt
-persistence: an applied commit with a failed final write keeps the started journal
-and indeterminate outcome. Two regression tests added; 42 local tests pass.
-Generated standalone plugin updated from reviewed modules.
-
-Run 40287888161 reached real plugin Run. Native audit rejected asyncio's internal
-socketpair before execute ran; no socket permission was approved. Upstream async
-design confirms plain def execute also runs on its official worker. Switched to
-that simpler path with standard sleep. Also retain mkstemp's descriptor and use
-os.write/fsync to avoid untargeted open(fd) audit events. Added subprocess audit
-regression. Next native run must prove startup/transactions with audit enabled.
+The user intends to contact the upstream team personally. No message/issue/PR was
+sent. Suggested discussion and factual draft: docs/UPSTREAM_CONTACT.md,
+https://github.com/OrcaSlicer/OrcaSlicer/discussions/14878.

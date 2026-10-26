@@ -1,0 +1,83 @@
+{
+  "report": {
+    "status": "succeeded",
+    "real_embedded_host": true,
+    "stdio_mcp_verified": true,
+    "mcp_updated_wall_loops": "6",
+    "additional_preset_categories": {
+      "printer": {
+        "setting": "machine_max_speed_z",
+        "value": "13",
+        "result": {
+          "category": "printer",
+          "dirty": true,
+          "keys": [
+            "machine_max_speed_z"
+          ],
+          "saved_to_disk": false,
+          "selection_changed": false,
+          "shared_slots": [],
+          "slot_assignment_changed": false,
+          "target_name": "RRS Test machine"
+        }
+      },
+      "filament": {
+        "setting": "filament_flow_ratio",
+        "value": "0.98",
+        "result": {
+          "category": "filament",
+          "dirty": false,
+          "keys": [
+            "filament_flow_ratio"
+          ],
+          "saved_to_disk": false,
+          "selection_changed": false,
+          "shared_slots": [
+            1
+          ],
+          "slot_assignment_changed": false,
+          "target_name": "RRS Test filament"
+        }
+      }
+    },
+    "app": {
+      "app_config_version": "2.5.0",
+      "build": "2dfcba39",
+      "is_bambu_signed_in": false,
+      "is_signed_in": false,
+      "language": "en_US",
+      "mode": "editor",
+      "network_plugin_error": "",
+      "network_plugin_version": "",
+      "stealth_mode": true,
+      "version": "2.5.0-dev"
+    },
+    "object_count": 1,
+    "preset_name": "RRS Test process",
+    "before": "2",
+    "after": "5",
+    "mutation_id_reused_without_reexecution": true,
+    "native_invalid_batch_preserved_existing_value": true,
+    "export_contains_unsaved_wall_loops": "5",
+    "export_preserved_project_path_and_dirty_state": true,
+    "project_export_bytes": 26432,
+    "project_export_sha256": "eefdac69a330b338461e67987a70663a2c909f4a1fb00fe2b79e2ee985ddc1f0",
+    "session_capabilities": [
+      "bridge.ping",
+      "host.snapshot",
+      "model.read",
+      "presets.list",
+      "preset.read",
+      "project.export",
+      "preset.update"
+    ]
+  },
+  "fixture": {
+    "plugin_sha256": "e3bdda34d5ebe7b320ae2b8858696706e86aed2621ee1a71281ff7d98771560b",
+    "data_directory": "/home/runner/work/RRS-ORCASLICER-MCP/RRS-ORCASLICER-MCP/host-output/isolated-host-data",
+    "source_model_sha256": "50654b3307fcf57c21dd74e21cf0de63568da7b380e80bac918c048bb2efd298"
+  },
+  "official_nightly_checksum": "bbf25727331f95dbef82b60e6467d33b396d0367e1cbfd83f2b58a04f628766d  OrcaSlicer_Linux_AppImage_Ubuntu2404_nightly.AppImage",
+  "source_commit": "de282ab59b013dd80806de4be59e2aebe61186a0",
+  "workflow": "https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/actions/runs/40288598146"
+}

@@ -1,2 +1,6 @@
-..........................................                               [100%]
-42 passed in 6.61s
+Published GitHub release v0.3.0 wheel
+SHA256: abbbd23579a702a484020526ffe7282b550b35915f013dc09174a75fc84272e2
+Source: de282ab59b013dd80806de4be59e2aebe61186a0
+
+...........................................                              [100%]
+43 passed in 6.29s

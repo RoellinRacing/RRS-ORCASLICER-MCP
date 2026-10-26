@@ -11,6 +11,7 @@ ein kleines vorhandenes Referenzprojekt slicen.
 | JSON | Alle Schlüssel erhalten, Werte nicht ungefragt umformen | Orca kann Werte migrieren oder ablehnen |
 | 3MF | Unbekannte ZIP-Mitglieder erhalten, Slicing-Caches verwerfen, neue Ausgabedatei | Ein internes Format kann sich ändern; JSON/XML-Syntax ist keine Semantikprüfung |
 | Katalog | Aus offiziellem Source regenerierbare Metadaten mit Revision | Parser ist kein C++-Compiler; Makros/dynamische Definitionen können fehlen |
+| Host-Plugin | Protokollversion und verfügbare offizielle Methoden prüfen | Experimentelle API; erfordert kompatiblen Hintergrund-Script-Host |
 | Desktop | Beobachten und interagieren, keine festen Klickrezepte | Sprache, Layout, Dialoge und OS-Berechtigungen ändern Abläufe |
 
 Nachgewiesene Engine: Linux AppImage **v2.4.2**, offizielles Upstream-Release.
@@ -36,3 +37,11 @@ ORCA_SLICER_BIN=/path/to/AppRun ORCA_TEST_RESOURCES=/path/to/resources \
 Den Smoke-Ausgabeordner für verschiedene Versionen getrennt halten. Die erzeugten
 Profile müssen zur getesteten Engine gehören. Danach das eigene Druckerprojekt
 öffnen, slicen und G-Code/Startcode mit der bisherigen Ausgabe vergleichen.
+
+## Nativer Hostnachweis 0.3.0
+
+Offizielles Linux-Nightly **2.5.0-dev, Build 2dfcba39** erfolgreich getestet.
+Die AppImage-Prüfsumme, der Pluginhash und der tatsächliche Live-/MCP-Bericht stehen
+in [host-0.3.0.json](evidence/host-0.3.0.json). Dieser Nachweis gilt für den
+aufgezeichneten Build; die Plugin-API bleibt experimentell. Der separate Server
+bestand 43 Tests in allen sechs OS-/Python-Konfigurationen.

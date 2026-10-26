@@ -24,6 +24,11 @@ storage. Operations are allowlisted. Session/request identities and durable rece
 prevent accidental repeats; timeouts are explicitly indeterminate. We do not expose
 an eval endpoint, private C++ symbols, a network listener or printer credentials.
 
+The native integration passed on the official Linux nightly 2.5.0-dev, build
+2dfcba39: live reads, all three preset categories, invalid staged settings, duplicate
+receipts, unsaved 3MF copy export and external stdio MCP calls. The 43-test protocol
+suite also passed on Linux, macOS and Windows with Python 3.11/3.13.
+
 The repository includes reproducible tests, business-logic/protocol notes and a
 maintainer review summary. The validation report identifies exactly which native
 host build/platform was tested; mocked protocol tests are labelled separately.
