@@ -1,3 +1,56 @@
+# Claude handoff checkpoint — 0.5.1 candidate
+
+Implementation checkpoint: 53335cd (local commit only).
+Latest completed step: local ZIP/source/wheel/plugin built; all four SHA256SUMS
+entries verified. All 26 module/data files in the wheel match source. Wheel was
+installed in /workspace/scratch/811592a9e338/wheel-check; its own import location
+was verified, 103 tests passed in 21.45s, and all 63 tools were listed.
+Actual evidence: docs/evidence/package-local-0.5.1.json, wheel-local-0.5.1.txt,
+tool-inventory-local-0.5.1.json. Review ZIP: dist/rrs-orcaslicer-mcp-0.5.1.zip.
+Re-use these completed local results; do not repeat them before CI unless changed.
+Public main remains 31b95c8; stable published package remains 0.5.0.
+Dani explicitly authorized public publication in this session: "Ja veröffentliche es!"
+The previous automatic-upload approval blocker is superseded by this direct
+permission. Direct git push then failed because the CLI has no GitHub credentials;
+publication proceeds via the connected GitHub API to feat/resumable-slice-jobs.
+The API publication commit may differ from local history; compare the complete
+Git tree to verify identical content, and use the actual public branch HEAD.
+Local code/evidence commits remain provenance references, not remote commit claims.
+Claude owns final review, CI, fixes, merge and release. Do not merge main or release
+as part of this handoff. Handoff: docs/CLAUDE_HANDOFF.md.
+
+Saved files: source/tests/docs below; scripts/verify_resumable_jobs.py is ready for
+actual stock-Orca stdio acceptance in CI. Full local suite passed 103 tests; two
+new tools are also checked through actual stdio in test_mcp.py. Re-run only checks
+invalidated by further changes. Local distribution is a review candidate, not a
+released/native-accepted 0.5.1. Existing published 0.5.0 evidence remains valid.
+
+Next owner: Claude. After branch handoff, run CI including real resumable CLI
+slicing, six OS/Python jobs and all native sections. Release only after all gates;
+then download/verify published checksums, wheel source, tests and tool inventory.
+
+## Implementation checkpoint
+
+# Active checkpoint — 0.5.1 resumable single slicing
+
+Base: main 31b95c8 (published 0.5.0 evidence below is complete).
+Saved implementation: engine.py, server.py. Single slicing binds optional retry
+keys to arguments, timeout and input/profile hashes. Engine submission is serialized
+across capability probes. job_log uses byte cursors; job_wait is bounded and does
+not cancel work on observation timeout. CLI execution remains separate from GUI
+slicing and never starts a physical print. No new GUI/platform coverage is claimed.
+Targeted acceptance: 12 tests passed, including actual stdio cleanup. Concurrent
+submissions, completed-job restart, changed profile/model conflicts, cancelled
+observers, UTF-8 cursor boundaries and exact 10 MiB cap passed. Reproduction:
+python -m pytest -q tests/test_engine.py tests/test_slice_jobs.py tests/test_mcp.py.
+The real-engine stdio acceptance script is saved before CI computation.
+Full local suite: 103 passed in 21.45s; ruff, generated plugin and diff checks pass.
+Next: push source checkpoint, run all CI/native jobs,
+then verify the published 0.5.1 wheel/ZIP and save actual outcome evidence.
+Business rationale: docs/BUSINESS_LOGIC.md and docs/RESUMABLE_JOBS.md.
+
+## Previous completed release
+
 # Published checkpoint — 0.5.0
 
 Release/source commit: 1101d5f2ea691c3425d582e2fc6e6d27dcf1cfed.

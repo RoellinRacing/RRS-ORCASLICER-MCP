@@ -722,15 +722,24 @@ def create_server() -> FastMCP:
         filaments: list[str] | None = None,
         export_3mf: str | None = None,
         timeout_seconds: int = 3600,
+        idempotency_key: str | None = None,
     ) -> dict[str, Any]:
         """Slice 3MF/STL/STEP inputs using the installed engine and supplied profiles.
 
         Plate 0 selects all plates. Use a self-contained Orca 3MF or supply complete
         printer/process/filament JSON; the bridge does not guess printer settings.
+        Reusing an optional idempotency_key returns the saved job, even after a
+        restart. Changed input/profile bytes or parameters conflict. Use a new key
+        for an intentional retry. Queued jobs verify input/profile hashes again.
         """
+        if idempotency_key is not None and (
+            not 1 <= len(idempotency_key) <= 200 or not idempotency_key.strip()
+        ):
+            raise ValueError("Supply an idempotency key of 1..200 characters")
         if not inputs or plate < 0:
             raise ValueError("Supply input files and plate >= 0")
         args = ["--slice", str(plate), "--outputdir", str(files.path(output_directory))]
+        checked_paths = [str(files.path(p, True)) for p in inputs]
         for flag, paths in (("--load-settings", settings), ("--load-filaments", filaments)):
             if paths:
                 resolved = [str(files.path(p, True)) for p in paths]
@@ -738,6 +747,7 @@ def create_server() -> FastMCP:
                     raise ValueError(
                         "Orca CLI profile lists cannot represent semicolons in filenames"
                     )
+                checked_paths += resolved
                 args += [flag, ";".join(resolved)]
         if export_3mf:
             # Orca 2.4.2 concatenates outputdir + export-3mf literally, even for
@@ -753,7 +763,13 @@ def create_server() -> FastMCP:
             args += ["--export-3mf", export.name]
         args += [str(files.path(p, True)) for p in inputs]
         files.path(output_directory).mkdir(parents=True, exist_ok=True)
-        return await backend().submit(args, timeout_seconds)
+        expected = {p: digest(Path(p)) for p in dict.fromkeys(checked_paths)}
+        ident = (
+            hashlib.sha256(("slice_project:" + idempotency_key).encode()).hexdigest()[:32]
+            if idempotency_key is not None
+            else None
+        )
+        return await backend().submit(args, timeout_seconds, job_id=ident, expected_files=expected)
 
     @mcp.tool()
     async def batch_slice(
@@ -832,6 +848,24 @@ def create_server() -> FastMCP:
                 job["log_tail"] = stream.read().decode(errors="replace")
         job["files"] = [str(p) for p in Path(job["directory"]).rglob("*") if p.is_file()]
         return job
+
+    @mcp.tool()
+    def job_log(job_id: str, offset: int = 0, limit_bytes: int = 8000) -> dict[str, Any]:
+        """Read saved CLI output from a byte cursor; reuse next_offset on reconnect.
+
+        Each response is bounded to 100000 bytes; saved logs are capped at 10 MiB.
+        at_end means caught up with the observed bytes, not that slicing finished.
+        """
+        return backend().read_log(job_id, offset, limit_bytes)
+
+    @mcp.tool()
+    async def job_wait(job_id: str, timeout_seconds: float = 10) -> dict[str, Any]:
+        """Wait up to 30 seconds for a saved job; timeout does not cancel slicing.
+
+        Returns the durable state; queued/running means call again. Restarted jobs
+        remain interrupted and are never automatically repeated.
+        """
+        return await backend().wait(job_id, timeout_seconds)
 
     @mcp.tool()
     def jobs_list(limit: int = 50) -> list[dict[str, Any]]:

@@ -72,6 +72,7 @@ jobs:
           mkdir -p "$XDG_RUNTIME_DIR"
           chmod 700 "$XDG_RUNTIME_DIR"
           python scripts/smoke_orca.py
+          python scripts/verify_resumable_jobs.py
           python scripts/verify_roundtrip.py
           python scripts/verify_extensions.py
           python scripts/verify_semantics.py

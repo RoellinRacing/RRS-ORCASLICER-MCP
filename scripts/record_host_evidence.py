@@ -71,7 +71,7 @@ if tuple(map(int, package_version.split("."))) >= (0, 5, 0):
         "Move/rotate/scale with native Undo/Redo, editable Join/Cut/Modifier text and "
         "nine native generator families passed. Exact receipts are bundled in "
         f"docs/evidence/native-workflows-{package_version}.json.\n\n"
-        "61 MCP tools. Limits and business rules: docs/NATIVE_WORKFLOWS.md and "
+        "63 MCP tools. Limits and business rules: docs/NATIVE_WORKFLOWS.md and "
         "docs/BUSINESS_LOGIC.md. Other GUI platforms/layouts/locales require acceptance.\n\n"
         "## Earlier checkpoints (historical)\n\n"
     )

@@ -29,6 +29,11 @@
       "status": "supported"
     },
     {
+      "feature": "Resumable individual CLI slicing and log observation",
+      "route": "slice_project idempotency_key, job_log byte cursor, job_wait bounded observation",
+      "status": "content_bound_retry_identity_no_automatic_reexecution"
+    },
+    {
       "feature": "Model scaling, rotations, arrangement, duplication and exports",
       "route": "cli_run when advertised",
       "status": "depends_on_installed_cli"
