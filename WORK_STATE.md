@@ -39,3 +39,17 @@ reference models and completed results; do not regenerate them without a reason.
 Contact location for the user's intended later discussion:
 https://github.com/OrcaSlicer/OrcaSlicer/discussions/14878
 No upstream message, comment or PR has been posted.
+
+# Active extension — official host plugin
+
+Saved base checked: c2bf2baa8dc1c462ac149eaab4cfad054c9b69c6, clean origin.
+Official source 5817a76da6a783a992009c8f3aa6cd6b88efc9b8 reviewed:
+PluginHostApp/Model/Presets/Ui, Script async design, registry and permission docs.
+Architecture: single-file official Script plugin + local file mailbox; GUI callbacks
+perform model/preset reads and project export, Script worker performs staged preset
+transactions. External stdio MCP remains separate. No arbitrary Python execution.
+Nightly AppImage downloaded (2.5.0-dev). Local Xvfb cannot bind display sockets in
+this execution environment; a real GUI test must run in GitHub Actions, with an
+isolated data directory. Do not claim embedded-host validation until that test passes.
+Next: implement shared protocol, client, plugin adapter, generation and real-host
+verification scripts; test, review business rules, publish a new version.
