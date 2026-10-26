@@ -1,0 +1,86 @@
+{
+  "status": "succeeded",
+  "checksums": [
+    "rrs-orcaslicer-mcp-0.5.0.zip",
+    "rrs_orcaslicer_bridge.py",
+    "rrs_orcaslicer_mcp-0.5.0-py3-none-any.whl",
+    "rrs_orcaslicer_mcp-0.5.0.tar.gz"
+  ],
+  "matching_package_files": 26,
+  "source_commit": "1101d5f2ea691c3425d582e2fc6e6d27dcf1cfed",
+  "native_operations": 30,
+  "app": {
+    "app_config_version": "2.5.0",
+    "build": "0b4e7e9e",
+    "is_bambu_signed_in": false,
+    "is_signed_in": false,
+    "language": "en_US",
+    "mode": "editor",
+    "network_plugin_error": "",
+    "network_plugin_version": "",
+    "stealth_mode": true,
+    "version": "2.5.0-dev"
+  },
+  "generators": [
+    "temperature",
+    "pressure_advance",
+    "retraction",
+    "max_volumetric_speed",
+    "flow_ratio",
+    "vfa",
+    "cornering",
+    "input_shaping_frequency",
+    "input_shaping_damping"
+  ],
+  "text_modes": [
+    "join",
+    "cut",
+    "modifier"
+  ],
+  "release": {
+    "tag": "v0.5.0",
+    "target": "1101d5f2ea691c3425d582e2fc6e6d27dcf1cfed",
+    "url": "https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/releases/tag/v0.5.0",
+    "assets": [
+      {
+        "name": "rrs-orcaslicer-mcp-0.5.0.zip",
+        "size": 329885,
+        "digest": "sha256:08bc2c6b96ef4aae2c0878f36de3fe72ec7185288c90396b7da254c2953fb4b2",
+        "url": "https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/releases/download/v0.5.0/rrs-orcaslicer-mcp-0.5.0.zip"
+      },
+      {
+        "name": "rrs_orcaslicer_bridge.py",
+        "size": 27960,
+        "digest": "sha256:0ed3ed5e7bfecaaef02f732b2abc1f251f25b68d1add28ee259fc92f67022c17",
+        "url": "https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/releases/download/v0.5.0/rrs_orcaslicer_bridge.py"
+      },
+      {
+        "name": "rrs_orcaslicer_mcp-0.5.0-py3-none-any.whl",
+        "size": 168456,
+        "digest": "sha256:90b7295f04866bf21b40a04a117c4c1a8bbeeb5ec60a57aaf8fb5f6923decaee",
+        "url": "https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/releases/download/v0.5.0/rrs_orcaslicer_mcp-0.5.0-py3-none-any.whl"
+      },
+      {
+        "name": "rrs_orcaslicer_mcp-0.5.0.tar.gz",
+        "size": 277145,
+        "digest": "sha256:8b01ceab207a15c8d53708e9633541109fd6f611237ee345b6ba70671ae57ad0",
+        "url": "https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/releases/download/v0.5.0/rrs_orcaslicer_mcp-0.5.0.tar.gz"
+      },
+      {
+        "name": "SHA256SUMS",
+        "size": 392,
+        "digest": "sha256:e9874306b4fc3f4db658ce06190db5b50a6c850cb18806b6560f52d3d248d356",
+        "url": "https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/releases/download/v0.5.0/SHA256SUMS"
+      }
+    ]
+  },
+  "workflow": "https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/actions/runs/40373662076",
+  "all_19_ci_jobs_succeeded": true,
+  "installed_wheel": {
+    "import_verified_in_venv_site_packages": true,
+    "test_result": "97 passed in 24.33s",
+    "stdio_verified": true,
+    "tool_count": 61,
+    "environment": "Dedicated venv with system-site-packages for dependencies; public wheel installed with --no-deps; PYTHONPATH unset; executed from /tmp."
+  }
+}

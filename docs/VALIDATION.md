@@ -1,16 +1,31 @@
 # Abnahme für 0.5.0
 
-Das 0.5.0-Paket wird erst nach sechs erfolgreichen OS-/Python-Prüfungen, echtem
-Slicing und vollständiger kombinierter Linux-X11-Abnahme veröffentlicht. Der
-paketeigene `evidence/host-0.5.0.json` bindet den offiziellen Orca-Build, Pluginhash,
-Source-Commit und CI-Lauf. `evidence/native-workflows-0.5.0.json` enthält die echten
-Operationsquittungen für Transformation/Undo/Redo, Join/Cut/Modifier-Text und neun
-native Generatorfamilien. Die unabhängigen Diagnoseläufe allein geben kein Paket frei.
+[CI 40373662076](https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/actions/runs/40373662076)
+und [Release v0.5.0](https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/releases/tag/v0.5.0)
+gehören zum Quellcommit `1101d5f2ea691c3425d582e2fc6e6d27dcf1cfed`.
+Alle 19 Jobs bestanden. Die sechs Windows/macOS/Linux-Prüfungen mit Python
+3.11/3.13 bestehen jeweils 95 Tests und überspringen zwei Pillow-abhängige Tests.
+Lokal und gegen das veröffentlichte, separat installierte Wheel bestehen alle 97.
 
-95 lokale Tests bestanden im Fortsetzungsstand. Zehn tatsächliche Fehler-/Commitbilder
-wurden zusätzlich ohne Eingaben gegen exakte Zahlen/Radioziele geprüft:
-[evidence/native-calibration-ocr-0.5.0.json](evidence/native-calibration-ocr-0.5.0.json).
-Das ist ein Selector-Nachweis; die native Gesamtabnahme bleibt zusätzlich erforderlich.
+Der unveränderte offizielle Linux-Nightly 2.5.0-dev, Build `0b4e7e9e`, führt in einer
+Sitzung 30 echte native Operationen erfolgreich aus: Verschieben/Drehen/Skalieren
+mit Undo/Redo, editierbarer Join/Cut/Modifier-Text und neun Kalibrierungsgeneratoren.
+Auch der Übergang Maximaldurchfluss → Flow-Ratio mit geerbtem Vasenmodus besteht.
+Die einzelnen Generatoren und Text bestehen zusätzlich ihre getrennten GUI-Läufe.
+[Native Operationsquittungen](evidence/native-workflows-0.5.0.json) und
+[Build-/Plugin-Nachweis](evidence/host-0.5.0.json). Slicing nutzt den offiziellen
+Linux-Build 2.4.2. Kein physischer Druck wurde gestartet.
+
+Öffentliche ZIP-/Quell-/Wheel-/Plugin-Downloads stimmen mit SHA256SUMS und GitHubs
+Asset-Digests überein. Die 26 Modul-/Datendateien stimmen in allen Archiven mit dem
+Releasecode überein. Das installierte Wheel startet über stdio und bietet 61 Tools.
+[Releaseprüfung](evidence/github-release-0.5.0.json),
+[Wheeltests](evidence/wheel-tests-0.5.0.txt),
+[OS-/Python-Matrix](evidence/unit-matrix-0.5.0.json).
+
+GUI-Abnahme: Linux X11, englische Oberfläche und dokumentiertes Layout; aktuell
+ein Objekt/eine Instanz für Transformation/Text. Andere GUI-Plattformen, Sprachen
+und Firmwarevarianten haben keinen pauschalen Funktionsnachweis.
 Geschäftsregeln und Grenzen: [NATIVE_WORKFLOWS.md](NATIVE_WORKFLOWS.md).
 
 # Historischer Nachweis — 0.4.0

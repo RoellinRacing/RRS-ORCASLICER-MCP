@@ -1,3 +1,32 @@
+# Published checkpoint — 0.5.0
+
+Release/source commit: 1101d5f2ea691c3425d582e2fc6e6d27dcf1cfed.
+Release: https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/releases/tag/v0.5.0
+CI: https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/actions/runs/40373662076
+All 19 CI jobs succeeded. Six Python/OS jobs each passed 95 tests, with two
+Pillow-dependent skips; all 97 passed locally and against the installed public wheel.
+
+61 tools. Stock official Linux nightly 2.5.0-dev build 0b4e7e9e completed 30 native
+operations in one session: move/rotate/scale with native Undo/Redo, editable
+Join/Cut/Modifier text and all nine original calibration generator families.
+The Max Flowrate → Flow Ratio inherited-spiral transition passed with its exact
+prompt/body/footer checks. No physical print started. Linux X11, English/light
+UI and the documented one-object/instance transform/text scope are the GUI limits.
+
+Public ZIP, source archive, wheel and plugin were downloaded and matched both
+SHA256SUMS and GitHub asset digests. All 26 packaged module/data files match the
+release source across the three archives. Native reports are bundled and copied
+under docs/evidence. The public wheel imported from its dedicated venv, passed
+97 tests and exposed all 61 tools over actual stdio. See github-release-0.5.0.json,
+native-workflows-0.5.0.json, host-0.5.0.json, unit-matrix-0.5.0.json and
+wheel-tests-0.5.0.txt. Business rules: docs/BUSINESS_LOGIC.md and NATIVE_WORKFLOWS.md.
+
+No remaining requested 0.5.0 implementation work. Further GUI platforms/locales,
+multiple objects and other firmware-specific variants require separate acceptance.
+Earlier failed pilots below are historical and must not override this checkpoint.
+
+## Historical checkpoints
+
 # Published checkpoint — 0.4.0
 
 Last successful step: official native integration and all six Windows/macOS/Linux

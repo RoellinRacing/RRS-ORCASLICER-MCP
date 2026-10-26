@@ -1,3 +1,5 @@
-........................................................................ [ 82%]
-...............                                                          [100%]
-87 passed in 14.81s
+Public v0.5.0 wheel downloaded and SHA256 verified.
+Dedicated venv with system-site-packages for dependencies; regular wheel installation with --no-deps.
+PYTHONPATH unset; execution from /tmp; imported source verified under venv site-packages and matched wheel bytes.
+97 passed in 24.33s
+Actual MCP stdio initialization/list_tools: 61 tools, all seven native workflow tools present.
