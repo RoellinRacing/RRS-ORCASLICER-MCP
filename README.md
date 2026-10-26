@@ -1,8 +1,8 @@
-> **0.4.0 extension:** 54 MCP tools. Added typed project transforms and four-channel
-> facet painting, optional mesh topology tools, calibration coupon series, native
-> stage observations and configured Moonraker/OctoPrint adapters. See
-> [extended operations](docs/EXTENDED_OPERATIONS.md). Full native GUI coverage and
-> all-version compatibility remain explicit unfulfilled requirements.
+> **Neu in 0.4.0: 54 MCP-Werkzeuge.** Gezielte 3MF-Transformationen und Bemalung,
+> optionale Mesh-Bearbeitung, Kalibrierungsreihen, native Slicing-Ereignisse und
+> konfigurierte Moonraker-/OctoPrint-Adapter. [Paket herunterladen](https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/releases/tag/v0.4.0)
+> · [Bedienung und Grenzen](docs/EXTENDED_OPERATIONS.md). Vollständige native
+> GUI-Abdeckung und Kompatibilität mit jeder Version sind weiterhin nicht erreicht.
 
 # RRS-ORCASLICER-MCP
 

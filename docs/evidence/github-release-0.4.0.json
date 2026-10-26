@@ -1,0 +1,30 @@
+{
+  "release": "https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/releases/tag/v0.4.0",
+  "source_commit": "ad2227e2acd48a32e7e1a912d3bf2461ae49625d",
+  "workflow": "https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/actions/runs/40323305158",
+  "checksums_verified": true,
+  "zip_integrity_verified": true,
+  "wheel_matches_current_source": true,
+  "native_evidence_in_bundle": true,
+  "assets": {
+    "rrs-orcaslicer-mcp-0.4.0.zip": {
+      "sha256": "e8c070e18497354c39465309fef1bf9c996ad980df3a3603819f1f9d4dab6d2d",
+      "bytes": 243269
+    },
+    "rrs_orcaslicer_bridge.py": {
+      "sha256": "1de73dc4b8cf21c3580d6226b21250200ce54bf4f900769c3c36311f214a95eb",
+      "bytes": 26100
+    },
+    "rrs_orcaslicer_mcp-0.4.0-py3-none-any.whl": {
+      "sha256": "640e8893618b9a54697a657b30353de9bcfd325935e0d1561c299e724e2dac9d",
+      "bytes": 149950
+    },
+    "rrs_orcaslicer_mcp-0.4.0.tar.gz": {
+      "sha256": "45f11fa81ce04c8d47c68ecc9d27d847694798d031e235cf99a946d7214d01eb",
+      "bytes": 207430
+    }
+  },
+  "published_wheel_separately_installed": true,
+  "published_wheel_tests": "58 passed",
+  "published_wheel_module_path": "/tmp/rrs-published-wheel-0.4.0/rrs_orcaslicer_mcp/__init__.py"
+}

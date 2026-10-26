@@ -1,3 +1,37 @@
+# Aktueller Nachweis — 0.4.0
+
+[CI 40323305158](https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/actions/runs/40323305158)
+ist vollständig erfolgreich, Release-Commit `ad2227e2acd48a32e7e1a912d3bf2461ae49625d`.
+58 Tests je Matrixeintrag auf Windows/macOS/Linux, Python 3.11/3.13; lokale
+Suite und separat installiertes Wheel ebenfalls 58 bestanden.
+
+**Stock Orca 2.4.2 Linux:** Das über öffentliche MCP-Werkzeuge transformierte und
+in allen vier Kanälen bemalte 3MF wurde geöffnet und neu geslict. Der Faktor 1.1
+und Support-/Naht-/Material-/Fuzzy-Masken blieben im Orca-Export erhalten. G-Code wurde
+erzeugt; [tatsächlicher Roundtrip](evidence/semantics-0.4.0.json).
+
+**Offizieller Linux-Nightly 2.5.0-dev, Build 2dfcba39:** Detaillierte Volumen-/Instanz-
+Abfragen mit Objektidentität, redigierte Geräteabfrage (kein Gerät verbunden),
+Preset-Transaktionen aller drei Kategorien, Fehler-/Duplikatbehandlung, ungespeicherte
+Projektkopie und MCP-stdio bestanden. Nach Auswahl des Observers und normalem GUI-
+Slicen wurden zehn echte Pipeline-Schritte gemeldet, darunter posSlice, posPerimeters,
+posInfill und psSkirtBrim. [Build-/Plugin-/CI-Nachweis](evidence/host-0.4.0.json).
+
+**Mesh-Tests:** Booleans werden am exportierten und neu geladenen STL gemessen:
+Union 1500, Differenz 500, Schnittmenge 500 mm3 für die dokumentierten Testwürfel.
+Zwei geschlossene Schnitthälften je 500 mm3, Reparatur, Teilen, Transformation,
+Hülle und Vereinfachung geprüft. Keine Zusicherung für beliebige defekte Netze.
+
+**Kalibrierung und Geräte:** Wiederaufnahme/Parameterbindung und Erhalt fremder
+Filamentslots getestet. Moonraker-/OctoPrint-HTTP-Verträge, explizite Pause/Resume,
+Upload ohne Druckstart, Request-ID-Konflikte und unsichere Transportresultate nach
+Neustart getestet. Das sind HTTP-Mocks, keine Geräteabnahme. Kein physischer Druck.
+
+Öffentliche Downloads wurden gegen SHA256SUMS, ZIP-Integrität, enthaltene native
+Nachweise und Wheel-Quellinhalt geprüft:
+[Releaseprüfung](evidence/github-release-0.4.0.json). Die vollständigen früheren
+Nachweise folgen als historische, versionsbezogene Ergebnisse.
+
 # Testnachweis für 0.1.1
 
 Prüfung am 26. Oktober 2026, Linux x86_64, Python 3.12.14, MCP SDK 1.30.0.

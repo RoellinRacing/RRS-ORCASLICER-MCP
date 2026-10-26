@@ -13,3 +13,10 @@ https://github.com/OrcaSlicer/OrcaSlicer/blob/5817a76da6a783a992009c8f3aa6cd6b88
 
 OrcaSlicer is a separate project. This bridge is not affiliated with or endorsed
 by its maintainers. Third-party Python dependencies retain their own licenses.
+
+The 3MF facet-mask codec follows OrcaSlicer FacetsAnnotation/TriangleSelector
+serialization and the bbs_3mf paint attributes, inspected at upstream revision
+1433316b550bac676136f618e215ece8c884bb8c. Corresponding source:
+https://github.com/OrcaSlicer/OrcaSlicer/blob/1433316b550bac676136f618e215ece8c884bb8c/src/libslic3r/Model.cpp
+https://github.com/OrcaSlicer/OrcaSlicer/blob/1433316b550bac676136f618e215ece8c884bb8c/src/libslic3r/TriangleSelector.cpp
+https://github.com/OrcaSlicer/OrcaSlicer/blob/1433316b550bac676136f618e215ece8c884bb8c/src/libslic3r/Format/bbs_3mf.cpp

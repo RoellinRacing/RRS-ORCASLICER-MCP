@@ -27,3 +27,12 @@ original operations and versions. New behavior gets separate evidence.
 
 Checkpoint after each completed section: implementation, tests, business rules,
 remaining gaps and next step; commit and push before costly native validation.
+
+## Saved outcome
+
+0.4.0 is published at ad2227e, CI 40323305158 fully passed. Sections 1–4 have
+implemented operations and native acceptance evidence; section 5 has independent
+coupon-series and HTTP-provider workflows, with remaining native/cloud/AMS gaps
+explicit in WORK_STATE.md. The next implementation depends on supported upstream
+document transactions and native job/calibration/provider entry points. Consult
+UPSTREAM_CONTACT.md; never relabel independent operations as complete native coverage.

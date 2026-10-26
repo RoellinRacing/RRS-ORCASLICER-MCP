@@ -1,105 +1,61 @@
-# Published checkpoint — 0.3.0
+# Published checkpoint — 0.4.0
 
-Last successful step: GitHub Actions 40288598146 passed all six Windows/macOS/Linux
-Python 3.11/3.13 matrix entries (43 tests each), official OrcaSlicer 2.4.2 reference
-slicing and project/profile/batch checks, real embedded-host integration and package
-build. Public release files were downloaded and checksum/archive checks passed.
-The actual published wheel was separately installed and all 43 tests passed.
+Last successful step: official native integration and all six Windows/macOS/Linux
+Python 3.11/3.13 matrix entries passed (58 tests each). Stock OrcaSlicer 2.4.2
+reopened/resliced an affine-transformed project and preserved all four edited facet
+paint channels. Official Linux nightly 2.5.0-dev build 2dfcba39 delivered ten native
+pipeline events and passed detailed model/printer reads, preset transactions,
+invalid-setting handling, duplicate suppression, unsaved export and MCP stdio checks.
 
-Release source commit: de282ab59b013dd80806de4be59e2aebe61186a0.
-Repository: https://github.com/RoellinRacing/RRS-ORCASLICER-MCP
-Release: https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/releases/tag/v0.3.0
-CI: https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/actions/runs/40288598146
-ZIP SHA256: 350aa9d3d960477086ffbb0ae975b1bae5534df726d9ee50233bef25e7419ee6
-Plugin SHA256: e3bdda34d5ebe7b320ae2b8858696706e86aed2621ee1a71281ff7d98771560b
+Source/release commit: ad2227e2acd48a32e7e1a912d3bf2461ae49625d.
+Release: https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/releases/tag/v0.4.0
+CI: https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/actions/runs/40323305158
+ZIP SHA256: e8c070e18497354c39465309fef1bf9c996ad980df3a3603819f1f9d4dab6d2d
+Plugin SHA256: 1de73dc4b8cf21c3580d6226b21250200ce54bf4f900769c3c36311f214a95eb
 
-## Saved implementation and evidence
+## Saved implementation and actual results
 
-- 39 MCP tools: existing independent CLI/file tools and nine optional host tools.
-- host_bridge/: versioned mailbox, GUI reads, official Script-worker transactions,
-  duplicate suppression, conservative timeout recovery and bounded atomic writes.
-- Generated standalone rrs_orcaslicer_bridge.py, shipped in wheel/source/ZIP and as
-  a separate release asset; build_host_plugin.py --check verifies its source.
-- Native host: official Linux nightly 2.5.0-dev build 2dfcba39. Real reads, updates
-  to process/printer/filament, invalid-setting rejection, duplicate receipt reuse,
-  unsaved-settings export and public MCP stdio calls succeeded with audit enabled.
-- docs/evidence/host-0.3.0.json, github-release-0.3.0.json and
-  wheel-tests-0.3.0.txt contain completed results.
-- HOST_BRIDGE.md, BUSINESS_LOGIC.md and MAINTAINER_REVIEW.md document threading,
-  target/slot semantics, persistence, indeterminate outcomes and native limits.
-- Reviewed/fixed real issues: missing native user-profile version metadata,
-  transient Windows journal replacement locks, receipt failure after applied
-  effects, and unnecessary asyncio socket permissions. Regression coverage saved.
+54 MCP tools (15 additions to 0.3.0):
+- project_geometry.py: paged 3MF identities, build/component affine transforms,
+  four-channel facet/subtriangle paint read/write with revision-bound new archives.
+- meshes.py: optional measured STL/PLY repair, split, cut, merge, Booleans, hull,
+  simplify and transform, checkpointed before computation and after each output.
+- calibration.py: resumable temperature/flow/PA/volumetric-speed coupon series from
+  a supplied 3MF, preserving other filament slots; no automatic quality selection.
+- printers.py: configured Moonraker/OctoPrint status, upload and explicit job commands;
+  durable exclusive dispatch IDs, no automatic retry of uncertain physical actions.
+- host_bridge/: copied identity-bound volume/instance diagnostics, redacted printer
+  snapshot and a synchronous bounded stage observer without retained native handles.
+- docs/evidence/: extended-unit-0.4.0.txt, wheel-tests-0.4.0.txt,
+  semantics-0.4.0.json, host-0.4.0.json, github-release-0.4.0.json and package checks.
+- Actual public ZIP/wheel/source/plugin were downloaded and checked against
+  SHA256SUMS. ZIP integrity and wheel source contents verified. Native evidence is
+  included in the published ZIP. Public wheel acceptance results are saved separately.
 
-## Remaining scope and next step
+Business rules/operation contracts: BUSINESS_LOGIC.md, EXTENDED_OPERATIONS.md,
+MAINTAINER_REVIEW.md. Reproducible verification: verify_semantics.py,
+verify_host_gui.py, record_host_evidence.py, package.py and saved pytest tests.
 
-Complete semantic coverage is NOT achieved. Live geometry/painting mutation,
-calibration, slicing hooks and physical printer/cloud control remain explicit gaps.
-No every-version guarantee is claimed. Older Orca versions can retain CLI/file
-workflows; the optional plugin requires a compatible background Script host.
-Windows/macOS native GUI operations were not tested. No physical print was started.
+Native validation caught and fixed lexical XML namespace compatibility. GUI tests
+now close the modal Plugins manager, retain the modeless bridge and use validated
+cropped/upscaled OCR with explicit MainFrame activation. Those fixes are saved;
+do not repeat already successful investigations/reference generation.
 
-For further work, use docs/FEATURE_COVERAGE.md and the saved reference artifacts.
-Add capabilities only when an actual supported API and operation-level proof exist.
-Do not repeat reference generation without a reason. Retained mailboxes are useful
-for recovery; never resubmit an indeterminate mutation under a fresh ID blindly.
+## Remaining requirements / exact next step
 
-The user intends to contact the upstream team personally. No message/issue/PR was
-sent. Suggested discussion and factual draft: docs/UPSTREAM_CONTACT.md,
-https://github.com/OrcaSlicer/OrcaSlicer/discussions/14878.
+Full semantic coverage of every Orca function is NOT achieved. Live model/painting
+mutation with undo, embossing, native calibration tower/line generator invocation,
+GUI slice/cancel/export job APIs, cloud/AMS/MMU control remain explicit gaps.
+At inspected upstream 1433316b550bac676136f618e215ece8c884bb8c the document-model
+bindings are read-only. Do not invent supported mutators or bypass native ownership.
 
-## Extension checkpoint — project geometry and painting
+Next: re-check upstream for supported document transactions/native calibration and
+job/provider APIs; integrate one supported operation with operation-level proof.
+The factual proposal/questions are saved in UPSTREAM_CONTACT.md for Dani's own
+contact: https://github.com/OrcaSlicer/OrcaSlicer/discussions/14878.
+No upstream message/issue/PR was sent.
 
-Completed locally: four typed tools for 3MF geometry inspection, build/component
-transform replacement, painting inspection and channel-specific triangle/subtriangle
-painting. Source/payload preservation, stale-output invalidation, revision checks,
-invalid paint trees and atomic validation covered. `python -m pytest -q`: 48 passed.
-Generation source: project_geometry.py; no expensive native work repeated.
-Next: native reopen/reslice evidence, detailed host reads and synchronous slicing
-observations; then reconcile calibration/device gaps. No complete-API claim.
-
-## Extension checkpoint — live observations
-
-Implemented host_model_detail (identity-bound paged volumes/instances),
-host_printer_read (upstream diagnostic snapshot), host_slicing_events and a separate
-optional synchronous SlicingPipeline observer. Added ring overflow/cursor and live
-identity tests. Source generator saved before native validation.
-CI scripts now exercise stock Orca reopen/reslice of transformed four-channel paint,
-and detailed GUI reads plus actual pipeline events. Native results are pending;
-only prior 0.3.0 operations currently have completed native evidence.
-Next: inspect CI; independent provider operations and calibration sweep semantics.
-
-## Extension checkpoint — offline geometry, calibration and print hosts
-
-Source saved: meshes.py (repair/split/cut/booleans/merge/hull/simplify/transform),
-calibration.py (four types of resumable constant-setting coupon series), printers.py
-(configured Moonraker/OctoPrint status/upload/job commands with durable dispatch IDs).
-Documentation: EXTENDED_OPERATIONS.md and BUSINESS_LOGIC.md.
-Optional geometry dependency group added; geometry tests use measured STL volumes,
-including union=1500, difference=500, intersection=500 mm3 for overlapping cubes.
-No physical device connected. New native evidence/0.4.0 release remains pending.
-CI dependency installation is bounded so unrelated apt repositories cannot consume
-an entire native-test run. Next: full checks, native CI, then release evidence.
-
-Local full suite: 58 passed, evidence saved in extended-unit-0.4.0.txt.
-Native test on 5dda5fd discovered Orca compares lexical XML core tag names:
-ElementTree's namespace-equivalent ns0:model was interpreted as empty. Fixed
-serialization to retain unprefixed core tags/original extension prefixes and added
-an explicit lexical regression assertion. New native run must confirm this fix.
-
-Native roundtrip succeeded on 17fad59 (semantics-0.4.0.json saved). All six
-Windows/macOS/Linux matrix entries passed. GUI reads/details/printer diagnostics,
-preset transactions and export succeeded; observer stage check found no events.
-Inspection of its screenshot showed the modal Plugins manager was still open,
-blocking the mainframe Slice action. Test now closes only that modal manager,
-keeps the separate modeless bridge running, and saves selection/partial-report
-and before/after screenshots. No application bridge code changed for this test fix.
-
-GUI rerun ff782a8 hit an OCR startup flake: screenshot showed the correct Plugins
-menu, but Tesseract default page segmentation missed its visible text because of
-large Xvfb black margins. Test now uses sparse-text OCR, active-window cropping
-(with full-screen fallback), and explicit recorded MainFrame activation before
-Slice. The product/plugin code and completed semantic/58-test evidence are unchanged.
-The saved failed screenshot was independently cropped/upscaled and re-OCRed locally:
-Plugins was correctly detected. Matching now uses that validated 2x crop route and
-converts coordinates back to screen coordinates before clicking.
+Physical printer/provider acceptance requires an explicitly configured compatible
+device; only HTTP contract tests were performed. No physical print was started.
+Windows/macOS native GUI operations are not accepted yet. No every-version or
+future-version guarantee. Existing immutable 0.3.0 evidence remains in docs/evidence.

@@ -61,10 +61,10 @@ Set `ORCA_MCP_PRINTERS` to an administrator-controlled JSON configuration path:
 
 ```json
 {
-  "centauri": {
+  "klipper": {
     "provider": "moonraker",
     "url": "http://YOUR-PRINTER:7125",
-    "api_key_env": "CENTAURI_API_KEY"
+    "api_key_env": "KLIPPER_API_KEY"
   },
   "octo": {
     "provider": "octoprint",

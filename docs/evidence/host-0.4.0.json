@@ -1,0 +1,273 @@
+{
+  "report": {
+    "status": "succeeded",
+    "real_embedded_host": true,
+    "model_detail": {
+      "id": 52,
+      "index": 0,
+      "instance_count": 1,
+      "instances": [
+        {
+          "id": 70,
+          "index": 0,
+          "mirror": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "offset": [
+            90.0,
+            90.0,
+            5.0
+          ],
+          "printable": true,
+          "rotation": [
+            0.0,
+            -0.0,
+            0.0
+          ],
+          "scaling_factor": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      ],
+      "name": "cube.stl",
+      "offset": 0,
+      "offset_unit": "millimeters",
+      "rotation_unit": "radians",
+      "volume_count": 1,
+      "volumes": [
+        {
+          "extruder_id": 1,
+          "facets": 12,
+          "id": 55,
+          "index": 0,
+          "manifold": true,
+          "mesh_errors": 0,
+          "mirror": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "name": "cube.stl",
+          "offset": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "rotation": [
+            0.0,
+            -0.0,
+            0.0
+          ],
+          "scaling_factor": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "settings": {
+            "offset": 0,
+            "total_keys": 0,
+            "values": {}
+          },
+          "type": "ModelVolumeType.ModelPart"
+        }
+      ]
+    },
+    "selected_printer": {
+      "physical_print_started": false,
+      "printer": null
+    },
+    "slicing_events_before": {
+      "epoch": "618db3f99b364dff8826c91d3d2de010",
+      "events": [],
+      "gap": false,
+      "latest_sequence": 0,
+      "notice": "Stage observations, not percent progress or proof of a physical print",
+      "oldest_sequence": 1,
+      "selection_required": "RRS MCP slicing observer in process slicing_pipeline_plugin"
+    },
+    "slicing_events": {
+      "epoch": "618db3f99b364dff8826c91d3d2de010",
+      "events": [
+        {
+          "cancelled": false,
+          "object_id": 90,
+          "orca_version": "2.5.0-dev",
+          "postprocess": false,
+          "sequence": 1,
+          "step": "Step.posSlice",
+          "time": 1793018085.377328
+        },
+        {
+          "cancelled": false,
+          "object_id": 90,
+          "orca_version": "2.5.0-dev",
+          "postprocess": false,
+          "sequence": 2,
+          "step": "Step.posPerimeters",
+          "time": 1793018085.3808813
+        },
+        {
+          "cancelled": false,
+          "object_id": 90,
+          "orca_version": "2.5.0-dev",
+          "postprocess": false,
+          "sequence": 3,
+          "step": "Step.posPrepareInfill",
+          "time": 1793018085.382585
+        },
+        {
+          "cancelled": false,
+          "object_id": 90,
+          "orca_version": "2.5.0-dev",
+          "postprocess": false,
+          "sequence": 4,
+          "step": "Step.posInfill",
+          "time": 1793018085.3841722
+        },
+        {
+          "cancelled": false,
+          "object_id": 90,
+          "orca_version": "2.5.0-dev",
+          "postprocess": false,
+          "sequence": 5,
+          "step": "Step.posIroning",
+          "time": 1793018085.3842885
+        },
+        {
+          "cancelled": false,
+          "object_id": 90,
+          "orca_version": "2.5.0-dev",
+          "postprocess": false,
+          "sequence": 6,
+          "step": "Step.posSupportMaterial",
+          "time": 1793018085.3848503
+        },
+        {
+          "cancelled": false,
+          "object_id": 90,
+          "orca_version": "2.5.0-dev",
+          "postprocess": false,
+          "sequence": 7,
+          "step": "Step.posDetectOverhangsForLift",
+          "time": 1793018085.3850176
+        },
+        {
+          "cancelled": false,
+          "object_id": null,
+          "orca_version": "2.5.0-dev",
+          "postprocess": false,
+          "sequence": 8,
+          "step": "Step.psWipeTower",
+          "time": 1793018085.3857832
+        },
+        {
+          "cancelled": false,
+          "object_id": null,
+          "orca_version": "2.5.0-dev",
+          "postprocess": false,
+          "sequence": 9,
+          "step": "Step.psSkirtBrim",
+          "time": 1793018085.3859649
+        },
+        {
+          "cancelled": false,
+          "object_id": 90,
+          "orca_version": "2.5.0-dev",
+          "postprocess": false,
+          "sequence": 10,
+          "step": "Step.posSimplifyPath",
+          "time": 1793018085.3863204
+        }
+      ],
+      "gap": false,
+      "latest_sequence": 10,
+      "notice": "Stage observations, not percent progress or proof of a physical print",
+      "oldest_sequence": 1,
+      "selection_required": "RRS MCP slicing observer in process slicing_pipeline_plugin"
+    },
+    "stdio_mcp_verified": true,
+    "mcp_updated_wall_loops": "6",
+    "additional_preset_categories": {
+      "printer": {
+        "setting": "machine_max_speed_z",
+        "value": "13",
+        "result": {
+          "category": "printer",
+          "dirty": true,
+          "keys": [
+            "machine_max_speed_z"
+          ],
+          "saved_to_disk": false,
+          "selection_changed": false,
+          "shared_slots": [],
+          "slot_assignment_changed": false,
+          "target_name": "RRS Test machine"
+        }
+      },
+      "filament": {
+        "setting": "filament_flow_ratio",
+        "value": "0.98",
+        "result": {
+          "category": "filament",
+          "dirty": false,
+          "keys": [
+            "filament_flow_ratio"
+          ],
+          "saved_to_disk": false,
+          "selection_changed": false,
+          "shared_slots": [
+            1
+          ],
+          "slot_assignment_changed": false,
+          "target_name": "RRS Test filament"
+        }
+      }
+    },
+    "app": {
+      "app_config_version": "2.5.0",
+      "build": "e021ccb3",
+      "is_bambu_signed_in": false,
+      "is_signed_in": false,
+      "language": "en_US",
+      "mode": "editor",
+      "network_plugin_error": "",
+      "network_plugin_version": "",
+      "stealth_mode": true,
+      "version": "2.5.0-dev"
+    },
+    "object_count": 1,
+    "preset_name": "RRS Test process",
+    "before": "2",
+    "after": "5",
+    "mutation_id_reused_without_reexecution": true,
+    "native_invalid_batch_preserved_existing_value": true,
+    "export_contains_unsaved_wall_loops": "5",
+    "export_preserved_project_path_and_dirty_state": true,
+    "project_export_bytes": 26432,
+    "project_export_sha256": "8b3166ca8fcf7282840d840392645e1c5b922a1404f8792354026f7b967bf88b",
+    "session_capabilities": [
+      "bridge.ping",
+      "host.snapshot",
+      "model.read",
+      "presets.list",
+      "preset.read",
+      "model.detail",
+      "printer.read",
+      "slicing.events",
+      "project.export",
+      "preset.update"
+    ]
+  },
+  "fixture": {
+    "plugin_sha256": "1de73dc4b8cf21c3580d6226b21250200ce54bf4f900769c3c36311f214a95eb",
+    "data_directory": "/home/runner/work/RRS-ORCASLICER-MCP/RRS-ORCASLICER-MCP/host-output/isolated-host-data",
+    "source_model_sha256": "50654b3307fcf57c21dd74e21cf0de63568da7b380e80bac918c048bb2efd298"
+  },
+  "official_nightly_checksum": "98bf0de16651e3af4ad2d89c3abf7664ed6c4ada88b840ead85bc8c1c9813cb9  OrcaSlicer_Linux_AppImage_Ubuntu2404_nightly.AppImage",
+  "source_commit": "ad2227e2acd48a32e7e1a912d3bf2461ae49625d",
+  "workflow": "https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/actions/runs/40323305158"
+}

@@ -1,4 +1,4 @@
-## Stand 0.4.0
+## Stand 0.4.0 — native Nachweise bestanden
 
 Neue semantische Wege: `project_geometry_read/project_transform_write`,
 `project_painting_read/write` (vier Kanäle samt Unterdreiecken), `mesh_operation`
