@@ -240,3 +240,15 @@ and native-primary-buttons-0.5.0.json retain the exact targets. A regression cov
 unrelated grey panels and a radio mark above the button. Next: require new full
 native acceptance after this isolated selector correction; do not release on the
 older failed pilot or on screenshot-only results.
+
+2dc6758 / run 40368784963 passed all nine independent native generators, all
+three text modes and the six 95-test Python/OS checks. The combined session again
+completed 25 operations, then stopped before responding to the inherited spiral
+prompt: wx had recentered/resized the modal after the first bounds query, leaving
+the first body line outside a stale crop. Observation retries now reacquire the
+exact dialog title and bounds; both semantic anchors remain mandatory before the
+single No input. Regression reproduces the real initial/settled bounds, and
+replay_spiral_prompt.py accepts artifact/run provenance and initial bounds.
+The actual image replay is retained in native-recentered-spiral-prompt-0.5.0.json.
+Next: require fresh combined native acceptance before immutable publication.
+The exact saved-dialog replay, 96 local tests, static checks and diff checks passed.

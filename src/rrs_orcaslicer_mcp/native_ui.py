@@ -347,10 +347,22 @@ class NativeControls:
         title = self.window_title()
         if kind != "flow_ratio" or title not in ("Orca Slicer info", "OrcaSlicer info"):
             return None
-        left, top, right, bottom = self.bounds()
-        body = (left + 90, top + 30, right - 10, bottom - 50)
-        self.label("Spiral mode only works", body, psm=6)
-        self.label("Cancel enabling spiral mode", body, psm=6)
+        for attempt in range(3):
+            # wx recenters/resizes this modal after its first visible frame.
+            # Reacquire its bounds on observation retries; a stale fixed crop
+            # can exclude the first line even after painting has completed.
+            if self.window_title() != title:
+                raise ValueError("Native spiral prompt changed while settling")
+            left, top, right, bottom = self.bounds()
+            body = (left + 90, top + 30, right - 10, bottom - 50)
+            try:
+                self.label("Spiral mode only works", body, psm=6)
+                self.label("Cancel enabling spiral mode", body, psm=6)
+                break
+            except ValueError:
+                if attempt == 2:
+                    raise
+                time.sleep(0.3)
         screenshot = self.capture("inherited_spiral_prompt")
         # Flow calibration loads flat coupons. Decline re-enabling inherited
         # vase mode, rather than accepting automatic wall/infill/support edits.

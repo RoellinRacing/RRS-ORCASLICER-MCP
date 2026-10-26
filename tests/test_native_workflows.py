@@ -544,6 +544,30 @@ def test_prepare_readiness_waits_for_loaded_sidebar_without_input(tmp_path, monk
         ui.wait_prepared(timeout=0)
 
 
+def test_spiral_prompt_reacquires_recentered_modal_before_input(tmp_path, monkeypatch):
+    from rrs_orcaslicer_mcp import native_ui
+
+    ui = NativeControls(None, tmp_path)
+    ui.window_title = lambda: "Orca Slicer info"
+    positions = iter([(229, 442, 1172, 633), (229, 403, 1172, 614)])
+    ui.bounds = lambda: next(positions)
+    observed, clicks = [], []
+
+    def label(phrase, region, **kwargs):
+        observed.append((phrase, region))
+        assert not clicks
+        if region[1] == 472:
+            raise ValueError("First line outside stale modal crop")
+
+    ui.label = label
+    ui.capture = lambda _: "settled.png"
+    ui.dialog_button = lambda *a, **k: clicks.append((a, k))
+    monkeypatch.setattr(native_ui.time, "sleep", lambda _: None)
+    assert ui.resolve_calibration_dialog("flow_ratio")["cancelled_inherited_spiral_mode"]
+    assert [region[1] for _, region in observed] == [472, 433, 433]
+    assert len(clicks) == 1
+
+
 def test_primary_button_fallback_ignores_unrelated_grey_panels(tmp_path, monkeypatch):
     from rrs_orcaslicer_mcp import native_ui
 

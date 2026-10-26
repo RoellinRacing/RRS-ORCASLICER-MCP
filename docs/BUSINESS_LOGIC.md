@@ -206,6 +206,11 @@ availability for avoiding duplicate physical actions. Cloud/AMS is an explicit g
 
 ## Typed native GUI workflows (0.5.0)
 
+The inherited spiral prompt can resize/recenter after its first visible frame.
+Observation retries reacquire its bounds and exact title before verifying both
+body anchors; they never repeat input. A crop from the initial frame must not
+authorize a click after the native window has moved.
+
 See NATIVE_WORKFLOWS.md. The stock host bindings are read-only, so native actions
 are driven through Orca's own visible controls, not undocumented native memory.
 The adapter requires opt-in desktop control, foreground English Prepare UI,

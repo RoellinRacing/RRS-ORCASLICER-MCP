@@ -1,0 +1,27 @@
+{
+  "status": "succeeded",
+  "test": "Read-only exact native spiral prompt replay; no desktop input",
+  "source_image_sha256": "8efdbbe5fba50d3b24993b6da986560af0debd241e35c9fa0de06e2c5b24e3a0",
+  "source_artifact": 12671424474,
+  "source_run": 40368784963,
+  "initial_bounds": [
+    229,
+    442,
+    1172,
+    633
+  ],
+  "settled_bounds": [
+    229,
+    403,
+    1172,
+    614
+  ],
+  "target": {
+    "x": 1061,
+    "y": 571,
+    "w": 100,
+    "h": 32
+  },
+  "cancelled_inherited_spiral_mode": true,
+  "upstream_source": "https://github.com/OrcaSlicer/OrcaSlicer/blob/0b4e7e9e2a7968df544e7f52e71e18dac8041d85/src/slic3r/GUI/ConfigManipulation.cpp"
+}
