@@ -294,7 +294,9 @@ class NativeControls:
     def canvas(self):
         left, top, right = self.main()
         self.click("Prepare", (left, top + 25, right, top + 110))
-        # The supported Prepare layout places the viewport below the right toolbar.
-        # Focus it before shortcuts so Ctrl+A/Z cannot target a settings text box.
-        self.desktop._api().click(right - 100, top + 160)
-        time.sleep(0.2)
+        # Leave a native gizmo after any active numeric editor has lost focus.
+        # Its XYZ fields occupy the top-right viewport; that is not a canvas
+        # focus target. Use the supported empty lower-left viewport corridor.
+        self.key("escape")
+        _, _, _, bottom = self.bounds()
+        self.point_click({"x": left + (right - left) * 0.48, "y": bottom - 180, "w": 0, "h": 0})
