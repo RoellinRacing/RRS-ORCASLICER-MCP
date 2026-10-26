@@ -470,23 +470,35 @@ class NativeWorkflows:
                     phase("setting_native_calibration_parameters")
                     if kind == "pressure_advance":
                         await asyncio.to_thread(
-                            ui.click,
+                            ui.radio_choice,
+                            "Method",
                             {"tower": "PA Tower", "line": "PA Line", "pattern": "PA Pattern"}[
+                                values.get("method", "tower")
+                            ],
+                            {"tower": "Tower", "line": "Line", "pattern": "Pattern"}[
                                 values.get("method", "tower")
                             ],
                         )
                     if kind == "flow_ratio":
                         await asyncio.to_thread(
-                            ui.click,
+                            ui.radio_choice,
+                            "Calibration Test Type",
                             {
                                 "pass_1": "Pass 1 Coarse",
                                 "pass_2": "Pass 2 Fine",
                                 "yolo": "YOLO Recommended",
                                 "yolo_perfectionist": "YOLO Perfectionist",
                             }[values.get("test", "pass_1")],
+                            {
+                                "pass_1": "Coarse",
+                                "pass_2": "Fine",
+                                "yolo": "Recommended",
+                                "yolo_perfectionist": "Perfectionist",
+                            }[values.get("test", "pass_1")],
                         )
+                    record["native_parameter_readback"] = {}
                     for field in CALIBRATIONS[kind][1]:
-                        await asyncio.to_thread(
+                        record["native_parameter_readback"][field[0]] = await asyncio.to_thread(
                             ui.numeric,
                             field[1],
                             value=values[field[0]],

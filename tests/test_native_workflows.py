@@ -64,6 +64,13 @@ def test_control_locator_rejects_missing_ambiguous_and_resolves_phrase():
 
     words = [word("Start", 10, 10), word("temp", 45, 10), word("220", 100, 10)]
     assert NativeControls.locate(words, "Start temp")["x"] == 10
+    assert NativeControls.locate([word("PATower", 10, 10)], "PA Tower")["x"] == 10
+    assert (
+        NativeControls.locate(
+            [word("P", 10, 10), word("A", 40, 10), word("Tower", 70, 10)], "PA Tower"
+        )["x"]
+        == 10
+    )
     with pytest.raises(ValueError):
         NativeControls.locate(words, "End temp")
     with pytest.raises(ValueError, match="ambiguous"):
@@ -312,3 +319,60 @@ def test_native_button_selector_ignores_matching_body_text(tmp_path):
     ui.point_click = lambda box: clicked.append(box)
     ui.dialog_button("Transfer", "Creating a new project: unsaved changes")
     assert len(clicked) == 1 and clicked[0]["y"] == 455
+
+
+def test_native_label_waits_for_painted_dialog_without_input(tmp_path, monkeypatch):
+    from rrs_orcaslicer_mcp import native_ui
+    from rrs_orcaslicer_mcp.native_ui import tokens
+
+    observations = iter(
+        [[], [{"text": "PATower", "tokens": tokens("PATower"), "x": 10, "y": 10, "w": 60, "h": 12}]]
+    )
+    ui = NativeControls(None, tmp_path)
+    ui.words = lambda region=None: next(observations)
+    monkeypatch.setattr(native_ui.time, "sleep", lambda _: None)
+    assert ui.label("PA Tower")["x"] == 10
+
+
+def test_native_dialog_does_not_repeat_click_after_input_error(tmp_path):
+    from rrs_orcaslicer_mcp.native_ui import tokens
+
+    ui = NativeControls(None, tmp_path)
+    ui.window_title = lambda: "Temperature calibration"
+    ui.bounds = lambda: (0, 0, 600, 500)
+    ui.main_bounds = (0, 0, 1200, 800)
+    ui.words = lambda region=None: [
+        {"text": "OK", "tokens": tokens("OK"), "x": 300, "y": 455, "w": 20, "h": 12}
+    ]
+    actions = []
+
+    def fail(box):
+        actions.append(box)
+        raise ValueError("input failed after dispatch")
+
+    ui.point_click = fail
+    with pytest.raises(ValueError, match="after dispatch"):
+        ui.dialog_button("OK", "Temperature calibration")
+    assert len(actions) == 1
+
+
+def test_native_radio_fallback_stays_in_identified_group(tmp_path):
+    ui = NativeControls(None, tmp_path)
+    ui.bounds = lambda: (0, 0, 600, 500)
+    clicked = []
+
+    def label(phrase, region=None):
+        if phrase == "Method":
+            return {"y": 100, "h": 15}
+        if phrase == "Settings":
+            return {"y": 200}
+        assert region == (0, 115, 600, 200)
+        if phrase == "PA Tower":
+            raise ValueError("painted radio prefix unreadable")
+        assert phrase == "Tower"
+        return {"x": 40, "y": 150, "w": 35, "h": 12}
+
+    ui.label = label
+    ui.point_click = lambda box: clicked.append(box)
+    ui.radio_choice("Method", "PA Tower", "Tower")
+    assert len(clicked) == 1 and clicked[0]["y"] == 150

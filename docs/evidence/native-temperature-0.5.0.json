@@ -1,0 +1,251 @@
+{
+  "status": "succeeded",
+  "scope": "Actual native temperature generator only; other native generator families remain under acceptance",
+  "source_commit": "1a16350fd5c58c00d143d536fba15a728c2f4a7c",
+  "workflow": "https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/actions/runs/40353700208",
+  "artifact_id": 12664289748,
+  "raw_report_sha256": "69c594619def4b786c18382786440a65bcf8d712d1644631d0d8d46b526228ef",
+  "app": {
+    "app_config_version": "2.5.0",
+    "build": "a0e51b40",
+    "is_bambu_signed_in": false,
+    "is_signed_in": false,
+    "language": "en_US",
+    "mode": "editor",
+    "network_plugin_error": "",
+    "network_plugin_version": "",
+    "stealth_mode": true,
+    "version": "2.5.0-dev"
+  },
+  "arguments": {
+    "kind": "temperature",
+    "values": {
+      "start": 220,
+      "end": 210
+    },
+    "backup": "/home/runner/work/RRS-ORCASLICER-MCP/RRS-ORCASLICER-MCP/host-output/isolated-host-data/orca_plugins/plugin_data/rrs_orcaslicer_bridge/rrs-mcp-bridge/exports/native/before-temperature.3mf",
+    "destination": "/home/runner/work/RRS-ORCASLICER-MCP/RRS-ORCASLICER-MCP/host-output/isolated-host-data/orca_plugins/plugin_data/rrs_orcaslicer_bridge/rrs-mcp-bridge/exports/native/native-temperature.3mf",
+    "replace_scene": true,
+    "expected_revision": "7deb78590ead693f5bd6f78e2cc70494fc62a239eaded3d691ba4c749f5c717b",
+    "session_id": "958e33d319914ef0b80a678b48a59076",
+    "request_id": "bbbbc3416d76411591621385ed79d01d"
+  },
+  "native_scene_after": {
+    "app": {
+      "app_config_version": "2.5.0",
+      "build": "a0e51b40",
+      "is_bambu_signed_in": false,
+      "is_signed_in": false,
+      "language": "en_US",
+      "mode": "editor",
+      "network_plugin_error": "",
+      "network_plugin_version": "",
+      "stealth_mode": true,
+      "version": "2.5.0-dev"
+    },
+    "objects": [
+      {
+        "id": 336,
+        "index": 0,
+        "instance_count": 1,
+        "instances": [
+          {
+            "id": 353,
+            "index": 0,
+            "mirror": [
+              1.0,
+              1.0,
+              1.0
+            ],
+            "offset": [
+              90.0,
+              90.0,
+              -209.999984741
+            ],
+            "printable": true,
+            "rotation": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "scaling_factor": [
+              1.0,
+              1.0,
+              1.0
+            ]
+          }
+        ],
+        "name": "temperature_tower.drc",
+        "offset": 0,
+        "offset_unit": "millimeters",
+        "rotation_unit": "radians",
+        "volume_count": 1,
+        "volumes": [
+          {
+            "bounds_mm": {
+              "max": [
+                22.249534607,
+                5.000015259,
+                15.000030518
+              ],
+              "min": [
+                -22.249534607,
+                -5.000015259,
+                -15.000030518
+              ]
+            },
+            "extruder_id": 1,
+            "facets": 8726,
+            "id": 339,
+            "index": 0,
+            "manifold": true,
+            "mesh_errors": 0,
+            "mirror": [
+              1.0,
+              1.0,
+              1.0
+            ],
+            "name": "temperature_tower.drc",
+            "offset": [
+              0.0,
+              0.0,
+              225.000015259
+            ],
+            "rotation": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "scaling_factor": [
+              1.0,
+              1.0,
+              1.0
+            ],
+            "settings": {
+              "offset": 0,
+              "total_keys": 0,
+              "values": {}
+            },
+            "type": "ModelVolumeType.ModelPart"
+          }
+        ]
+      }
+    ],
+    "revision": "ead68e199c3a22a9adbcfbc2bbedd642cbc7d85ae03872e332e8fc34ec242445",
+    "revision_scope": "Copied identities, poses, bounds, facet counts and exposed settings; not a full mesh-content hash"
+  },
+  "native_metadata": {
+    "editable_texts": [],
+    "object_count": 1,
+    "calibration_settings": {
+      "activate_chamber_temp_control": [
+        "0"
+      ],
+      "bbl_calib_mark_logo": "1",
+      "bed_temperature_formula": "by_first_filament",
+      "calib_flowrate_topinfill_special_order": "0",
+      "chamber_minimal_temperature": [
+        "0"
+      ],
+      "chamber_temperature": [
+        "0"
+      ],
+      "cool_plate_temp": [
+        "35"
+      ],
+      "cool_plate_temp_initial_layer": [
+        "35"
+      ],
+      "eng_plate_temp": [
+        "0"
+      ],
+      "eng_plate_temp_initial_layer": [
+        "0"
+      ],
+      "filament_dev_ams_drying_heat_distortion_temperature": [
+        "0"
+      ],
+      "filament_dev_ams_drying_temperature": [
+        "0"
+      ],
+      "filament_dev_chamber_drying_bed_temperature": [
+        "0"
+      ],
+      "filament_dev_drying_cooling_temperature": [
+        "0"
+      ],
+      "filament_dev_drying_softening_temperature": [
+        "0"
+      ],
+      "filament_flush_temp": [
+        "0"
+      ],
+      "filament_flush_temp_fast": [
+        "0"
+      ],
+      "filament_pre_cooling_temperature": [
+        "0"
+      ],
+      "filament_pre_cooling_temperature_nc": [
+        "0"
+      ],
+      "filament_preheat_temperature_delta": [
+        "0"
+      ],
+      "filament_tower_interface_print_temp": [
+        "-1"
+      ],
+      "hot_plate_temp": [
+        "60"
+      ],
+      "hot_plate_temp_initial_layer": [
+        "60"
+      ],
+      "idle_temperature": [
+        "0"
+      ],
+      "nozzle_temperature": [
+        "220"
+      ],
+      "nozzle_temperature_initial_layer": [
+        "220"
+      ],
+      "nozzle_temperature_range_high": [
+        "240"
+      ],
+      "nozzle_temperature_range_low": [
+        "190"
+      ],
+      "solid_infill_rotate_template": "",
+      "sparse_infill_rotate_template": "",
+      "standby_temperature_delta": "-5",
+      "supertack_plate_temp": [
+        "45"
+      ],
+      "supertack_plate_temp_initial_layer": [
+        "45"
+      ],
+      "support_chamber_temp_control": "0",
+      "temperature_vitrification": [
+        "45"
+      ],
+      "template_custom_gcode": "",
+      "textured_cool_plate_temp": [
+        "40"
+      ],
+      "textured_cool_plate_temp_initial_layer": [
+        "40"
+      ],
+      "textured_plate_temp": [
+        "65"
+      ],
+      "textured_plate_temp_initial_layer": [
+        "65"
+      ],
+      "wait_for_temp_on_wipe_tower": "0"
+    }
+  },
+  "export_sha256": "8dbd7b9b1740e6c2ec8757f765b47fb9887a4385f9e45b44b7528473cf988305",
+  "backup_sha256": "ec1cfc9e1ad6619923d4b9ea7b1c2f983da846c50361df12f4e89790e7c5c792",
+  "physical_print_started": false
+}

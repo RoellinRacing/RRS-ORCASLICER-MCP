@@ -85,7 +85,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        section: [all, text, calibration]
+        section: [all, text, temperature, pressure_advance, retraction, max_volumetric_speed, flow_ratio, vfa, cornering, input_shaping_frequency, input_shaping_damping]
     needs: smoke
     runs-on: ubuntu-24.04
     timeout-minutes: 20

@@ -164,3 +164,18 @@ The earlier successful three-mode native text report is condensed in
 native-text-0.5.0.json, alongside the 12-operation native-transforms proof.
 Next: rerun native generators and the combined suite; release remains 0.4.0 until
 all 0.5.0 acceptance gates pass.
+
+Native 1a16350: the complete edit/Undo/Redo and all text modes passed together,
+then the actual temperature generator passed (temperature_tower.drc, 8726 facets,
+30 mm height for 220/215/210 C). PA dialog was visible but its radio label was not
+recognized in the first observation. Radio choices are now scoped to their own
+group with exact-word fallback; label observation waits for paint without repeating
+input. OCR word segmentation alone is ignored, with exact letters still required.
+Failed label observations are retained as JSON. A click failure can never enter a
+locator fallback and dispatch a second click. Regression tests cover these rules.
+CI now gives each of the nine generators its own disposable session, plus text
+and the strict combined run. The package still requires every job and full combined
+acceptance. An initial local 80-test run stalled on filesystem timing and rejected
+expired fixture requests; both unchanged tests and the full rerun then passed.
+Next: inspect all nine independent outcomes, fix remaining real selectors together,
+then require the combined native result and publish/check the 0.5.0 assets.

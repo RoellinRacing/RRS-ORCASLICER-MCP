@@ -15,15 +15,23 @@ from pathlib import Path
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
 from rrs_orcaslicer_mcp.storage import atomic_json
+from rrs_orcaslicer_mcp.native_workflows import CALIBRATIONS
 
 
 async def verify(client, root, evidence, main_window):
     output = client.directory / "exports/native"
     output.mkdir(parents=True, exist_ok=True)
     requested = os.environ.get("ORCA_NATIVE_SECTIONS", "all")
-    if requested not in ("all", "editing", "text", "calibration"):
+    if requested not in {"all", "editing", "text", "calibration", *CALIBRATIONS}:
         raise ValueError("Unknown native acceptance section")
-    sections = {"editing", "text", "calibration"} if requested == "all" else {requested}
+    sections = (
+        {"editing", "text", "calibration"}
+        if requested == "all"
+        else {"calibration"}
+        if requested in CALIBRATIONS
+        else {requested}
+    )
+    families = {requested} if requested in CALIBRATIONS else set(CALIBRATIONS)
     report = {
         "status": "running",
         "sections": sorted(sections),
@@ -138,6 +146,8 @@ async def verify(client, root, evidence, main_window):
                 ("max_volumetric_speed", {"start": 5, "end": 7, "step": 0.5}),
                 ("flow_ratio", {"test": "pass_1"}),
             ):
+                if kind not in families:
+                    continue
                 result = await operate(
                     "native_calibration",
                     {
@@ -152,20 +162,21 @@ async def verify(client, root, evidence, main_window):
                 assert Path(result["export"]["path"]).stat().st_size > 1000
             # Additional native generator families use a disposable Klipper flavor;
             # this is a fixture setting, never a user's machine or a physical command.
-            selected = await client.call(
-                "preset.read", {"kind": "printer", "keys": ["gcode_flavor"]}
-            )
-            changed = await client.call(
-                "preset.update",
-                {
-                    "kind": "printer",
-                    "preset_name": selected["result"]["name"],
-                    "changes": {"gcode_flavor": "klipper"},
-                },
-                session_id=client.status()["session_id"],
-                request_id=uuid.uuid4().hex,
-            )
-            assert changed["status"] == "succeeded", changed
+            if families & {"vfa", "cornering", "input_shaping_frequency", "input_shaping_damping"}:
+                selected = await client.call(
+                    "preset.read", {"kind": "printer", "keys": ["gcode_flavor"]}
+                )
+                changed = await client.call(
+                    "preset.update",
+                    {
+                        "kind": "printer",
+                        "preset_name": selected["result"]["name"],
+                        "changes": {"gcode_flavor": "klipper"},
+                    },
+                    session_id=client.status()["session_id"],
+                    request_id=uuid.uuid4().hex,
+                )
+                assert changed["status"] == "succeeded", changed
             for kind, values in (
                 ("vfa", {"start": 40, "end": 60, "step": 10}),
                 ("cornering", {"start": 1, "end": 5}),
@@ -175,6 +186,8 @@ async def verify(client, root, evidence, main_window):
                 ),
                 ("input_shaping_damping", {"freq_x": 30, "freq_y": 30, "start": 0, "end": 0.2}),
             ):
+                if kind not in families:
+                    continue
                 await operate(
                     "native_calibration",
                     {
@@ -192,15 +205,19 @@ async def verify(client, root, evidence, main_window):
             editable_native_text="text" in sections,
             text_modes=text_modes,
             native_generators=[
-                "temperature",
-                "pressure_advance",
-                "retraction",
-                "max_volumetric_speed",
-                "flow_ratio",
-                "vfa",
-                "cornering",
-                "input_shaping_frequency",
-                "input_shaping_damping",
+                name
+                for name in [
+                    "temperature",
+                    "pressure_advance",
+                    "retraction",
+                    "max_volumetric_speed",
+                    "flow_ratio",
+                    "vfa",
+                    "cornering",
+                    "input_shaping_frequency",
+                    "input_shaping_damping",
+                ]
+                if name in families
             ]
             if "calibration" in sections
             else [],

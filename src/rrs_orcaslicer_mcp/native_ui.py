@@ -102,7 +102,9 @@ class NativeControls:
 
     @staticmethod
     def locate(words, phrase, region=None, all_matches=False):
-        desired = tokens(phrase)
+        # OCR may join PA+Line or split PA into P+A. Require exact letters,
+        # ignoring only word segmentation rather than using fuzzy matching.
+        desired = "".join(tokens(phrase))
         candidates = []
         for first in words:
             if region and not (
@@ -118,9 +120,9 @@ class NativeControls:
                 key=lambda w: w["x"],
             )
             start = row.index(first)
-            found, chosen = [], []
+            found, chosen = "", []
             for item in row[start:]:
-                found.extend(item["tokens"])
+                found += "".join(item["tokens"])
                 chosen.append(item)
                 if found == desired:
                     candidates.append(
@@ -132,7 +134,7 @@ class NativeControls:
                         }
                     )
                     break
-                if desired[: len(found)] != found:
+                if not desired.startswith(found):
                     break
         if all_matches:
             return candidates
@@ -143,7 +145,23 @@ class NativeControls:
         return candidates[0]
 
     def label(self, phrase, region=None):
-        return self.locate(self.words(region), phrase, region)
+        # Native dialogs can finish painting after their first visible frame.
+        # Retry observation only; no click or key is repeated by this wait.
+        for attempt in range(3):
+            words = self.words(region)
+            try:
+                return self.locate(words, phrase, region)
+            except ValueError:
+                if attempt < 2:
+                    time.sleep(0.3)
+                    continue
+                if self.evidence.parent.is_dir():
+                    name = re.sub(r"\W+", "_", phrase).strip("_")
+                    atomic_json(
+                        self.evidence / ("ocr_" + name + ".json"),
+                        {"phrase": phrase, "region": region, "words": words},
+                    )
+                raise
 
     def point_click(self, box):
         api = self.desktop._api()
@@ -177,12 +195,14 @@ class NativeControls:
         left, top, right, bottom = self.bounds()
         footer = (left, max(top, bottom - 75), right, bottom)
         try:
-            # Preset explanations also contain "transfer". A button selector
-            # must only search the dialog's footer, never its body text.
-            self.click(phrase, footer)
-            return
+            # Preset explanations also contain "transfer". Search its footer.
+            box = self.label(phrase, footer)
         except ValueError:
             pass
+        else:
+            # A failure after input must propagate, never trigger another click.
+            self.point_click(box)
+            return
         # Sparse OCR omits short white labels on Orca's teal primary buttons.
         # Identify button rectangles only inside this verified dialog's footer,
         # then read each inset as black text on white. Never click color alone.
@@ -235,6 +255,20 @@ class NativeControls:
         if len(matches) != 1:
             raise ValueError(f"Native dialog button {phrase!r} missing or ambiguous")
         self.point_click(matches[0])
+
+    def radio_choice(self, group, full_label, unique_word):
+        heading = self.label(group)
+        end = self.label("Settings")
+        left, _, right, _ = self.bounds()
+        region = (left, heading["y"] + heading["h"], right, end["y"])
+        if region[1] >= region[3]:
+            raise ValueError("Native radio group bounds are invalid")
+        try:
+            box = self.label(full_label, region)
+        except ValueError:
+            # Only a unique exact word inside this identified radio group.
+            box = self.label(unique_word, region)
+        self.point_click(box)
 
     def replace_emboss_text(self, value):
         # The part notification repeats the default text. Anchor the editable
