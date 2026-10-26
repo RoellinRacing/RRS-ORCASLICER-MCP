@@ -27,6 +27,9 @@ if tuple(map(int, package_version.split("."))) >= (0, 5, 0):
         native.get("status") == "succeeded"
         and native.get("actual_native_undo_redo") is True
         and native.get("editable_native_text") is True
+        and native.get("sections") == ["calibration", "editing", "text"]
+        and len(native.get("native_generators", [])) == 9
+        and set(native.get("text_modes", [])) == {"join", "cut", "modifier"}
     ):
         raise SystemExit("Typed native workflow acceptance is missing or failed")
 checksum = next(artifacts.rglob("nightly-SHA256SUMS")).read_text(encoding="utf-8").strip()

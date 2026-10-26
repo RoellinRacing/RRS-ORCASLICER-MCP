@@ -20,7 +20,16 @@ from rrs_orcaslicer_mcp.storage import atomic_json
 async def verify(client, root, evidence, main_window):
     output = client.directory / "exports/native"
     output.mkdir(parents=True, exist_ok=True)
-    report = {"status": "running", "operations": [], "physical_print_started": False}
+    requested = os.environ.get("ORCA_NATIVE_SECTIONS", "all")
+    if requested not in ("all", "editing", "text", "calibration"):
+        raise ValueError("Unknown native acceptance section")
+    sections = {"editing", "text", "calibration"} if requested == "all" else {requested}
+    report = {
+        "status": "running",
+        "sections": sorted(sections),
+        "operations": [],
+        "physical_print_started": False,
+    }
     report_path = evidence / "native-workflows.json"
     env = {
         **os.environ,
@@ -82,95 +91,105 @@ async def verify(client, root, evidence, main_window):
             return result
 
         baseline = await scene()
-        for kind, axis, value in (("move", "x", 7), ("rotate", "z", 15), ("scale", "x", 110)):
-            before = await scene()
-            moved = await operate("native_transform", {"kind": kind, "axis": axis, "value": value})
-            undone = await operate("native_history", {"direction": "undo"})
-            assert undone["after"]["revision"] == before["revision"], (kind, before, undone)
-            redone = await operate("native_history", {"direction": "redo"})
-            assert redone["after"]["revision"] == moved["after"]["revision"], kind
-            await operate("native_history", {"direction": "undo"})
-        assert (await scene())["revision"] == baseline["revision"]
+        if "editing" in sections:
+            for kind, axis, value in (("move", "x", 7), ("rotate", "z", 15), ("scale", "x", 110)):
+                before = await scene()
+                moved = await operate(
+                    "native_transform", {"kind": kind, "axis": axis, "value": value}
+                )
+                undone = await operate("native_history", {"direction": "undo"})
+                assert undone["after"]["revision"] == before["revision"], (kind, before, undone)
+                redone = await operate("native_history", {"direction": "redo"})
+                assert redone["after"]["revision"] == moved["after"]["revision"], kind
+                await operate("native_history", {"direction": "undo"})
+            assert (await scene())["revision"] == baseline["revision"]
 
         text_modes = []
-        for mode in ("join", "cut", "modifier"):
-            text = await operate(
-                "native_text",
-                {
-                    "text": "RRS",
-                    "height_mm": 8,
-                    "depth_mm": 1.2,
-                    "mode": mode,
-                    "backup": str(output / f"before-text-{mode}.3mf"),
-                    "destination": str(output / f"editable-text-{mode}.3mf"),
-                },
-            )
-            assert any(
-                e["text"]["text"] == "RRS" for e in text["native_metadata"]["editable_texts"]
-            )
-            text_modes.append(mode)
-            for _ in range(8):
+        if "text" in sections:
+            for mode in ("join", "cut", "modifier"):
+                text = await operate(
+                    "native_text",
+                    {
+                        "text": "RRS",
+                        "height_mm": 8,
+                        "depth_mm": 1.2,
+                        "mode": mode,
+                        "backup": str(output / f"before-text-{mode}.3mf"),
+                        "destination": str(output / f"editable-text-{mode}.3mf"),
+                    },
+                )
+                assert any(
+                    e["text"]["text"] == "RRS" for e in text["native_metadata"]["editable_texts"]
+                )
+                text_modes.append(mode)
+                for _ in range(8):
+                    current = await scene()
+                    if len(current["objects"]) == 1 and current["objects"][0]["volume_count"] == 1:
+                        break
+                    await operate("native_history", {"direction": "undo"})
                 current = await scene()
-                if len(current["objects"]) == 1 and current["objects"][0]["volume_count"] == 1:
-                    break
-                await operate("native_history", {"direction": "undo"})
-            current = await scene()
-            assert len(current["objects"]) == 1 and current["objects"][0]["volume_count"] == 1
+                assert len(current["objects"]) == 1 and current["objects"][0]["volume_count"] == 1
 
-        for kind, values in (
-            ("temperature", {"start": 220, "end": 210}),
-            ("pressure_advance", {"start": 0, "end": 0.02, "step": 0.005, "method": "tower"}),
-            ("retraction", {"start": 0, "end": 1, "step": 0.2}),
-            ("max_volumetric_speed", {"start": 5, "end": 7, "step": 0.5}),
-            ("flow_ratio", {"test": "pass_1"}),
-        ):
-            result = await operate(
-                "native_calibration",
-                {
-                    "kind": kind,
-                    "values": values,
-                    "backup": str(output / f"before-{kind}.3mf"),
-                    "destination": str(output / f"native-{kind}.3mf"),
-                    "replace_scene": True,
-                },
+        if "calibration" in sections:
+            for kind, values in (
+                ("temperature", {"start": 220, "end": 210}),
+                ("pressure_advance", {"start": 0, "end": 0.02, "step": 0.005, "method": "tower"}),
+                ("retraction", {"start": 0, "end": 1, "step": 0.2}),
+                ("max_volumetric_speed", {"start": 5, "end": 7, "step": 0.5}),
+                ("flow_ratio", {"test": "pass_1"}),
+            ):
+                result = await operate(
+                    "native_calibration",
+                    {
+                        "kind": kind,
+                        "values": values,
+                        "backup": str(output / f"before-{kind}.3mf"),
+                        "destination": str(output / f"native-{kind}.3mf"),
+                        "replace_scene": True,
+                    },
+                )
+                assert result["native_metadata"]["object_count"] > 0
+                assert Path(result["export"]["path"]).stat().st_size > 1000
+            # Additional native generator families use a disposable Klipper flavor;
+            # this is a fixture setting, never a user's machine or a physical command.
+            selected = await client.call(
+                "preset.read", {"kind": "printer", "keys": ["gcode_flavor"]}
             )
-            assert result["native_metadata"]["object_count"] > 0
-            assert Path(result["export"]["path"]).stat().st_size > 1000
-        # Additional native generator families use a disposable Klipper flavor;
-        # this is a fixture setting, never a user's machine or a physical command.
-        selected = await client.call("preset.read", {"kind": "printer", "keys": ["gcode_flavor"]})
-        changed = await client.call(
-            "preset.update",
-            {
-                "kind": "printer",
-                "preset_name": selected["result"]["name"],
-                "changes": {"gcode_flavor": "klipper"},
-            },
-            session_id=client.status()["session_id"],
-            request_id=uuid.uuid4().hex,
-        )
-        assert changed["status"] == "succeeded", changed
-        for kind, values in (
-            ("vfa", {"start": 40, "end": 60, "step": 10}),
-            ("cornering", {"start": 1, "end": 5}),
-            ("input_shaping_frequency", {"x_start": 15, "x_end": 25, "y_start": 15, "y_end": 25}),
-            ("input_shaping_damping", {"freq_x": 30, "freq_y": 30, "start": 0, "end": 0.2}),
-        ):
-            await operate(
-                "native_calibration",
+            changed = await client.call(
+                "preset.update",
                 {
-                    "kind": kind,
-                    "values": values,
-                    "backup": str(output / f"before-{kind}.3mf"),
-                    "destination": str(output / f"native-{kind}.3mf"),
-                    "replace_scene": True,
+                    "kind": "printer",
+                    "preset_name": selected["result"]["name"],
+                    "changes": {"gcode_flavor": "klipper"},
                 },
+                session_id=client.status()["session_id"],
+                request_id=uuid.uuid4().hex,
             )
+            assert changed["status"] == "succeeded", changed
+            for kind, values in (
+                ("vfa", {"start": 40, "end": 60, "step": 10}),
+                ("cornering", {"start": 1, "end": 5}),
+                (
+                    "input_shaping_frequency",
+                    {"x_start": 15, "x_end": 25, "y_start": 15, "y_end": 25},
+                ),
+                ("input_shaping_damping", {"freq_x": 30, "freq_y": 30, "start": 0, "end": 0.2}),
+            ):
+                await operate(
+                    "native_calibration",
+                    {
+                        "kind": kind,
+                        "values": values,
+                        "backup": str(output / f"before-{kind}.3mf"),
+                        "destination": str(output / f"native-{kind}.3mf"),
+                        "replace_scene": True,
+                    },
+                )
         report.update(
             status="succeeded",
             app=baseline["app"],
-            actual_native_undo_redo=True,
-            editable_native_text=True,
+            actual_native_undo_redo="editing" in sections,
+            editable_native_text="text" in sections,
             text_modes=text_modes,
             native_generators=[
                 "temperature",
@@ -182,7 +201,9 @@ async def verify(client, root, evidence, main_window):
                 "cornering",
                 "input_shaping_frequency",
                 "input_shaping_damping",
-            ],
+            ]
+            if "calibration" in sections
+            else [],
         )
         atomic_json(report_path, report)
         print(json.dumps({k: v for k, v in report.items() if k != "operations"}), flush=True)
