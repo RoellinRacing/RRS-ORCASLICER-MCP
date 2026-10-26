@@ -169,8 +169,11 @@ class NativeControls:
         ).strip()
 
     def dialog_button(self, phrase, expected_title):
-        if self.window_title() != expected_title or self.bounds() == self.main_bounds:
-            raise ValueError("Expected native generator dialog is not active")
+        title = self.window_title()
+        if title != expected_title or self.bounds() == self.main_bounds:
+            raise ValueError(
+                f"Expected native dialog {expected_title!r} is not active; observed {title!r}"
+            )
         try:
             self.click(phrase)
             return

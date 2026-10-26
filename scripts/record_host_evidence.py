@@ -44,5 +44,39 @@ result = {
         else None
     ),
 }
+
+if tuple(map(int, package_version.split("."))) >= (0, 5, 0):
+    raw_native = json.loads(next(artifacts.rglob("native-workflows.json")).read_text())
+    if raw_native.get("status") != "succeeded" or raw_native.get("sections") != [
+        "calibration",
+        "editing",
+        "text",
+    ]:
+        raise SystemExit("Combined operation receipts are missing")
+    atomic_json(
+        root / f"docs/evidence/native-workflows-{package_version}.json",
+        {
+            "source_commit": result["source_commit"],
+            "workflow": result["workflow"],
+            "report": raw_native,
+        },
+    )
+    app = raw_native["app"]
+    checkpoint = (
+        f"# Validated package checkpoint — {package_version}\n\n"
+        f"Source commit: {result['source_commit']}\n"
+        f"Native workflow: {result['workflow']}\n\n"
+        f"Official Linux Orca {app['version']}, build {app['build']}, English X11. "
+        f"{len(raw_native['operations'])} actual native operations completed. "
+        "Move/rotate/scale with native Undo/Redo, editable Join/Cut/Modifier text and "
+        "nine native generator families passed. Exact receipts are bundled in "
+        f"docs/evidence/native-workflows-{package_version}.json.\n\n"
+        "61 MCP tools. Limits and business rules: docs/NATIVE_WORKFLOWS.md and "
+        "docs/BUSINESS_LOGIC.md. Other GUI platforms/layouts/locales require acceptance.\n\n"
+        "## Earlier checkpoints (historical)\n\n"
+    )
+    state = root / "WORK_STATE.md"
+    state.write_text(checkpoint + state.read_text(), encoding="utf-8")
+
 atomic_json(root / f"docs/evidence/host-{package_version}.json", result)
 print("Recorded native evidence matching plugin SHA256", prepared["plugin_sha256"])

@@ -11,7 +11,8 @@ Separate MCP-Schnittstelle für **OrcaSlicer**. OrcaSlicer bleibt unverändert i
 der Server läuft daneben auf demselben Computer. Windows, macOS und Linux werden
 auf Python-Ebene unterstützt. Der echte Slicing-Nachweis dieser Veröffentlichung
 wurde mit der offiziellen **Linux-Version 2.4.2** durchgeführt. Das optionale
-Host-Plugin wurde zusätzlich in **2.5.0-dev, Build 2dfcba39 (Linux)** geprüft.
+Host-Plugin und die nativen Abläufe werden in der offiziellen Linux-Nightly geprüft;
+den exakten Build und die Ergebnisse enthält `docs/evidence/host-0.5.0.json` im Paket.
 
 ## Neu in 0.3.0: Plugin für Orcas offiziellen Python-Host
 

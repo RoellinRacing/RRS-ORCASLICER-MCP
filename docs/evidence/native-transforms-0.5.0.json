@@ -1,0 +1,838 @@
+{
+  "status": "succeeded",
+  "scope": "Actual live move/rotate/scale and native Undo/Redo (12 operations); excludes text/calibration acceptance",
+  "source_commit": "7c756f29c0ca04aa37ffd7dae7659d43eaf949c3",
+  "workflow": "https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/actions/runs/40347148596",
+  "artifact_id": 12661357913,
+  "raw_report_sha256": "89fdeb8e265f85ce6d365892dbcfd6c7cc573b128bd223dce5286befc8b2a133",
+  "app": {
+    "app_config_version": "2.5.0",
+    "build": "1f811152",
+    "is_bambu_signed_in": false,
+    "is_signed_in": false,
+    "language": "en_US",
+    "mode": "editor",
+    "network_plugin_error": "",
+    "network_plugin_version": "",
+    "stealth_mode": true,
+    "version": "2.5.0-dev"
+  },
+  "operations": [
+    {
+      "tool": "native_transform",
+      "arguments": {
+        "kind": "move",
+        "axis": "x",
+        "value": 7,
+        "expected_revision": "7deb78590ead693f5bd6f78e2cc70494fc62a239eaded3d691ba4c749f5c717b",
+        "session_id": "18c7375fe4d94416bd266403b26bc427",
+        "request_id": "35d89e1bd93e47bc80c8768dd9ef1115"
+      },
+      "status": "succeeded",
+      "before_revision": "7deb78590ead693f5bd6f78e2cc70494fc62a239eaded3d691ba4c749f5c717b",
+      "after_revision": "1458bc192719ed1ba3c010ea7747219388a495d9efbdcacee66210e7a3123999",
+      "before_pose": {
+        "id": 70,
+        "index": 0,
+        "mirror": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "offset": [
+          90.0,
+          90.0,
+          5.0
+        ],
+        "printable": true,
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scaling_factor": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "after_pose": {
+        "id": 70,
+        "index": 0,
+        "mirror": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "offset": [
+          97.0,
+          90.0,
+          5.0
+        ],
+        "printable": true,
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scaling_factor": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "verified_transform": {
+        "field": "offset",
+        "axis": "x",
+        "before": [
+          90.0,
+          90.0,
+          5.0
+        ],
+        "after": [
+          97.0,
+          90.0,
+          5.0
+        ],
+        "expected_axis_value": 97.0
+      },
+      "completed_steps": null
+    },
+    {
+      "tool": "native_history",
+      "arguments": {
+        "direction": "undo",
+        "expected_revision": "1458bc192719ed1ba3c010ea7747219388a495d9efbdcacee66210e7a3123999",
+        "session_id": "18c7375fe4d94416bd266403b26bc427",
+        "request_id": "8aeba6f2e3a3465592550fb89a791325"
+      },
+      "status": "succeeded",
+      "before_revision": "1458bc192719ed1ba3c010ea7747219388a495d9efbdcacee66210e7a3123999",
+      "after_revision": "7deb78590ead693f5bd6f78e2cc70494fc62a239eaded3d691ba4c749f5c717b",
+      "before_pose": {
+        "id": 70,
+        "index": 0,
+        "mirror": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "offset": [
+          97.0,
+          90.0,
+          5.0
+        ],
+        "printable": true,
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scaling_factor": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "after_pose": {
+        "id": 70,
+        "index": 0,
+        "mirror": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "offset": [
+          90.0,
+          90.0,
+          5.0
+        ],
+        "printable": true,
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scaling_factor": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "verified_transform": null,
+      "completed_steps": 1
+    },
+    {
+      "tool": "native_history",
+      "arguments": {
+        "direction": "redo",
+        "expected_revision": "7deb78590ead693f5bd6f78e2cc70494fc62a239eaded3d691ba4c749f5c717b",
+        "session_id": "18c7375fe4d94416bd266403b26bc427",
+        "request_id": "28daae9740c84213b8a5df80e87188c9"
+      },
+      "status": "succeeded",
+      "before_revision": "7deb78590ead693f5bd6f78e2cc70494fc62a239eaded3d691ba4c749f5c717b",
+      "after_revision": "1458bc192719ed1ba3c010ea7747219388a495d9efbdcacee66210e7a3123999",
+      "before_pose": {
+        "id": 70,
+        "index": 0,
+        "mirror": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "offset": [
+          90.0,
+          90.0,
+          5.0
+        ],
+        "printable": true,
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scaling_factor": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "after_pose": {
+        "id": 70,
+        "index": 0,
+        "mirror": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "offset": [
+          97.0,
+          90.0,
+          5.0
+        ],
+        "printable": true,
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scaling_factor": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "verified_transform": null,
+      "completed_steps": 1
+    },
+    {
+      "tool": "native_history",
+      "arguments": {
+        "direction": "undo",
+        "expected_revision": "1458bc192719ed1ba3c010ea7747219388a495d9efbdcacee66210e7a3123999",
+        "session_id": "18c7375fe4d94416bd266403b26bc427",
+        "request_id": "13ecd5727ddd4fd48dfc88d61ec8eb29"
+      },
+      "status": "succeeded",
+      "before_revision": "1458bc192719ed1ba3c010ea7747219388a495d9efbdcacee66210e7a3123999",
+      "after_revision": "7deb78590ead693f5bd6f78e2cc70494fc62a239eaded3d691ba4c749f5c717b",
+      "before_pose": {
+        "id": 70,
+        "index": 0,
+        "mirror": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "offset": [
+          97.0,
+          90.0,
+          5.0
+        ],
+        "printable": true,
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scaling_factor": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "after_pose": {
+        "id": 70,
+        "index": 0,
+        "mirror": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "offset": [
+          90.0,
+          90.0,
+          5.0
+        ],
+        "printable": true,
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scaling_factor": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "verified_transform": null,
+      "completed_steps": 1
+    },
+    {
+      "tool": "native_transform",
+      "arguments": {
+        "kind": "rotate",
+        "axis": "z",
+        "value": 15,
+        "expected_revision": "7deb78590ead693f5bd6f78e2cc70494fc62a239eaded3d691ba4c749f5c717b",
+        "session_id": "18c7375fe4d94416bd266403b26bc427",
+        "request_id": "456e5e5ae36a4e77b773257b4e64e056"
+      },
+      "status": "succeeded",
+      "before_revision": "7deb78590ead693f5bd6f78e2cc70494fc62a239eaded3d691ba4c749f5c717b",
+      "after_revision": "64f86065e48b2d1c0f62b10b62a9fc59ae125bb43cc4acf32d285b222b1b5036",
+      "before_pose": {
+        "id": 70,
+        "index": 0,
+        "mirror": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "offset": [
+          90.0,
+          90.0,
+          5.0
+        ],
+        "printable": true,
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scaling_factor": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "after_pose": {
+        "id": 70,
+        "index": 0,
+        "mirror": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "offset": [
+          90.0,
+          90.0,
+          5.0
+        ],
+        "printable": true,
+        "rotation": [
+          0.0,
+          0.0,
+          0.261799388
+        ],
+        "scaling_factor": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "verified_transform": {
+        "field": "rotation",
+        "axis": "z",
+        "before": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "after": [
+          0.0,
+          0.0,
+          0.261799388
+        ],
+        "expected_axis_value": 0.2617993877991494
+      },
+      "completed_steps": null
+    },
+    {
+      "tool": "native_history",
+      "arguments": {
+        "direction": "undo",
+        "expected_revision": "64f86065e48b2d1c0f62b10b62a9fc59ae125bb43cc4acf32d285b222b1b5036",
+        "session_id": "18c7375fe4d94416bd266403b26bc427",
+        "request_id": "b8657db6860b4b6dabbd7c21f1140ced"
+      },
+      "status": "succeeded",
+      "before_revision": "64f86065e48b2d1c0f62b10b62a9fc59ae125bb43cc4acf32d285b222b1b5036",
+      "after_revision": "7deb78590ead693f5bd6f78e2cc70494fc62a239eaded3d691ba4c749f5c717b",
+      "before_pose": {
+        "id": 70,
+        "index": 0,
+        "mirror": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "offset": [
+          90.0,
+          90.0,
+          5.0
+        ],
+        "printable": true,
+        "rotation": [
+          0.0,
+          0.0,
+          0.261799388
+        ],
+        "scaling_factor": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "after_pose": {
+        "id": 70,
+        "index": 0,
+        "mirror": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "offset": [
+          90.0,
+          90.0,
+          5.0
+        ],
+        "printable": true,
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scaling_factor": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "verified_transform": null,
+      "completed_steps": 1
+    },
+    {
+      "tool": "native_history",
+      "arguments": {
+        "direction": "redo",
+        "expected_revision": "7deb78590ead693f5bd6f78e2cc70494fc62a239eaded3d691ba4c749f5c717b",
+        "session_id": "18c7375fe4d94416bd266403b26bc427",
+        "request_id": "67a44220554149e2a2592a7c3dd8c89b"
+      },
+      "status": "succeeded",
+      "before_revision": "7deb78590ead693f5bd6f78e2cc70494fc62a239eaded3d691ba4c749f5c717b",
+      "after_revision": "64f86065e48b2d1c0f62b10b62a9fc59ae125bb43cc4acf32d285b222b1b5036",
+      "before_pose": {
+        "id": 70,
+        "index": 0,
+        "mirror": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "offset": [
+          90.0,
+          90.0,
+          5.0
+        ],
+        "printable": true,
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scaling_factor": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "after_pose": {
+        "id": 70,
+        "index": 0,
+        "mirror": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "offset": [
+          90.0,
+          90.0,
+          5.0
+        ],
+        "printable": true,
+        "rotation": [
+          0.0,
+          0.0,
+          0.261799388
+        ],
+        "scaling_factor": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "verified_transform": null,
+      "completed_steps": 1
+    },
+    {
+      "tool": "native_history",
+      "arguments": {
+        "direction": "undo",
+        "expected_revision": "64f86065e48b2d1c0f62b10b62a9fc59ae125bb43cc4acf32d285b222b1b5036",
+        "session_id": "18c7375fe4d94416bd266403b26bc427",
+        "request_id": "d7ef7fdc146b4bf4bc45c27e0e5d0b46"
+      },
+      "status": "succeeded",
+      "before_revision": "64f86065e48b2d1c0f62b10b62a9fc59ae125bb43cc4acf32d285b222b1b5036",
+      "after_revision": "7deb78590ead693f5bd6f78e2cc70494fc62a239eaded3d691ba4c749f5c717b",
+      "before_pose": {
+        "id": 70,
+        "index": 0,
+        "mirror": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "offset": [
+          90.0,
+          90.0,
+          5.0
+        ],
+        "printable": true,
+        "rotation": [
+          0.0,
+          0.0,
+          0.261799388
+        ],
+        "scaling_factor": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "after_pose": {
+        "id": 70,
+        "index": 0,
+        "mirror": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "offset": [
+          90.0,
+          90.0,
+          5.0
+        ],
+        "printable": true,
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scaling_factor": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "verified_transform": null,
+      "completed_steps": 1
+    },
+    {
+      "tool": "native_transform",
+      "arguments": {
+        "kind": "scale",
+        "axis": "x",
+        "value": 110,
+        "expected_revision": "7deb78590ead693f5bd6f78e2cc70494fc62a239eaded3d691ba4c749f5c717b",
+        "session_id": "18c7375fe4d94416bd266403b26bc427",
+        "request_id": "5ffb0d32f8824143be97730e4e18e413"
+      },
+      "status": "succeeded",
+      "before_revision": "7deb78590ead693f5bd6f78e2cc70494fc62a239eaded3d691ba4c749f5c717b",
+      "after_revision": "1deea632e4b78a5be2e6d6c011ac972abfb3252d3785bf4b27f8075ab4fd5b26",
+      "before_pose": {
+        "id": 70,
+        "index": 0,
+        "mirror": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "offset": [
+          90.0,
+          90.0,
+          5.0
+        ],
+        "printable": true,
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scaling_factor": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "after_pose": {
+        "id": 70,
+        "index": 0,
+        "mirror": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "offset": [
+          90.0,
+          90.0,
+          5.5
+        ],
+        "printable": true,
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scaling_factor": [
+          1.1,
+          1.1,
+          1.1
+        ]
+      },
+      "verified_transform": {
+        "field": "scaling_factor",
+        "axis": "x",
+        "before": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "after": [
+          1.1,
+          1.1,
+          1.1
+        ],
+        "expected_axis_value": 1.1
+      },
+      "completed_steps": null
+    },
+    {
+      "tool": "native_history",
+      "arguments": {
+        "direction": "undo",
+        "expected_revision": "1deea632e4b78a5be2e6d6c011ac972abfb3252d3785bf4b27f8075ab4fd5b26",
+        "session_id": "18c7375fe4d94416bd266403b26bc427",
+        "request_id": "46f69e37ac664e1ca2f2d07982d65eaf"
+      },
+      "status": "succeeded",
+      "before_revision": "1deea632e4b78a5be2e6d6c011ac972abfb3252d3785bf4b27f8075ab4fd5b26",
+      "after_revision": "7deb78590ead693f5bd6f78e2cc70494fc62a239eaded3d691ba4c749f5c717b",
+      "before_pose": {
+        "id": 70,
+        "index": 0,
+        "mirror": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "offset": [
+          90.0,
+          90.0,
+          5.5
+        ],
+        "printable": true,
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scaling_factor": [
+          1.1,
+          1.1,
+          1.1
+        ]
+      },
+      "after_pose": {
+        "id": 70,
+        "index": 0,
+        "mirror": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "offset": [
+          90.0,
+          90.0,
+          5.0
+        ],
+        "printable": true,
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scaling_factor": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "verified_transform": null,
+      "completed_steps": 1
+    },
+    {
+      "tool": "native_history",
+      "arguments": {
+        "direction": "redo",
+        "expected_revision": "7deb78590ead693f5bd6f78e2cc70494fc62a239eaded3d691ba4c749f5c717b",
+        "session_id": "18c7375fe4d94416bd266403b26bc427",
+        "request_id": "f078271a74be4041a685c8488a327ee2"
+      },
+      "status": "succeeded",
+      "before_revision": "7deb78590ead693f5bd6f78e2cc70494fc62a239eaded3d691ba4c749f5c717b",
+      "after_revision": "1deea632e4b78a5be2e6d6c011ac972abfb3252d3785bf4b27f8075ab4fd5b26",
+      "before_pose": {
+        "id": 70,
+        "index": 0,
+        "mirror": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "offset": [
+          90.0,
+          90.0,
+          5.0
+        ],
+        "printable": true,
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scaling_factor": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "after_pose": {
+        "id": 70,
+        "index": 0,
+        "mirror": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "offset": [
+          90.0,
+          90.0,
+          5.5
+        ],
+        "printable": true,
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scaling_factor": [
+          1.1,
+          1.1,
+          1.1
+        ]
+      },
+      "verified_transform": null,
+      "completed_steps": 1
+    },
+    {
+      "tool": "native_history",
+      "arguments": {
+        "direction": "undo",
+        "expected_revision": "1deea632e4b78a5be2e6d6c011ac972abfb3252d3785bf4b27f8075ab4fd5b26",
+        "session_id": "18c7375fe4d94416bd266403b26bc427",
+        "request_id": "d7056e88423746a382fa1e4e4b66eab7"
+      },
+      "status": "succeeded",
+      "before_revision": "1deea632e4b78a5be2e6d6c011ac972abfb3252d3785bf4b27f8075ab4fd5b26",
+      "after_revision": "7deb78590ead693f5bd6f78e2cc70494fc62a239eaded3d691ba4c749f5c717b",
+      "before_pose": {
+        "id": 70,
+        "index": 0,
+        "mirror": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "offset": [
+          90.0,
+          90.0,
+          5.5
+        ],
+        "printable": true,
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scaling_factor": [
+          1.1,
+          1.1,
+          1.1
+        ]
+      },
+      "after_pose": {
+        "id": 70,
+        "index": 0,
+        "mirror": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "offset": [
+          90.0,
+          90.0,
+          5.0
+        ],
+        "printable": true,
+        "rotation": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "scaling_factor": [
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "verified_transform": null,
+      "completed_steps": 1
+    }
+  ]
+}

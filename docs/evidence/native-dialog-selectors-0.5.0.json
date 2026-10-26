@@ -1,7 +1,7 @@
 {
   "status": "succeeded",
   "scope": "Read-only replay of saved actual native screenshots; no input or native edit occurred",
-  "driver_sha256": "4ecbce19b88ccab9f267be59812f24bf4d30177d55f1d4bd5704cc54746fb798",
+  "driver_sha256": "fb11e03d788093aae88fa9e77836bff7337902acbb6870d07e6c951dfe95f652",
   "observations": [
     {
       "selector": "button",
@@ -43,6 +43,20 @@
         }
       ],
       "source_image_sha256": "64bfb12cd8df00566fa5298dd4030c17d47d69b39ca614238fe2aef9fe370f24"
+    },
+    {
+      "selector": "backed_up_scene_no",
+      "actions_replaced_by_recording": [
+        {
+          "observed_box": {
+            "x": 863.0,
+            "y": 553.5,
+            "w": 18.5,
+            "h": 12.0
+          }
+        }
+      ],
+      "source_image_sha256": "86695ad33aeb26202a488149f3ea180f1fac99e795524d06bdbbc74d29f04703"
     }
   ]
 }

@@ -65,3 +65,12 @@ acceptance; the initial driver fails before model input there.
 Native Modifier text requires Orca Advanced/Expert mode; Orca hides this radio
 button in Simple mode. The disposable acceptance fixture uses Expert. The adapter
 does not change an existing user's mode automatically.
+
+The initial native fixture uses a fully visible 1200x780 MainFrame on a 1440x1000
+X11 desktop with the stock light theme and scaling. Keep the main window fully
+visible. Native gizmo coordinates are reacquired after hover-induced layout fits.
+Project replacement recognizes the native Save dialog separately from the edited
+preset dialog. The latter's current Keep action is labeled Transfer; edited
+presets are retained. Neither a generic Discard button nor a color-only match is
+used to authorize replacement. Primary-button fallback requires the exact dialog
+title plus OCR of the button's isolated label.

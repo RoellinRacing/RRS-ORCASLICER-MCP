@@ -142,3 +142,14 @@ reads their inset label; color alone never triggers a click. Read-only replay of
 the actual text/temperature screenshots passed, saved in native-dialog-selectors-
 0.5.0.json. Remaining: actual text modes and all nine generator successes, package
 only after all combined acceptance checks. Further targeted regressions passed.
+
+Native 12be2f3: all three text modes (Join/Cut/Modifier), editable text/height/depth
+in real 3MF, correct native volume types and native Undo restoration passed in
+the independent text session, run 40349995892 / artifact 12663777026. 76 full local
+tests passed. Temperature reached the save prompt, whose actual native caption is
+"Orca Slicer - Save" (with a space); the strict known-caption pack now recognizes
+that official spelling too. Exact observed dialog titles are retained for diagnosis.
+The combined successful native report is copied into release packages and prepends
+a current package checkpoint so historical 0.4.0 notes are not mistaken for status.
+Next: confirm native project replacement/Transfer and all nine generator families,
+then full combined acceptance, immutable release and published-asset verification.

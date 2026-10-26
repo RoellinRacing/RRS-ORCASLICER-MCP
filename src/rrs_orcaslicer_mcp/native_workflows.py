@@ -503,7 +503,8 @@ class NativeWorkflows:
                     # These are different native dialogs. Only the backed-up
                     # project may be replaced; edited presets must be retained.
                     title = await asyncio.to_thread(ui.window_title)
-                    if title == "OrcaSlicer - Save":
+                    record["native_dialog_titles"] = [title]
+                    if title in ("Orca Slicer - Save", "OrcaSlicer - Save"):
                         phase("confirming_backed_up_scene_replacement")
                         await asyncio.to_thread(ui.label, "unsaved changes")
                         record["replacement_prompt"] = await asyncio.to_thread(
@@ -512,6 +513,7 @@ class NativeWorkflows:
                         await asyncio.to_thread(ui.click, "No")
                         await asyncio.sleep(0.5)
                     title = await asyncio.to_thread(ui.window_title)
+                    record["native_dialog_titles"].append(title)
                     if title == "Creating a new project: unsaved changes":
                         phase("preserving_native_presets")
                         record["presets_prompt"] = await asyncio.to_thread(
