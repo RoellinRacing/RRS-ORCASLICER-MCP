@@ -1,4 +1,19 @@
-# Aktueller Nachweis — 0.4.0
+# Abnahme für 0.5.0
+
+Das 0.5.0-Paket wird erst nach sechs erfolgreichen OS-/Python-Prüfungen, echtem
+Slicing und vollständiger kombinierter Linux-X11-Abnahme veröffentlicht. Der
+paketeigene `evidence/host-0.5.0.json` bindet den offiziellen Orca-Build, Pluginhash,
+Source-Commit und CI-Lauf. `evidence/native-workflows-0.5.0.json` enthält die echten
+Operationsquittungen für Transformation/Undo/Redo, Join/Cut/Modifier-Text und neun
+native Generatorfamilien. Die unabhängigen Diagnoseläufe allein geben kein Paket frei.
+
+87 lokale Tests bestanden im Fortsetzungsstand. Sechs tatsächliche Fehlerbilder
+wurden zusätzlich ohne Eingaben gegen exakte Zahlen/Radioziele geprüft:
+[evidence/native-calibration-ocr-0.5.0.json](evidence/native-calibration-ocr-0.5.0.json).
+Das ist ein Selector-Nachweis; die native Gesamtabnahme bleibt zusätzlich erforderlich.
+Geschäftsregeln und Grenzen: [NATIVE_WORKFLOWS.md](NATIVE_WORKFLOWS.md).
+
+# Historischer Nachweis — 0.4.0
 
 [CI 40323305158](https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/actions/runs/40323305158)
 ist vollständig erfolgreich, Release-Commit `ad2227e2acd48a32e7e1a912d3bf2461ae49625d`.

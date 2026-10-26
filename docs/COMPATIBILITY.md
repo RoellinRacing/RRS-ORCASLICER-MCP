@@ -24,7 +24,12 @@ Die GitHub-Actions-Prüfung führt Unit-/Protokolltests auf Windows, macOS und L
 aus. Ein separater Linux-Test lädt beim regulären Build das festgelegte Release
 2.4.2; beim wöchentlichen und manuellen Lauf stattdessen das aktuellste offizielle
 stabile Release. Die Resultate sind Testnachweise, keine Garantie für beliebige
-Versionen. Der Desktopadapter wird dabei nicht interaktiv getestet.
+Versionen. Ein zusätzlicher isolierter Linux-X11-Test bedient die offizielle
+Nightly tatsächlich: Live-Transformationen mit Undo/Redo, native Textmodi und neun
+Generatorfamilien. Die Veröffentlichung von 0.5.0 erfordert den vollständigen
+kombinierten Nachweis; Einzelprüfungen ersetzen ihn nicht. Die genauen Build- und
+Plugin-Prüfsummen stehen im jeweiligen Paketnachweis. Windows/macOS-GUI und andere
+Sprachen/Layouts sind durch diese Linux-Prüfung nicht abgenommen.
 
 Manuelle Prüfung einer neuen Version:
 

@@ -56,13 +56,16 @@ passende offizielle Plugin-Diskussion. Dort wurde noch nichts gepostet.
 | Profile | Drucker, Filamente, Prozesse, Vererbung, Suche, gesicherte Änderungen |
 | 3MF | Projektsettings sowie vorhandene JSON/XML-Metadaten für Objekte und Platten; Modelle, Bemalung und unbekannte Inhalte bleiben erhalten; alte Slicing-Caches werden entfernt |
 | Live-Host | Optionales Script-Plugin: Presets lesen/ändern, Modell abfragen, Projektkopie exportieren |
+| Native Abläufe (0.5.0) | Live-Verschieben/Drehen/Skalieren, Undo/Redo, editierbarer Text und neun Kalibrierungsgenerator-Familien; geprüfte Umgebung und Varianten im Paketnachweis |
 | Oberfläche | Optional: Starten, Fokussieren, Screenshot, Maus, Tastatur und Unicode-Texteingabe |
 | Aufträge | Warteschlange, Protokoll, Status, Zeitlimit, Prozessabbruch, Zustand nach Neustart |
 
 **Grenze:** OrcaSlicer stellt keine vollständige externe API für sämtliche GUI-Funktionen
-bereit. Malen, manuelle Stützen, Schneiden, Kalibrierungsdialoge und Druckeroberflächen
-können über den optionalen Desktopadapter bedient werden. Dafür gibt es hier keine
-versionsfeste semantische API und keinen automatisierten Funktionsnachweis.
+bereit. Die typisierten nativen Abläufe und ihre Ergebnisprüfung stehen in
+[NATIVE_WORKFLOWS.md](docs/NATIVE_WORKFLOWS.md). Der optionale allgemeine Desktopzugriff
+auf weitere Oberflächenfunktionen wie Live-Bemalung und manuelle Stützen hat keinen
+vergleichbaren automatisierten Funktionsnachweis. Die nativen Tests gelten für die
+aufgezeichnete Linux-X11-/Orca-Version und den englischen Selector-Pack.
 Drucker-Anmeldung, Netzwerktreiber und Cloudfunktionen bleiben Sache von OrcaSlicer.
 Erfolgreiches Slicing startet keinen physischen Druck.
 
