@@ -1,0 +1,67 @@
+{
+  "status": "succeeded",
+  "object_id": "2",
+  "object_wall_loops": "4",
+  "plate_name": "MCP Testplatte",
+  "profile_checks": "passed",
+  "batch_id": "b1eb75d392804ee21d685408e915dff1",
+  "batch_status": "succeeded",
+  "duplicate_jobs_on_retry": false,
+  "results": [
+    {
+      "gcode_sha256": "382a0744feba84767d1bebfe568d58f60dda5eee8c7dff28ef482c8b58674f32",
+      "gcode_bytes": 193189,
+      "declared_statistics": {
+        "declared_layers": 50,
+        "filament used [mm]": [
+          237.33
+        ],
+        "filament used [cm3]": [
+          0.57
+        ],
+        "filament used [g]": [
+          0.72
+        ],
+        "filament cost": [
+          0.02
+        ]
+      },
+      "estimated_seconds": {
+        "model printing time": 381.0,
+        "total estimated time": 739.0
+      },
+      "object_settings": {
+        "name": "cube.stl",
+        "extruder": "1"
+      }
+    },
+    {
+      "gcode_sha256": "38ff81032672e431704652a2ad3da15970a63d4bf0bfe8e211adbe76defa31d2",
+      "gcode_bytes": 205164,
+      "declared_statistics": {
+        "declared_layers": 50,
+        "filament used [mm]": [
+          309.62
+        ],
+        "filament used [cm3]": [
+          0.74
+        ],
+        "filament used [g]": [
+          0.94
+        ],
+        "filament cost": [
+          0.02
+        ]
+      },
+      "estimated_seconds": {
+        "model printing time": 384.0,
+        "total estimated time": 743.0
+      },
+      "object_settings": {
+        "name": "cube.stl",
+        "extruder": "1",
+        "wall_loops": "4"
+      }
+    }
+  ]
+}

@@ -81,7 +81,7 @@ class Desktop:
             )
         else:
             windows = subprocess.check_output(
-                ["xdotool", "search", "--onlyvisible", "--class", "(?i)orca"], text=True
+                ["xdotool", "search", "--onlyvisible", "--class", "[Oo]rca"], text=True
             ).split()
             if len(windows) != 1:
                 raise ValueError("Expected exactly one OrcaSlicer window; select it locally")

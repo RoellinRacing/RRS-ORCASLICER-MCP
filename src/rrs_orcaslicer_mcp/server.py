@@ -3,6 +3,8 @@
 import argparse
 import asyncio
 import os
+import hashlib
+import re
 from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Any
@@ -10,10 +12,19 @@ from typing import Any
 import anyio
 from mcp.server.fastmcp import FastMCP, Image
 
-from . import __version__, catalog, profiles, projects
+from . import (
+    __version__,
+    catalog,
+    profiles,
+    projects,
+    settings as profile_settings,
+    project_settings,
+    gcode,
+)
+from .batches import Batches
 from .desktop import Desktop
 from .engine import Engine
-from .storage import Files, atomic_json
+from .storage import Files, atomic_json, digest
 
 
 def create_server() -> FastMCP:
@@ -28,12 +39,19 @@ def create_server() -> FastMCP:
     )
     desktop = Desktop()
     engine = None
+    batch_store = None
 
     def backend() -> Engine:
         nonlocal engine
         if engine is None:
             engine = Engine(state / "jobs")
         return engine
+
+    def batches() -> Batches:
+        nonlocal batch_store
+        if batch_store is None:
+            batch_store = Batches(state / "batches", backend())
+        return batch_store
 
     @asynccontextmanager
     async def lifespan(server):
@@ -67,6 +85,20 @@ def create_server() -> FastMCP:
     def settings_catalog(query: str = "", offset: int = 0, limit: int = 50) -> dict[str, Any]:
         """Search source-derived setting names, types, labels, enums and ranges (hints)."""
         return catalog.search(query, offset, limit)
+
+    @mcp.tool()
+    async def feature_coverage() -> dict[str, Any]:
+        """Report supported feature families and explicit GUI/API gaps without claiming 100%."""
+        import json
+        from importlib.resources import files as resources
+
+        report = json.loads(
+            resources("rrs_orcaslicer_mcp")
+            .joinpath("data/coverage.json")
+            .read_text(encoding="utf-8")
+        )
+        report["installed_cli"] = await backend().capabilities()
+        return report
 
     @mcp.tool()
     def settings_read(path: str) -> dict[str, Any]:
@@ -135,6 +167,28 @@ def create_server() -> FastMCP:
         return profiles.resolve(files, path, search_directories)
 
     @mcp.tool()
+    def settings_compare(left_path: str, right_path: str) -> dict[str, Any]:
+        """Compare serialized profiles exactly; report added, removed and changed keys."""
+        left, right = files.read(left_path), files.read(right_path)
+        return {
+            "left_sha256": left["sha256"],
+            "right_sha256": right["sha256"],
+            **profile_settings.compare(left["settings"], right["settings"]),
+        }
+
+    @mcp.tool()
+    def settings_validate(values: dict) -> dict[str, Any]:
+        """Advisory check of source-known types, ranges and enums; not engine validation."""
+        return profile_settings.validate(values)
+
+    @mcp.tool()
+    def profile_export(
+        source: str, destination: str, name: str, search_directories: list[str]
+    ) -> dict[str, Any]:
+        """Create a new flattened user profile with inherited values and no parent dependency."""
+        return profile_settings.export_profile(files, source, destination, name, search_directories)
+
+    @mcp.tool()
     def project_inspect(path: str, metadata_member: str = projects.SETTINGS) -> dict[str, Any]:
         """List 3MF members and read JSON/text metadata, including per-object XML."""
         if not metadata_member.startswith("Metadata/"):
@@ -172,6 +226,44 @@ def create_server() -> FastMCP:
             metadata_member=metadata_member,
             metadata_text=text,
         )
+
+    @mcp.tool()
+    def project_objects_read(path: str) -> dict[str, Any]:
+        """Read objects, part IDs, plates and instance assignments as structured settings."""
+        return project_settings.inspect(files, path)
+
+    @mcp.tool()
+    def project_target_settings_write(
+        source: str,
+        destination: str,
+        target: str,
+        target_id: str,
+        changes: dict,
+        expected_source_sha256: str,
+        remove: list[str] | None = None,
+        part_id: str | None = None,
+    ) -> dict[str, Any]:
+        """Set object/part or plate print settings in a new 3MF using stored IDs.
+
+        target is object or plate. Values are Orca's serialized strings. Geometry,
+        identity and cached G-code references are protected. Reslicing is required.
+        """
+        return project_settings.write(
+            files,
+            source,
+            destination,
+            target,
+            target_id,
+            changes,
+            expected_source_sha256,
+            remove,
+            part_id,
+        )
+
+    @mcp.tool()
+    def gcode_analyze(path: str) -> dict[str, Any]:
+        """Summarize declared time/material/layers, selected settings and temperature commands."""
+        return gcode.analyze(files, path)
 
     @mcp.tool()
     async def cli_run(arguments: list[str], timeout_seconds: int = 3600) -> dict[str, Any]:
@@ -222,7 +314,74 @@ def create_server() -> FastMCP:
                 )
             args += ["--export-3mf", export.name]
         args += [str(files.path(p, True)) for p in inputs]
+        files.path(output_directory).mkdir(parents=True, exist_ok=True)
         return await backend().submit(args, timeout_seconds)
+
+    @mcp.tool()
+    async def batch_slice(
+        inputs: list[str],
+        output_directory: str,
+        idempotency_key: str,
+        plate: int = 0,
+        settings: list[str] | None = None,
+        filaments: list[str] | None = None,
+        timeout_seconds: int = 3600,
+    ) -> dict[str, Any]:
+        """Slice up to 64 inputs independently with durable, retry-safe batch identity.
+
+        Reusing a key with unchanged inputs returns existing jobs; changed contents
+        cause a conflict. Each input has its own output folder and sliced 3MF.
+        Interrupted/failed work is never silently repeated; use a new key to retry it.
+        """
+        if not 1 <= len(inputs) <= 64 or plate < 0 or not 1 <= timeout_seconds <= 86400:
+            raise ValueError("Supply 1..64 inputs, plate >= 0, timeout 1..86400")
+        if not 1 <= len(idempotency_key) <= 200 or not idempotency_key.strip():
+            raise ValueError("Supply an idempotency key of 1..200 characters")
+        resolved_inputs = [str(files.path(p, True)) for p in inputs]
+        base = files.path(output_directory)
+        ident = hashlib.sha256(idempotency_key.encode()).hexdigest()[:32]
+        common = ["--slice", str(plate)]
+        profile_paths = []
+        for flag, paths in (("--load-settings", settings), ("--load-filaments", filaments)):
+            if paths:
+                resolved = [str(files.path(p, True)) for p in paths]
+                if any(";" in p for p in resolved):
+                    raise ValueError("Profile filenames cannot contain semicolons")
+                profile_paths += resolved
+                common += [flag, ";".join(resolved)]
+        checks = {
+            p: digest(files.path(p, True)) for p in dict.fromkeys(resolved_inputs + profile_paths)
+        }
+        entries = []
+        for index, path in enumerate(resolved_inputs):
+            stem = re.sub(r"[^a-zA-Z0-9_-]", "_", Path(path).stem)[:40]
+            directory = base / ident / f"{index + 1:03d}-{stem}"
+            args = common + ["--outputdir", str(directory), "--export-3mf", "sliced.3mf", path]
+            entries.append(
+                {
+                    "input": path,
+                    "output_directory": str(directory),
+                    "arguments": args,
+                    "expected_files": {p: checks[p] for p in dict.fromkeys([path] + profile_paths)},
+                }
+            )
+        request = {
+            "inputs": resolved_inputs,
+            "output_directory": str(base),
+            "plate": plate,
+            "settings": common,
+        }
+        return await batches().create(idempotency_key, request, entries, timeout_seconds, checks)
+
+    @mcp.tool()
+    def batch_status(batch_id: str) -> dict[str, Any]:
+        """Aggregate durable batch status and per-input job IDs after reconnecting."""
+        return batches().get(batch_id)
+
+    @mcp.tool()
+    async def batch_cancel(batch_id: str) -> dict[str, Any]:
+        """Cancel active/queued work in a batch and keep successful results unchanged."""
+        return await batches().cancel(batch_id)
 
     @mcp.tool()
     def job_status(job_id: str, log_tail_bytes: int = 8000) -> dict[str, Any]:

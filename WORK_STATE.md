@@ -1,38 +1,29 @@
-# Completed checkpoint — v0.1.1
+# Active checkpoint — 0.2.0
 
-Last successful step: GitHub Actions run 40276480510 passed all six OS/Python
-matrix entries (14 tests each), the official OrcaSlicer 2.4.2 slicing + full MCP
-roundtrip, and packaging. Public v0.1.1 release published with ZIP, wheel,
-source tarball and SHA256SUMS. Downloaded release ZIP checksum/integrity verified.
+Last successful step: 25 tests/lint passed; real MCP extension verification using
+saved official 2.4.2 inputs succeeded. Object wall_loops=4 and plate name changed;
+profile export/diff/validation passed; two-input batch produced G-code; a repeated
+request returned the same jobs without reslicing. Evidence saved in
+ docs/evidence/extensions-0.2.0.json. Source generation and earlier successful
+reference slicing were not repeated.
 
-Release source commit: b801692e51f5bfba880466941eac258e0781dcc3.
-Repository: https://github.com/RoellinRacing/RRS-ORCASLICER-MCP
-Release: https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/releases/tag/v0.1.1
-CI: https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/actions/runs/40276480510
+Base release: 0.1.1, completed checkpoint ea84b238d054707a09cdd2f6586ae498efd11ae3.
+Extension plan saved to GitHub: 07941871faffe9c5e82d22f8c95f3a3010d8a0f3.
+Files added: batches.py, settings.py, project_settings.py, gcode.py, coverage.json,
+test_extensions.py, verify_extensions.py, FEATURE_COVERAGE.md, UPSTREAM_CONTACT.md.
+Business reasons documented in docs/BUSINESS_LOGIC.md. Total MCP tools: 30.
 
-Saved results and files:
-- src/: 20-tool standalone stdio MCP server, profiles, 3MF, jobs and desktop adapter.
-- src/rrs_orcaslicer_mcp/data/options.json: 966 source-derived definitions.
-- scripts/: source generation, installation/configuration, packaging and real tests.
-- tests/: 14 automated checks including real stdio and disconnect cancellation.
-- docs/BUSINESS_LOGIC.md: intended behavior, reasons, constraints and recovery rules.
-- docs/VALIDATION.md and docs/evidence/: real slicing hashes, roundtrip, wheel and CI.
-- README.md, LICENSE, NOTICE: installation, compatibility and source attribution.
-- Release assets preserve the actual published packages; dist/ is local build output.
+User clarified goal is all Orca functions. Complete semantic coverage is NOT achieved:
+painting, calibration, live model/preset APIs and printer/cloud integration remain
+explicitly documented gaps. Official experimental plugin APIs found in source;
+no untested host bridge is claimed. Contact location and draft prepared:
+https://github.com/OrcaSlicer/OrcaSlicer/discussions/14878
+Nothing posted upstream.
 
-Next step: install the release on the user's OrcaSlicer computer and import the
-provided MCP configuration into a local stdio-capable client. No development work
-is pending for this release. GUI interaction and physical printing are not tested;
-new Orca versions are capability-probed and checked by the weekly CI workflow.
-Do not rerun completed generation/tests unless code, engine or requirements change.
+Next: build/verify wheel, publish 0.2.0, inspect all CI matrix entries and release
+assets. Continue remaining live-plugin integration separately with actual nightly
+execution rather than claiming generic GUI clicks equal full API coverage.
 
-# Active extension — 0.2.0
-
-Checked saved state and current origin/main: ea84b238d054707a09cdd2f6586ae498efd11ae3;
-working tree clean. Existing source catalog, published 0.1.1 and real test outputs
-are reused rather than regenerated.
-Planned additions: semantic object/plate settings; profile diff, advisory validation
-and flattened export; structured G-code summaries; persistent batch slicing with
-idempotency and aggregate status/cancellation. Extend tests, business logic and
-real MCP verification, then build and publish a new version.
-Next: implement these modules, save results, run targeted and integration checks.
+Distribution built locally (0.2.0 ZIP, wheel, source tarball, checksums).
+Installed-wheel verification: all 25 tests passed; saved as
+ docs/evidence/wheel-tests-0.2.0.txt. Next: publish source and verify remote CI/release.

@@ -34,6 +34,9 @@ async def test_real_stdio_protocol(tmp_path):
             catalog = await client.call_tool("settings_catalog", {"query": "layer_height"})
             assert not catalog.isError
             assert catalog.structuredContent["total"] > 0
+            coverage = await client.call_tool("feature_coverage", {})
+            assert not coverage.isError
+            assert coverage.structuredContent["complete_orcaslicer_api"] is False
 
 
 async def test_disconnect_cancels_running_job(tmp_path):

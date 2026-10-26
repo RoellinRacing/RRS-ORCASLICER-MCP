@@ -1,15 +1,15 @@
-# 0.1.1
+# 0.2.0
 
-Standalone local stdio MCP bridge for an unmodified OrcaSlicer installation.
+30-tool standalone OrcaSlicer MCP bridge with new semantic project and batch workflows.
 
-- 20 MCP tools: runtime CLI discovery, profile/JSON editing, inheritance,
-  3MF project and object metadata, asynchronous slicing/jobs and optional desktop.
-- 966 source-derived definitions with upstream revision and regeneration script.
-- Backups, revision checks, preserved unknown settings and original 3MF files.
-- Windows installation helper, MCP config generator, wheel/source/ZIP packages.
-- Automated protocol, state, file integrity and process lifecycle tests.
-- Real G-code and sliced 3MF verified using official OrcaSlicer Linux v2.4.2.
+- Read objects, parts, plate IDs and instance assignments; change print settings by ID.
+- Compare serialized profiles, run advisory source-based checks, export flattened profiles.
+- Read declared G-code time, filament, layer and temperature data without executing it.
+- Durable batch slicing, content-sensitive idempotency, aggregate status and cancellation.
+- Verify queued input/profile hashes before engine execution; keep prior successful jobs.
+- Real MCP verification of object settings, two-input batch slicing, output analysis and retry identity.
+- Explicit feature coverage and a prepared upstream plugin-discussion contact proposal.
 
-GUI-only operations require the opt-in desktop adapter and are not covered by the
-real-engine test. No universal future-version guarantee or direct hosted ChatGPT
-HTTPS connector is claimed. See README and docs/COMPATIBILITY.md for scope.
+Not a complete semantic API for all GUI, painting, calibration, printer/cloud or
+live-plugin functions. The experimental official host API has been researched but
+is not yet integrated. See docs/FEATURE_COVERAGE.md. No message has been sent upstream.

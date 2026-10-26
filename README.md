@@ -5,6 +5,18 @@ der Server läuft daneben auf demselben Computer. Windows, macOS und Linux werde
 auf Python-Ebene unterstützt. Der echte Slicing-Nachweis dieser Veröffentlichung
 wurde mit der offiziellen **Linux-Version 2.4.2** durchgeführt.
 
+## Neu in 0.2.0
+
+30 MCP-Werkzeuge: direkte Objekt-/Teil-/Platteneinstellungen, Profilvergleich und
+Vorprüfung, unabhängiger Profilexport, G-Code-Zusammenfassungen sowie Stapel-Slicing
+mit Wiederholungsschutz und Abbruch. Die bestehende 0.1.1-Anbindung bleibt erhalten.
+
+**Noch keine vollständige API für jede Orca-Funktion.** Die tatsächliche Abdeckung,
+GUI-Funktionen und noch nicht integrierten offiziellen Plugin-APIs sind in
+[FEATURE_COVERAGE.md](docs/FEATURE_COVERAGE.md) und per `feature_coverage` ausgewiesen.
+Der vorbereitete [Kontakt zum OrcaSlicer-Team](docs/UPSTREAM_CONTACT.md) nennt die
+passende offizielle Plugin-Diskussion. Dort wurde noch nichts gepostet.
+
 ## Was lässt sich steuern?
 
 | Bereich | Unterstützung |

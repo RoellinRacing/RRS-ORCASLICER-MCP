@@ -11,7 +11,7 @@ import time
 import uuid
 from pathlib import Path
 
-from .storage import atomic_json
+from .storage import atomic_json, digest
 
 
 def find_binary() -> str | None:
@@ -138,11 +138,29 @@ class Engine:
         atomic_json(self.state / "capabilities.json", self._capabilities)
         return self._capabilities
 
-    async def submit(self, arguments: list[str], timeout: int = 3600) -> dict:
+    async def submit(
+        self,
+        arguments: list[str],
+        timeout: int = 3600,
+        job_id: str | None = None,
+        expected_files: dict[str, str] | None = None,
+    ) -> dict:
         if not 1 <= timeout <= 86400:
             raise ValueError("Timeout must be 1..86400 seconds")
         if not arguments or len(arguments) > 1000 or any("\x00" in a for a in arguments):
             raise ValueError("Expected 1..1000 non-NUL CLI arguments")
+        ident = job_id or uuid.uuid4().hex
+        if not re.fullmatch(r"[0-9a-f]{32}", ident):
+            raise ValueError("Invalid job ID")
+        if (self.state / ident / "job.json").exists():
+            existing = self.get(ident)
+            if (
+                existing["arguments"] != arguments
+                or existing["timeout"] != timeout
+                or existing.get("expected_files", {}) != (expected_files or {})
+            ):
+                raise ValueError("Job ID was already used with different inputs")
+            return existing
         caps = await self.capabilities(refresh=True)
         if not caps["available"]:
             raise ValueError(caps["reason"])
@@ -155,7 +173,6 @@ class Engine:
                     )
             elif re.match(r"^-[A-Za-z]", argument):
                 raise ValueError("Use documented long flags, not short aliases")
-        ident = uuid.uuid4().hex
         folder = self.state / ident
         folder.mkdir()
         job = {
@@ -166,6 +183,7 @@ class Engine:
             "created": time.time(),
             "directory": str(folder),
             "log": str(folder / "output.log"),
+            "expected_files": expected_files or {},
         }
         atomic_json(folder / "job.json", job)
         self.tasks[ident] = asyncio.create_task(self._run(job))
@@ -186,6 +204,10 @@ class Engine:
         process = None
         try:
             async with self.slots:
+                # A queued batch must not silently print changed input/profile data.
+                for filename, expected in job.get("expected_files", {}).items():
+                    if digest(Path(filename)) != expected:
+                        raise ValueError(f"Input changed while queued: {filename}")
                 job.update(status="running", started=time.time())
                 atomic_json(path, job)
                 process = await asyncio.create_subprocess_exec(

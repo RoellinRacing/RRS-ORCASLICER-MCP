@@ -48,3 +48,39 @@ Desktopaktionen: `click`, `double_click`, `right_click`, `move`, `drag`, `scroll
 `keys` enthält PyAutoGUI-Namen wie `["ctrl", "o"]`, `text` wird per Zwischenablage
 mit Unicode eingefügt. `amount` ist die Scrollanzahl von -100 bis 100.
 Maus in die obere linke Ecke bewegen löst PyAutoGUIs Notabbruch aus.
+
+## Ergänzungen in 0.2.0
+
+| Werkzeug | Zweck |
+| --- | --- |
+| `feature_coverage()` | Tatsächliche Funktionsfamilien und offene GUI-/API-Lücken |
+| `settings_compare(left_path, right_path)` | Zusätzliche, entfernte und geänderte JSON-Werte |
+| `settings_validate(values)` | Unverbindliche Quellkatalog-Vorprüfung; kein Engine-Nachweis |
+| `profile_export(source, destination, name, search_directories)` | Neues, vollständig aufgelöstes Benutzerprofil |
+| `project_objects_read(path)` | Objekte, Teile, Platten, IDs und Instanzzuweisungen |
+| `project_target_settings_write(source, destination, target, target_id, changes, expected_source_sha256, remove, part_id)` | Objekt-, Teil- oder Plattensettings gezielt ändern |
+| `gcode_analyze(path)` | Deklarierte Zeit/Materialwerte, Schichten und Temperaturkommandos |
+| `batch_slice(inputs, output_directory, idempotency_key, plate, settings, filaments, timeout_seconds)` | Bis zu 64 Eingaben unabhängig slicen |
+| `batch_status(batch_id)` | Gesamtzustand und Einzeljobs lesen |
+| `batch_cancel(batch_id)` | Offene Batch-Jobs beenden, Erfolge erhalten |
+
+Objekt-/Plattensettings verwenden `target: "object"` oder `"plate"` und die IDs aus
+`project_objects_read`. Werte werden als Orcas serialisierte Strings übergeben,
+z. B. `{"wall_loops":"4"}`. Für eine Teileinstellung zusätzlich `part_id` angeben.
+Der Zielpfad muss neu sein; das Ergebnis muss erneut geslicet werden.
+
+Beispiel für einen wiederholbar beauftragbaren Stapel:
+
+```json
+{
+  "inputs": ["C:\\OrcaMCP\\teil-a.3mf", "C:\\OrcaMCP\\teil-b.3mf"],
+  "output_directory": "C:\\OrcaMCP\\batch-output",
+  "idempotency_key": "auftrag-2026-10-26-erster-versuch"
+}
+```
+
+Derselbe Schlüssel ist für denselben Auftrag zu behalten, auch nach einem
+Verbindungsabbruch. Ein bewusst neuer Versuch nach einem fehlgeschlagenen oder
+abgebrochenen Job braucht einen neuen Schlüssel. Der Status eines abgeschlossenen
+Jobs ist kein Nachweis dafür, dass jemand seine Ausgabedatei nicht später gelöscht
+hat; die Dateien können über `workspace_list` und `gcode_analyze` überprüft werden.

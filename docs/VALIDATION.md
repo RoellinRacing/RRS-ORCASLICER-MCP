@@ -66,3 +66,28 @@ Release **v0.1.1** wurde auf Commit `b801692e51f5bfba880466941eac258e0781dcc3`
 veröffentlicht. Das öffentliche ZIP wurde wieder heruntergeladen und gegen die
 veröffentlichten SHA256SUMS sowie auf ZIP-Integrität geprüft.
 [Maschinenlesbare Releaseprüfung](evidence/github-release.json).
+
+## Erweiterungsnachweis für 0.2.0
+
+25 lokale Tests bestanden, einschliesslich der neuen semantischen 3MF-Änderungen,
+Vererbungsexporte, serialisierten Profilunterschiede, advisory Vorprüfungen,
+G-Code-Auswertung, persistierter Batch-Identität, Abbruch und geänderten Warteschlangen-
+Eingaben. Die bisherigen 0.1.1-Prüfungen bleiben enthalten.
+
+`scripts/verify_extensions.py` verwendet das schon vorhandene reale Referenzprojekt
+und den offiziellen MCP-Client. Getestet wurden Objekt-Wände auf `4`, eine neue
+Plattenbezeichnung, flacher Profilexport und ein Zweier-Stapel mit Original und
+geändertem Projekt. Der zweite identische Aufruf verwendete dieselben Job-IDs und
+erzeugte keine weiteren Slicing-Prozesse.
+
+OrcaSlicer 2.4.2 erzeugte für das Original 193189 Bytes G-Code mit deklarierten
+739 Sekunden/0.72 g und für das Vier-Wände-Objekt 205164 Bytes mit 743 Sekunden/0.94 g.
+Die objektbezogene Einstellung `wall_loops=4` blieb im neu exportierten 3MF erhalten.
+Das sind Slicer-Schätzungen, keine gemessenen Druckzeiten oder Materialverbräuche.
+Maschinenlesbares Ergebnis: [extensions-0.2.0.json](evidence/extensions-0.2.0.json).
+
+Die hier recherchierte experimentelle offizielle Plugin-API wurde nicht in einer
+Nightly ausgeführt und ist keine implementierte Funktion dieser Veröffentlichung.
+
+Auch das separat installierte 0.2.0-Wheel bestand dieselben 25 Tests:
+[evidence/wheel-tests-0.2.0.txt](evidence/wheel-tests-0.2.0.txt).

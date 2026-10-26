@@ -64,3 +64,45 @@ Desktopaktionen beweisen nur, dass die Eingabe ausgeführt wurde. Ob ein Werkzeu
 seinen Zweck erfüllt hat, muss am neuen Screenshot oder an der erzeugten Datei
 überprüft werden. GUI, Cloudanmeldung, physische Drucker und alle alten Orca-Versionen
 sind nicht durch den Linux-Slicing-Test abgenommen.
+
+## Erweiterungen in 0.2.0
+
+Objekt-/Teil-/Plattenänderungen adressieren gespeicherte IDs und lehnen fehlende
+oder doppelte Ziele ab. Geometrie, Identität und G-Code-Referenzen werden nicht
+als gewöhnliche Druckeinstellungen behandelt. Die neue Datei bleibt ein Projekt,
+kein bereits fertiger Druckauftrag; alle bisherigen Slicing-Caches werden entfernt.
+Das verhindert, dass ein Objektsetting versehentlich ein anderes Objekt verändert
+oder noch der alte G-Code gedruckt wird.
+
+Der Profilvergleich vergleicht serialisierte JSON-Werte inklusive verschachtelter
+Typunterschiede. Eine flache Kopie erhält die Elternwerte, entfernt `inherits` und
+die kopierte System-Setting-ID und wird als neues Benutzerprofil gespeichert.
+Die Vorprüfung verwendet nur belegte Typ-/Enum-/Bereichshinweise des Source-Snapshots.
+Unbekannte Schlüssel sind keine Fehler. Sie behauptet ausdrücklich keine Prüfung
+gegen Orcas installierte Engine oder druckerspezifische Kombinationen.
+
+Stapelaufträge speichern ihr Manifest vor der ersten Ausführung. Aus dem expliziten
+Idempotenzschlüssel entstehen die Batch-ID und deterministische Job-IDs. Derselbe
+Schlüssel mit denselben Parametern und Dateiinhalten liefert vorhandene Jobs zurück;
+abweichende Parameter/Inhalte erzeugen einen Konflikt. Abgebrochene, fehlgeschlagene
+oder nach einem Neustart unterbrochene Jobs werden dabei nicht automatisch wiederholt.
+Ein absichtlicher neuer Versuch benötigt einen neuen Schlüssel. Fehlende, noch nie
+angelegte Jobs eines unvollständig übermittelten Manifests können weiter angelegt
+werden. Ein gespeicherter Abbruch verhindert auch das.
+
+Jedes Eingabemodell bekommt einen eigenen Ausgabeordner unter der Batch-ID. Diese
+Ordner werden rekursiv angelegt, weil Orcas CLI nicht alle Elternordner selbst
+anlegt. Hashes der jeweils benötigten Modelle/Profile werden direkt vor dem Start
+überprüft. Ändert ein Benutzer eine Datei während der Wartezeit, schlägt der Job
+explizit fehl, statt still andere Einstellungen zu slicen. Bei einem Batch-Abbruch
+bleiben bereits erfolgreiche Jobs und deren Dateien erhalten.
+
+Die G-Code-Auswertung liest eine Textdatei im Stream. Sie gibt deklarierte Zeit-
+und Materialwerte, Schichtmarker, ausgewählte Settings sowie explizite Temperatur-
+kommandos aus. Kommentare mit hinterlegtem Startcode werden nicht als ausgeführte
+Kommandos gezählt. Die Auswertung simuliert weder Firmware noch bedingte Makros
+und ist kein Sicherheitsurteil über einen realen Druck.
+
+Die Coverage-Ausgabe unterscheidet Funktionsfamilien statt eine erfundene
+Vollständigkeitsquote auszugeben. Offizielle experimentelle Host-APIs gelten erst
+nach echter Integration und Tests als unterstützt; ihre Existenz allein genügt nicht.
