@@ -1,0 +1,103 @@
+{
+  "run": 40358645271,
+  "cases": [
+    {
+      "kind": "input_shaping_damping",
+      "image": "121698373056/host-output/host-evidence/native-requests/a1f1d328d1b349c6865e53a9206255ac/screenshots/failure.png",
+      "sha256": "1abc30662be34e113ba3308a420feb3db8c644863ba288415d677226da47c1d0",
+      "bounds": [
+        501,
+        365,
+        921,
+        799
+      ],
+      "expected": {
+        "freq_x": 30,
+        "freq_y": 30,
+        "start": 0,
+        "end": 0.4
+      },
+      "source_job": 121698373056
+    },
+    {
+      "kind": "cornering",
+      "image": "121698372824/host-output/host-evidence/native-requests/ab4577df1dc04d2b96d910aa00f30c6e/screenshots/failure.png",
+      "sha256": "5e530e9ff55ffc2da159abd4cfb514f2afe77ac11bd6d4e388f94e8128cf5cf8",
+      "bounds": [
+        501,
+        365,
+        810,
+        694
+      ],
+      "expected": {
+        "start": 1,
+        "end": 15
+      },
+      "source_job": 121698372824
+    },
+    {
+      "kind": "pressure_advance",
+      "image": "121698372715/host-output/host-evidence/native-requests/327dd06cee264082b1d935b6c62383ba/screenshots/failure.png",
+      "sha256": "b93b6b611d17bea23123826db8a7beda3e72f5e89f0ee2ba8883c1043d7b9cea",
+      "bounds": [
+        501,
+        365,
+        824,
+        766
+      ],
+      "expected": {
+        "start": 0,
+        "end": 0.1,
+        "step": 0.002
+      },
+      "source_job": 121698372715
+    },
+    {
+      "kind": "max_volumetric_speed",
+      "image": "121698373026/host-output/host-evidence/native-requests/0651790e4fad445c82b8a18f3cef7e63/screenshots/failure.png",
+      "sha256": "ba6faa2f7c9cd23108b4e84cb06c0f95407db59f525f7f66d0b3a039811d7c80",
+      "bounds": [
+        501,
+        365,
+        824,
+        544
+      ],
+      "expected": {
+        "start": 5,
+        "end": 20,
+        "step": 0.5
+      },
+      "source_job": 121698373026
+    },
+    {
+      "kind": "retraction",
+      "image": "121698372880/host-output/host-evidence/native-requests/703599a53753434fab5aeb04bf721de3/screenshots/failure.png",
+      "sha256": "1d0fa6463e3ccbfdc061c9aba4622f6767d1beae1825dc001b93dfa3847246c0",
+      "bounds": [
+        501,
+        365,
+        822,
+        549
+      ],
+      "expected": {
+        "start": 0,
+        "end": 2,
+        "step": 0.1
+      },
+      "source_job": 121698372880
+    },
+    {
+      "kind": "flow_ratio",
+      "image": "121698372975/host-output/host-evidence/native-requests/892b2b6c718c4b07b5e12bb07a815459/screenshots/failure.png",
+      "sha256": "620226dc550d88b30372e5b8fa2f817c4852901d0d68d1b3e48f3564ebac66be",
+      "bounds": [
+        501,
+        365,
+        795,
+        629
+      ],
+      "expected": {},
+      "source_job": 121698372975
+    }
+  ]
+}

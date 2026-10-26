@@ -229,3 +229,14 @@ unexpected dialog/readback or partial native action remains indeterminate and is
 never automatically replayed. The exclusive external journal precedes input and
 retains screenshot/phase/result evidence. Platform/locale/layout acceptance must
 be stated separately from pure Python tests.
+
+### Selected native calibration values
+
+GTK highlights focused values as white on blue. Numeric OCR must preserve glyph
+holes and decimal points while removing field borders; connected highlight
+components read the immutable screenshot, never a partly normalized image. Read
+only the row identified by an exact field label, rather than accepting a tall OCR
+word spanning two native fields. Exact numeric readback remains mandatory before
+generation. Missing flow-ratio heading may use the single group above Settings
+only with exact active title `Flow Ratio Calibration`, and still requires one
+exact matching choice. These are observation fallbacks, never input retries.

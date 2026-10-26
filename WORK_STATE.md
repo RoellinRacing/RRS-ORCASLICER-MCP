@@ -179,3 +179,19 @@ acceptance. An initial local 80-test run stalled on filesystem timing and reject
 expired fixture requests; both unchanged tests and the full rerun then passed.
 Next: inspect all nine independent outcomes, fix remaining real selectors together,
 then require the combined native result and publish/check the 0.5.0 assets.
+
+Continuation 2026-10-26 (from 4aa5517): inspected the existing run 40358645271.
+All six unit matrix entries and real slicing passed. Independent native text,
+temperature, VFA and input-shaping frequency passed. Six generators exposed OCR
+failures on selected GTK values, vertically merged numeric rows and a clipped
+flow-ratio group heading. Saved correction normalizes blue selected text from
+immutable pixels, reads numeric rows separately with border removal/3x OCR, and
+uses an exact-title-bound flow radio group if its heading is clipped. Actual
+failure screenshots are bound by SHA256 in native-calibration-ocr-manifest.json;
+replay_calibration_ocr.py checks their exact values without desktop input.
+Next: require all screenshot replays, ordinary tests and a new full native run;
+release remains gated on successful combined native acceptance. No physical print.
+All six saved screenshot cases passed the exact-value/choice replay, including
+0.1/0.002/0.5 decimals and both 30 Hz fields. 87 local tests passed; static checks
+and generated-plugin consistency passed. Actual results and reproduction manifest
+are committed with source/business rules before the next native CI computation.

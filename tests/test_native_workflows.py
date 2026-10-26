@@ -234,7 +234,8 @@ def test_native_numeric_units_do_not_change_value(tmp_path, visible, expected):
         return {"text": text, "tokens": tokens(text), "x": x, "y": 10, "w": 30, "h": 12}
 
     ui = NativeControls(None, tmp_path)
-    ui.words = lambda region=None: [word("Start", 10), word(visible, 100)]
+    ui.words = lambda region=None, **kwargs: [word("Start", 10), word(visible, 100)]
+    ui.bounds = lambda: (0, 0, 500, 500)
     assert ui.read_numeric("Start")[1] == expected
 
 
@@ -315,7 +316,7 @@ def test_native_button_selector_ignores_matching_body_text(tmp_path):
     ui.window_title = lambda: "Creating a new project: unsaved changes"
     ui.bounds = lambda: (0, 0, 600, 500)
     ui.main_bounds = (0, 0, 1200, 800)
-    ui.words = lambda region=None: [word(100), word(455)]
+    ui.words = lambda region=None, **kwargs: [word(100), word(455)]
     ui.point_click = lambda box: clicked.append(box)
     ui.dialog_button("Transfer", "Creating a new project: unsaved changes")
     assert len(clicked) == 1 and clicked[0]["y"] == 455
@@ -329,7 +330,7 @@ def test_native_label_waits_for_painted_dialog_without_input(tmp_path, monkeypat
         [[], [{"text": "PATower", "tokens": tokens("PATower"), "x": 10, "y": 10, "w": 60, "h": 12}]]
     )
     ui = NativeControls(None, tmp_path)
-    ui.words = lambda region=None: next(observations)
+    ui.words = lambda region=None, **kwargs: next(observations)
     monkeypatch.setattr(native_ui.time, "sleep", lambda _: None)
     assert ui.label("PA Tower")["x"] == 10
 
@@ -341,7 +342,7 @@ def test_native_dialog_does_not_repeat_click_after_input_error(tmp_path):
     ui.window_title = lambda: "Temperature calibration"
     ui.bounds = lambda: (0, 0, 600, 500)
     ui.main_bounds = (0, 0, 1200, 800)
-    ui.words = lambda region=None: [
+    ui.words = lambda region=None, **kwargs: [
         {"text": "OK", "tokens": tokens("OK"), "x": 300, "y": 455, "w": 20, "h": 12}
     ]
     actions = []
@@ -376,3 +377,68 @@ def test_native_radio_fallback_stays_in_identified_group(tmp_path):
     ui.point_click = lambda box: clicked.append(box)
     ui.radio_choice("Method", "PA Tower", "Tower")
     assert len(clicked) == 1 and clicked[0]["y"] == 150
+
+
+def test_native_numeric_reads_separate_row_instead_of_tall_merged_word(tmp_path):
+    from rrs_orcaslicer_mcp.native_ui import tokens
+
+    def word(value, x, y=10, h=12):
+        return dict(text=value, tokens=tokens(value), x=x, y=y, w=30, h=h)
+
+    ui = NativeControls(None, tmp_path)
+    ui.bounds = lambda: (0, 0, 500, 500)
+    observations = []
+
+    def words(region=None, **kwargs):
+        observations.append((region, kwargs))
+        if region is None:
+            return [word("Frequency", 10), word("20", 100, h=49)]
+        return [word("30", 100), word("30", 200)]
+
+    ui.words = words
+    assert ui.read_numeric("Frequency", index=1)[1] == 30
+    assert observations[1][1]["psm"] == 7
+
+
+def test_native_selection_normalization_keeps_digit_hole_white():
+    image_module = pytest.importorskip("PIL.Image")
+    image = image_module.new("RGB", (24, 20), (255, 255, 255))
+    # Selected text with a white zero ring and blue interior disconnected from
+    # the outer selection. Both components must read from the original pixels.
+    for x in range(2, 22):
+        for y in range(2, 18):
+            image.putpixel((x, y), (53, 132, 228))
+    for x in range(6, 17):
+        for y in range(4, 16):
+            if x in (6, 7, 15, 16) or y in (4, 5, 14, 15):
+                image.putpixel((x, y), (255, 255, 255))
+    normalized = NativeControls.normalize_selection(image)
+    assert normalized.getpixel((6, 8)) == (0, 0, 0)
+    assert normalized.getpixel((10, 8)) == (255, 255, 255)
+    assert normalized.getpixel((3, 8)) == (255, 255, 255)
+
+
+@pytest.mark.parametrize("title", ["Flow Ratio Calibration", "Other dialog"])
+def test_flow_group_missing_heading_requires_exact_dialog_title(tmp_path, title):
+    ui = NativeControls(None, tmp_path)
+    ui.bounds = lambda: (0, 0, 600, 500)
+    ui.window_title = lambda: title
+    clicked = []
+
+    def label(phrase, region=None):
+        if phrase == "Settings":
+            return {"y": 200}
+        if phrase == "Calibration Test Type":
+            raise ValueError("clipped heading")
+        assert region == (0, 0, 600, 200)
+        return {"x": 30, "y": 60, "w": 40, "h": 12}
+
+    ui.label = label
+    ui.point_click = clicked.append
+    if title == "Flow Ratio Calibration":
+        ui.radio_choice("Calibration Test Type", "Pass 1 Coarse", "Coarse")
+        assert len(clicked) == 1
+    else:
+        with pytest.raises(ValueError, match="clipped heading"):
+            ui.radio_choice("Calibration Test Type", "Pass 1 Coarse", "Coarse")
+        assert clicked == []

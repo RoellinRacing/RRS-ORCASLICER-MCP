@@ -1,0 +1,186 @@
+{
+  "phrase": "Calibration Test Type",
+  "region": null,
+  "words": [
+    {
+      "text": "Callbravgon",
+      "tokens": [
+        "callbravgon"
+      ],
+      "x": 511.5,
+      "y": 365.0,
+      "w": 72.5,
+      "h": 9.0
+    },
+    {
+      "text": "lest",
+      "tokens": [
+        "lest"
+      ],
+      "x": 594.5,
+      "y": 365.0,
+      "w": 24.0,
+      "h": 9.0
+    },
+    {
+      "text": "type",
+      "tokens": [
+        "type"
+      ],
+      "x": 625.5,
+      "y": 365.0,
+      "w": 28.0,
+      "h": 12.0
+    },
+    {
+      "text": "Pass",
+      "tokens": [
+        "pass"
+      ],
+      "x": 540.5,
+      "y": 392.0,
+      "w": 27.5,
+      "h": 11.0
+    },
+    {
+      "text": "1",
+      "tokens": [
+        "1"
+      ],
+      "x": 574.5,
+      "y": 392.0,
+      "w": 5.0,
+      "h": 11.0
+    },
+    {
+      "text": "(Coarse)",
+      "tokens": [
+        "coarse"
+      ],
+      "x": 585.5,
+      "y": 391.0,
+      "w": 55.5,
+      "h": 14.0
+    },
+    {
+      "text": "Pass",
+      "tokens": [
+        "pass"
+      ],
+      "x": 540.5,
+      "y": 422.0,
+      "w": 27.5,
+      "h": 11.0
+    },
+    {
+      "text": "2",
+      "tokens": [
+        "2"
+      ],
+      "x": 574.0,
+      "y": 422.0,
+      "w": 7.0,
+      "h": 11.0
+    },
+    {
+      "text": "(Fine)",
+      "tokens": [
+        "fine"
+      ],
+      "x": 585.5,
+      "y": 421.0,
+      "w": 37.5,
+      "h": 14.0
+    },
+    {
+      "text": "YOLO",
+      "tokens": [
+        "yolo"
+      ],
+      "x": 539.0,
+      "y": 452.0,
+      "w": 37.0,
+      "h": 11.0
+    },
+    {
+      "text": "(Recommended)",
+      "tokens": [
+        "recommended"
+      ],
+      "x": 581.5,
+      "y": 451.0,
+      "w": 110.5,
+      "h": 14.0
+    },
+    {
+      "text": "YOLO",
+      "tokens": [
+        "yolo"
+      ],
+      "x": 539.0,
+      "y": 482.0,
+      "w": 37.0,
+      "h": 11.0
+    },
+    {
+      "text": "(Perfectionist)",
+      "tokens": [
+        "perfectionist"
+      ],
+      "x": 581.5,
+      "y": 481.0,
+      "w": 94.5,
+      "h": 14.0
+    },
+    {
+      "text": "Settings",
+      "tokens": [
+        "settings"
+      ],
+      "x": 511.0,
+      "y": 521.0,
+      "w": 54.0,
+      "h": 14.0
+    },
+    {
+      "text": "Top",
+      "tokens": [
+        "top"
+      ],
+      "x": 518.0,
+      "y": 550.0,
+      "w": 23.0,
+      "h": 14.0
+    },
+    {
+      "text": "Surface",
+      "tokens": [
+        "surface"
+      ],
+      "x": 546.0,
+      "y": 549.0,
+      "w": 50.0,
+      "h": 12.0
+    },
+    {
+      "text": "Pattern",
+      "tokens": [
+        "pattern"
+      ],
+      "x": 601.5,
+      "y": 550.0,
+      "w": 44.5,
+      "h": 11.0
+    },
+    {
+      "text": "Archimede...",
+      "tokens": [
+        "archimede"
+      ],
+      "x": 695.0,
+      "y": 550.0,
+      "w": 81.0,
+      "h": 11.0
+    }
+  ]
+}

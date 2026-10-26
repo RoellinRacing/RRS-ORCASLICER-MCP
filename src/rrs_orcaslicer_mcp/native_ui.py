@@ -52,7 +52,7 @@ class NativeControls:
         x, y, width, height = [int(data[k]) for k in ("X", "Y", "WIDTH", "HEIGHT")]
         return x, y, x + width, y + height
 
-    def words(self, region=None):
+    def words(self, region=None, psm=11):
 
         api = self.desktop._api()
         left, top, right, bottom = self.bounds()
@@ -64,14 +64,35 @@ class NativeControls:
         if region:
             left, top = max(left, int(region[0])), max(top, int(region[1]))
             right, bottom = min(right, int(region[2])), min(bottom, int(region[3]))
-        crop = image.crop((left, top, right, bottom)).convert("RGB")
+        crop = self.normalize_selection(image.crop((left, top, right, bottom)).convert("RGB"))
+        if psm == 7:
+            # Remove full-height wx input borders, never glyph-colored strokes.
+            pixels = crop.load()
+            for x in range(crop.width):
+                border = sum(
+                    (max(pixels[x, y]) - min(pixels[x, y]) < 4 and 180 <= pixels[x, y][0] <= 240)
+                    or (
+                        pixels[x, y][0] < 50
+                        and 90 < pixels[x, y][1] < 200
+                        and 70 < pixels[x, y][2] < 190
+                    )
+                    for y in range(crop.height)
+                )
+                if border >= crop.height * 0.8:
+                    for y in range(crop.height):
+                        pixels[x, y] = (255, 255, 255)
+            from PIL import ImageOps
+
+            crop = ImageOps.expand(crop, border=6, fill="white")
+            left, top = left - 6, top - 6
         stream = io.BytesIO()
-        crop.resize((crop.width * 2, crop.height * 2)).save(stream, format="PNG")
+        scale = 3 if psm == 7 else 2
+        crop.resize((crop.width * scale, crop.height * scale)).save(stream, format="PNG")
         # Bound OCR wall time and use a per-child OpenMP setting. Full-screen
         # Tesseract can otherwise spend minutes on a dense GL/UI composition.
         try:
             response = subprocess.run(
-                ["tesseract", "stdin", "stdout", "--psm", "11", "tsv"],
+                ["tesseract", "stdin", "stdout", "--psm", str(psm), "tsv"],
                 input=stream.getvalue(),
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
@@ -92,13 +113,49 @@ class NativeControls:
                     {
                         "text": text,
                         "tokens": tokens(text),
-                        "x": left + int(row["left"]) / 2,
-                        "y": top + int(row["top"]) / 2,
-                        "w": int(row["width"]) / 2,
-                        "h": int(row["height"]) / 2,
+                        "x": left + int(row["left"]) / scale,
+                        "y": top + int(row["top"]) / scale,
+                        "w": int(row["width"]) / scale,
+                        "h": int(row["height"]) / scale,
                     }
                 )
         return result
+
+    @staticmethod
+    def normalize_selection(image):
+        # GTK selects focused numeric text as white glyphs on blue. Normalize
+        # only connected blue highlight rectangles, retaining their white glyphs.
+        image = image.copy()
+        pixels = image.load()
+        source = image.copy().load()
+        pending = {
+            (x, y)
+            for y in range(image.height)
+            for x in range(image.width)
+            if pixels[x, y][2] > pixels[x, y][0] + 60
+            and pixels[x, y][2] > pixels[x, y][1] + 30
+            and pixels[x, y][1] > pixels[x, y][0] + 25
+        }
+        while pending:
+            stack = [pending.pop()]
+            group = []
+            while stack:
+                x, y = stack.pop()
+                group.append((x, y))
+                for adjacent in ((x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)):
+                    if adjacent in pending:
+                        pending.remove(adjacent)
+                        stack.append(adjacent)
+            x0, x1 = min(x for x, _ in group), max(x for x, _ in group)
+            y0, y1 = min(y for _, y in group), max(y for _, y in group)
+            if not (2 <= x1 - x0 <= 200 and 8 <= y1 - y0 <= 35):
+                continue
+            for y in range(y0, y1 + 1):
+                for x in range(x0, x1 + 1):
+                    # White/antialiased glyphs become dark; blue becomes white.
+                    v = 255 - max(0, min(255, (min(source[x, y]) - 80) * 255 // 175))
+                    pixels[x, y] = (v, v, v)
+        return image
 
     @staticmethod
     def locate(words, phrase, region=None, all_matches=False):
@@ -148,7 +205,7 @@ class NativeControls:
         # Native dialogs can finish painting after their first visible frame.
         # Retry observation only; no click or key is repeated by this wait.
         for attempt in range(3):
-            words = self.words(region)
+            words = self.words(region) if attempt < 2 else self.words(region, psm=6)
             try:
                 return self.locate(words, phrase, region)
             except ValueError:
@@ -257,10 +314,19 @@ class NativeControls:
         self.point_click(matches[0])
 
     def radio_choice(self, group, full_label, unique_word):
-        heading = self.label(group)
         end = self.label("Settings")
-        left, _, right, _ = self.bounds()
-        region = (left, heading["y"] + heading["h"], right, end["y"])
+        left, top, right, _ = self.bounds()
+        try:
+            heading = self.label(group)
+            start = heading["y"] + heading["h"]
+        except ValueError:
+            # This stock dialog has one radio group before Settings. Some
+            # window managers clip its first heading at the client boundary.
+            # Require the exact active dialog title before using that group.
+            if group != "Calibration Test Type" or self.window_title() != "Flow Ratio Calibration":
+                raise
+            start = top
+        region = (left, start, right, end["y"])
         if region[1] >= region[3]:
             raise ValueError("Native radio group bounds are invalid")
         try:
@@ -306,14 +372,25 @@ class NativeControls:
     def read_numeric(self, label, region=None, index=0, columns=None, required_unit=None):
         words = self.words(region)
         rows = []
-        for anchor in self.locate(words, label, region, all_matches=True):
+        anchors = self.locate(words, label, region, all_matches=True)
+        if not anchors:
+            words = self.words(region, psm=6)
+            anchors = self.locate(words, label, region, all_matches=True)
+        for anchor in anchors:
             mid = anchor["y"] + anchor["h"] / 2
+            # Full-dialog OCR sometimes merges adjacent numeric rows into a
+            # single tall word (e.g. two 30 Hz values become 20). Re-read only
+            # this label's row before choosing a value or dispatching input.
+            _, _, right, _ = self.bounds()
+            row_region = (anchor["x"] + anchor["w"] + 5, mid - 7, right, mid + 7)
+            row_words = self.words(row_region, psm=7)
             numbers = sorted(
                 [
                     w
-                    for w in words
-                    if w["x"] > anchor["x"] + anchor["w"] + 5
-                    and abs(w["y"] + w["h"] / 2 - mid) <= 10
+                    for w in row_words
+                    if w["h"] <= 24
+                    and w["x"] > anchor["x"] + anchor["w"] + 5
+                    and abs(w["y"] + w["h"] / 2 - mid) <= 5
                     and re.fullmatch(
                         r"[-+]?\d+(?:[.,]\d+)?(?:%|mm|°C?|℃|Hz|mm/s|mm[³3]/s)?",
                         w["text"].strip("()[]|"),
@@ -323,7 +400,7 @@ class NativeControls:
                 key=lambda w: w["x"],
             )
             if required_unit and not any(
-                w["text"] == required_unit and abs(w["y"] + w["h"] / 2 - mid) <= 10 for w in words
+                w["text"] == required_unit and abs(w["y"] + w["h"] / 2 - mid) <= 5 for w in words
             ):
                 continue
             if len(numbers) > index and (columns is None or len(numbers) == columns):

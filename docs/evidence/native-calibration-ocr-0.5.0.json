@@ -1,0 +1,63 @@
+{
+  "status": "succeeded",
+  "no_desktop_input": true,
+  "cases": [
+    {
+      "kind": "input_shaping_damping",
+      "observed": {
+        "freq_x": 30.0,
+        "freq_y": 30.0,
+        "start": 0.0,
+        "end": 0.4
+      },
+      "status": "succeeded"
+    },
+    {
+      "kind": "cornering",
+      "observed": {
+        "start": 1.0,
+        "end": 15.0
+      },
+      "status": "succeeded"
+    },
+    {
+      "kind": "pressure_advance",
+      "observed": {
+        "start": 0.0,
+        "end": 0.1,
+        "step": 0.002
+      },
+      "status": "succeeded"
+    },
+    {
+      "kind": "max_volumetric_speed",
+      "observed": {
+        "start": 5.0,
+        "end": 20.0,
+        "step": 0.5
+      },
+      "status": "succeeded"
+    },
+    {
+      "kind": "retraction",
+      "observed": {
+        "start": 0.0,
+        "end": 2.0,
+        "step": 0.1
+      },
+      "status": "succeeded"
+    },
+    {
+      "kind": "flow_ratio",
+      "observed": {
+        "radio_target": {
+          "x": 540.5,
+          "y": 391.0,
+          "w": 100.5,
+          "h": 14.0
+        }
+      },
+      "status": "succeeded"
+    }
+  ]
+}
