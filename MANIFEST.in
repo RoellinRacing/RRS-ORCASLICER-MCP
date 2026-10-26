@@ -1,0 +1,6 @@
+include LICENSE NOTICE WORK_STATE.md
+recursive-include docs *.md *.json *.txt
+recursive-include scripts *.py *.ps1 *.sh
+recursive-include tests *.py
+recursive-include src/rrs_orcaslicer_mcp/data *.json
+recursive-include .github/workflows *.yml

@@ -10,7 +10,9 @@ from rrs_orcaslicer_mcp.storage import Files, digest
 
 def test_settings_roundtrip_unknown_keys_revision_backup(tmp_path):
     files = Files([tmp_path])
-    first = files.write("p.json", {"name": "PLA ä", "future_key": ["v"], "layer_height": "0.2"}, [], None)
+    first = files.write(
+        "p.json", {"name": "PLA ä", "future_key": ["v"], "layer_height": "0.2"}, [], None
+    )
     with pytest.raises(ValueError, match="SHA256"):
         files.write("p.json", {"layer_height": "0.3"}, [], None)
     second = files.write("p.json", {"layer_height": "0.3"}, [], first["sha256"])
@@ -82,8 +84,50 @@ def test_object_metadata_edit(tmp_path):
     make_project(src)
     member = "Metadata/model_settings.config"
     changed = '<config><object id="1"><metadata key="extruder" value="2"/></object></config>'
-    result = projects.patch(files, "source.3mf", "object.3mf", {}, digest(src), metadata_member=member, metadata_text=changed)
+    result = projects.patch(
+        files,
+        "source.3mf",
+        "object.3mf",
+        {},
+        digest(src),
+        metadata_member=member,
+        metadata_text=changed,
+    )
     assert result["text"] == changed
     with pytest.raises(ParseError):
-        projects.patch(files, "source.3mf", "bad.3mf", {}, digest(src), metadata_member=member, metadata_text="<broken")
+        projects.patch(
+            files,
+            "source.3mf",
+            "bad.3mf",
+            {},
+            digest(src),
+            metadata_member=member,
+            metadata_text="<broken",
+        )
     assert not (tmp_path / "bad.3mf").exists()
+
+
+def test_changed_settings_remove_stale_gcode(tmp_path):
+    files = Files([tmp_path])
+    src = tmp_path / "sliced.3mf"
+    make_project(src)
+    with zipfile.ZipFile(src, "a") as archive:
+        archive.writestr("Metadata/plate_1.gcode", "old instructions")
+        archive.writestr("Metadata/plate_1.gcode.md5", "old checksum")
+        archive.writestr("Metadata/plate_1.json", '{"old":"statistics"}')
+        archive.writestr(
+            "Metadata/_rels/model_settings.config.rels",
+            '<Relationships><Relationship Target="/Metadata/plate_1.gcode"/></Relationships>',
+        )
+    result = projects.patch(
+        files, "sliced.3mf", "changed.3mf", {"layer_height": "0.3"}, digest(src)
+    )
+    assert result["requires_reslice"] is True
+    assert "Metadata/plate_1.gcode" in result["removed_slice_artifacts"]
+    with zipfile.ZipFile(tmp_path / "changed.3mf") as archive:
+        assert "Metadata/plate_1.gcode" not in archive.namelist()
+        assert (
+            "plate_1.gcode"
+            not in archive.read("Metadata/_rels/model_settings.config.rels").decode()
+        )
+        assert archive.read("vendor/unknown.bin") == b"\x00\x01\xff"

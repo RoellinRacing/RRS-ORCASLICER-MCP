@@ -1,0 +1,15 @@
+RRS-ORCASLICER-MCP
+Copyright (c) 2026 RRS project contributors
+Licensed under GNU Affero General Public License v3.0 or later.
+
+The option catalog src/rrs_orcaslicer_mcp/data/options.json is derived from
+OrcaSlicer/OrcaSlicer src/libslic3r/PrintConfig.cpp, revision
+5817a76da6a783a992009c8f3aa6cd6b88efc9b8, licensed AGPL-3.0.
+Upstream: https://github.com/OrcaSlicer/OrcaSlicer
+Copyright: OrcaSlicer, Bambu Studio, PrusaSlicer and Slic3r contributors as
+documented in the upstream source. This project includes no slicer engine binary.
+The original corresponding upstream source is available at the revision URL:
+https://github.com/OrcaSlicer/OrcaSlicer/blob/5817a76da6a783a992009c8f3aa6cd6b88efc9b8/src/libslic3r/PrintConfig.cpp
+
+OrcaSlicer is a separate project. This bridge is not affiliated with or endorsed
+by its maintainers. Third-party Python dependencies retain their own licenses.

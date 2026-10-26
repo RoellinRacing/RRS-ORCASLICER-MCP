@@ -53,7 +53,7 @@
     "bed_exclude_area": {
       "key": "bed_exclude_area",
       "type": "coPoints",
-      "source_line": 1053,
+      "source_line": 1054,
       "label": "Excluded bed area",
       "tooltip": "Unprintable area in XY plane. For example, X1 Series printers use the front left corner to cut filament during filament change. The area is expressed as a polygon in the format \"XxY, XxY, ...\". It constrains material and model placement, but allows machine travel. Configure toolhead collision volumes separately for G-code checking and travel avoidance."
     },
@@ -157,7 +157,7 @@
     "preset_names": {
       "key": "preset_names",
       "type": "coStrings",
-      "source_line": 1171,
+      "source_line": 1276,
       "label": "Printer preset names",
       "tooltip": "Names of presets related to the physical printer."
     },
@@ -924,7 +924,7 @@
     "brim_ears": {
       "key": "brim_ears",
       "type": "coBool",
-      "source_line": 563,
+      "source_line": 2176,
       "label": "Brim ears",
       "tooltip": "Only draw brim over the sharp edges of the model.",
       "category": "Support"
@@ -1349,7 +1349,7 @@
     "outer_wall_speed": {
       "key": "outer_wall_speed",
       "type": "coFloats",
-      "source_line": 1998,
+      "source_line": 2702,
       "label": "Outer wall",
       "tooltip": "This is the printing speed for the outer walls of parts. These are generally printed slower than inner walls for higher quality.",
       "category": "Speed",
@@ -1583,7 +1583,7 @@
     "line_width": {
       "key": "line_width",
       "type": "coFloatOrPercent",
-      "source_line": 1953,
+      "source_line": 3018,
       "label": "Default",
       "tooltip": "Default line width if other line widths are set to 0. If expressed as a %, it will be computed over the nozzle diameter.",
       "category": "Quality",
@@ -2312,7 +2312,7 @@
     "outer_wall_acceleration": {
       "key": "outer_wall_acceleration",
       "type": "coFloats",
-      "source_line": 2346,
+      "source_line": 3888,
       "label": "Outer wall",
       "tooltip": "Acceleration of outer wall: using a lower value can improve quality.",
       "category": "Speed",
@@ -2560,7 +2560,7 @@
     "filament_ironing_flow": {
       "key": "filament_ironing_flow",
       "type": "coPercents",
-      "source_line": 134,
+      "source_line": 4191,
       "label": "Ironing flow",
       "tooltip": "Filament-specific override for ironing flow. This allows you to customize the ironing flow for each filament type. Too high value results in overextrusion on the surface.",
       "category": "Quality",
@@ -2570,7 +2570,7 @@
     "filament_ironing_spacing": {
       "key": "filament_ironing_spacing",
       "type": "coFloats",
-      "source_line": 135,
+      "source_line": 4203,
       "label": "Ironing line spacing",
       "tooltip": "Filament-specific override for ironing line spacing. This allows you to customize the spacing between ironing lines for each filament type.",
       "category": "Quality",
@@ -2580,7 +2580,7 @@
     "filament_ironing_inset": {
       "key": "filament_ironing_inset",
       "type": "coFloats",
-      "source_line": 136,
+      "source_line": 4215,
       "label": "Ironing inset",
       "tooltip": "Filament-specific override for ironing inset. This allows you to customize the distance to keep from the edges when ironing for each filament type.",
       "category": "Quality",
@@ -2590,7 +2590,7 @@
     "filament_ironing_speed": {
       "key": "filament_ironing_speed",
       "type": "coFloats",
-      "source_line": 137,
+      "source_line": 4227,
       "label": "Ironing speed",
       "tooltip": "Filament-specific override for ironing speed. This allows you to customize the print speed of ironing lines for each filament type.",
       "category": "Speed",
@@ -3221,7 +3221,7 @@
     "sparse_infill_line_width": {
       "key": "sparse_infill_line_width",
       "type": "coFloatOrPercent",
-      "source_line": 4970,
+      "source_line": 5020,
       "label": "Sparse infill",
       "tooltip": "Line width of internal sparse infill. If expressed as a %, it will be computed over the nozzle diameter.",
       "category": "Quality",
@@ -3790,7 +3790,7 @@
     "nozzle_diameter": {
       "key": "nozzle_diameter",
       "type": "coFloats",
-      "source_line": 1725,
+      "source_line": 5741,
       "label": "Nozzle diameter",
       "tooltip": "The diameter of nozzle.",
       "max": 100.0
@@ -3965,7 +3965,7 @@
     "inner_wall_line_width": {
       "key": "inner_wall_line_width",
       "type": "coFloatOrPercent",
-      "source_line": 1886,
+      "source_line": 5945,
       "label": "Inner wall",
       "tooltip": "Line width of inner wall. If expressed as a %, it will be computed over the nozzle diameter.",
       "category": "Quality",
@@ -4201,14 +4201,14 @@
     "retract_lift_above": {
       "key": "retract_lift_above",
       "type": "coFloats",
-      "source_line": 6202,
+      "source_line": 6242,
       "label": "Only lift Z above",
       "tooltip": "If you set this to a positive value, Z lift will only take place above the specified absolute Z."
     },
     "retract_lift_below": {
       "key": "retract_lift_below",
       "type": "coFloats",
-      "source_line": 6210,
+      "source_line": 6249,
       "label": "Only lift Z below",
       "tooltip": "If you set this to a positive value, Z lift will only take place below the specified absolute Z."
     },
@@ -4250,7 +4250,7 @@
     "extruder_type": {
       "key": "extruder_type",
       "type": "coEnums",
-      "source_line": 845,
+      "source_line": 6271,
       "label": "Type",
       "tooltip": "This setting is only used for initial value of manual calibration of pressure advance. Bowden extruder usually has larger PA value. This setting doesn't influence normal slicing.",
       "enum_values": [
@@ -4275,7 +4275,7 @@
     "extruder_variant_list": {
       "key": "extruder_variant_list",
       "type": "coStrings",
-      "source_line": 844,
+      "source_line": 6326,
       "label": "Extruder variant list",
       "tooltip": "Extruder variant list."
     },
@@ -5351,7 +5351,7 @@
     "support_speed": {
       "key": "support_speed",
       "type": "coFloats",
-      "source_line": 2742,
+      "source_line": 7605,
       "label": "Support",
       "tooltip": "This is the speed for support.",
       "category": "Speed",
@@ -5823,7 +5823,7 @@
     "travel_speed": {
       "key": "travel_speed",
       "type": "coFloats",
-      "source_line": 4100,
+      "source_line": 8207,
       "label": "Travel",
       "tooltip": "This is the speed at which traveling is done.",
       "min": 1.0
@@ -6438,7 +6438,7 @@
     "filament_retract_length_nc": {
       "key": "filament_retract_length_nc",
       "type": "coFloats",
-      "source_line": 133,
+      "source_line": 8928,
       "label": "length when change hotend",
       "tooltip": "When this retraction value is modified, it will be used as the amount of filament retracted inside the hotend before changing hotends.",
       "min": 0.0,
@@ -7172,7 +7172,7 @@
     "rotate": {
       "key": "rotate",
       "type": "coFloat",
-      "source_line": 10004,
+      "source_line": 13013,
       "label": "Rotate",
       "tooltip": "Rotation angle around the Z axis in degrees."
     },
@@ -7216,7 +7216,7 @@
     "scale": {
       "key": "scale",
       "type": "coStrings",
-      "source_line": 10004,
+      "source_line": 13495,
       "label": "Scale per object",
       "tooltip": "Contains a string with the information about what scaling was applied to the individual objects. Indexing of the objects is zero-based (first object has index 0).\nExample: 'x:100% y:50% z:100%'."
     },
@@ -7769,7 +7769,7 @@
     "second": {
       "key": "second",
       "type": "coInt",
-      "source_line": 3047,
+      "source_line": 13587,
       "label": "Second"
     },
     "print_preset": {
@@ -7803,42 +7803,42 @@
     "layer_num": {
       "key": "layer_num",
       "type": "coInt",
-      "source_line": 13618,
+      "source_line": 13679,
       "label": "Layer number",
       "tooltip": "Index of the current layer. The index is zero-based (first layer has index 0). Before the first layer starts, it is -1. In extrusion role change G-code, the index is one-based (first layer has index 1)."
     },
     "layer_z": {
       "key": "layer_z",
       "type": "coFloat",
-      "source_line": 13618,
+      "source_line": 13684,
       "label": "Layer Z",
       "tooltip": "Height of the current layer above the print bed, measured to the top of the layer."
     },
     "max_layer_z": {
       "key": "max_layer_z",
       "type": "coFloat",
-      "source_line": 13618,
+      "source_line": 13688,
       "label": "Maximal layer Z",
       "tooltip": "Height of the last layer above the print bed."
     },
     "filament_extruder_id": {
       "key": "filament_extruder_id",
       "type": "coInt",
-      "source_line": 6426,
+      "source_line": 13692,
       "label": "Filament extruder ID",
       "tooltip": "In filament start G-code, the index of the filament that is being loaded. In filament end G-code, the index of the filament that is being unloaded. The index is zero-based (first filament has index 0). At a tool change, filament end G-code gets the extruder index instead, unless the Type 1 wipe tower does the tool change. Machine end G-code gets the value from the last filament end G-code at the end of the print."
     },
     "extrusion_role": {
       "key": "extrusion_role",
       "type": "coString",
-      "source_line": 13648,
+      "source_line": 13791,
       "label": "Extrusion role",
       "tooltip": "The new extrusion role/type that is going to be used\nPossible values:\n[\"Perimeter\", \"ExternalPerimeter\", \"OverhangPerimeter\", \"InternalInfill\", \"SolidInfill\", \"TopSolidInfill\", \"BottomSurface\", \"BridgeInfill\", \"GapFill\", \"Ironing\", \"Skirt\", \"Brim\", \"SupportMaterial\", \"SupportMaterialInterface\", \"SupportTransition\", \"WipeTower\", \"Mixed\"]"
     },
     "last_extrusion_role": {
       "key": "last_extrusion_role",
       "type": "coString",
-      "source_line": 13648,
+      "source_line": 13798,
       "label": "Last extrusion role",
       "tooltip": "The previously used extrusion role/type\nPossible values:\n[\"Perimeter\", \"ExternalPerimeter\", \"OverhangPerimeter\", \"InternalInfill\", \"SolidInfill\", \"TopSolidInfill\", \"BottomSurface\", \"BridgeInfill\", \"GapFill\", \"Ironing\", \"Skirt\", \"Brim\", \"SupportMaterial\", \"SupportMaterialInterface\", \"SupportTransition\", \"WipeTower\", \"Mixed\"]"
     }

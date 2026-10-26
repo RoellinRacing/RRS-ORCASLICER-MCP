@@ -29,13 +29,17 @@ def atomic_bytes(path: Path, data: bytes) -> None:
 
 
 def atomic_json(path: Path, data: object) -> None:
-    atomic_bytes(path, (json.dumps(data, ensure_ascii=False, indent=2, allow_nan=False) + "\n").encode())
+    atomic_bytes(
+        path, (json.dumps(data, ensure_ascii=False, indent=2, allow_nan=False) + "\n").encode()
+    )
 
 
 def check_revision(path: Path, expected: str | None) -> None:
     if path.exists():
         if not expected or digest(path) != expected:
-            raise ValueError("Existing destination requires its current SHA256; read it again first")
+            raise ValueError(
+                "Existing destination requires its current SHA256; read it again first"
+            )
     elif expected is not None:
         raise ValueError("Expected an existing destination, but it no longer exists")
 
@@ -79,4 +83,3 @@ class Files:
             atomic_bytes(backup, path.read_bytes())
         atomic_bytes(path, encoded)
         return {**self.read(name), "backup": str(backup) if backup else None}
-

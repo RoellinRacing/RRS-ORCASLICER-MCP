@@ -3,7 +3,9 @@
 from .storage import Files
 
 
-def listing(files: Files, directory: str, query: str = "", offset: int = 0, limit: int = 50) -> dict:
+def listing(
+    files: Files, directory: str, query: str = "", offset: int = 0, limit: int = 50
+) -> dict:
     root = files.path(directory)
     if not root.is_dir():
         raise ValueError("Profile directory does not exist")
@@ -12,12 +14,21 @@ def listing(files: Files, directory: str, query: str = "", offset: int = 0, limi
         try:
             data = files.read(str(path))
             setting = data["settings"]
-            row = {"path": str(path), "name": setting.get("name", path.stem), "type": setting.get("type"), "inherits": setting.get("inherits"), "sha256": data["sha256"]}
+            row = {
+                "path": str(path),
+                "name": setting.get("name", path.stem),
+                "type": setting.get("type"),
+                "inherits": setting.get("inherits"),
+                "sha256": data["sha256"],
+            }
             if query.lower() in str(row).lower():
                 matches.append(row)
         except (ValueError, OSError):
             continue
-    return {"total": len(matches), "profiles": matches[max(0, offset):max(0, offset) + max(1, min(limit, 200))]}
+    return {
+        "total": len(matches),
+        "profiles": matches[max(0, offset) : max(0, offset) + max(1, min(limit, 200))],
+    }
 
 
 def resolve(files: Files, name: str, directories: list[str]) -> dict:
@@ -52,5 +63,8 @@ def resolve(files: Files, name: str, directories: list[str]) -> dict:
         active.remove(canonical)
         return result
 
-    return {"settings": visit(name), "chain": chain, "notice": "JSON inheritance merge; OrcaSlicer performs schema migration and final validation."}
-
+    return {
+        "settings": visit(name),
+        "chain": chain,
+        "notice": "JSON inheritance merge; OrcaSlicer performs schema migration and final validation.",
+    }

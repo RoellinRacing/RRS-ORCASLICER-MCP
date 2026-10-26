@@ -1,0 +1,17 @@
+{
+  "status": "succeeded",
+  "original_sha256": "f2c18cfde89a086529deda1ec9551c292dcb1499f10718fc0cd46e86b0382353",
+  "engine": "OrcaSlicer-2.4.2:",
+  "removed_slice_artifacts": [
+    "Metadata/plate_1.gcode",
+    "Metadata/plate_1.gcode.md5",
+    "Metadata/plate_1.json",
+    "Metadata/slice_info.config"
+  ],
+  "job_id": "57f11149f0674f67b17bcae525069c81",
+  "job_status": "succeeded",
+  "layer_height": "0.25",
+  "gcode_sha256": "32be01bd5e76744b48bcb0f69eff2acefd4a1d98a2b1b31a6d452d0a4be86a82",
+  "gcode_bytes": 169258,
+  "project_sha256": "5c8041269ec469065f2b5c5a9c167b53a69254649a8f40ed68cc3b4e53e5b4a8"
+}
