@@ -211,7 +211,9 @@ class NativeControls:
             raise ValueError("Native numeric value must be finite")
         self.desktop._api().click(box["x"] + box["w"] / 2, box["y"] + box["h"] / 2)
         self.key("command" if sys.platform == "darwin" else "ctrl", "a")
-        self.paste(format(target, ".10g"))
+        # Numeric fields accept ASCII directly; this avoids clipboard ownership
+        # races between X11/wx and the native ImGui canvas.
+        self.desktop._api().write(format(target, ".10g"), interval=0.05)
         self.key(commit)
         time.sleep(0.3)
         result = {"before": old, "requested": target}

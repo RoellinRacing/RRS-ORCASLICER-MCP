@@ -56,6 +56,17 @@ async def verify(client, root, evidence, main_window):
             result = await call(name, args)
             report["operations"].append({"tool": name, "arguments": args, "result": result})
             atomic_json(report_path, report)
+            print(
+                json.dumps(
+                    {
+                        "native_tool": name,
+                        "arguments": arguments,
+                        "status": result["status"],
+                        "error": result.get("error"),
+                    }
+                ),
+                flush=True,
+            )
             assert result["status"] == "succeeded", result
             repeated = await call(name, args)
             assert repeated == result, (

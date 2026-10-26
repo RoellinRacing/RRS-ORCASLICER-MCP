@@ -384,7 +384,8 @@ class NativeWorkflows:
                         label,
                         index="xyz".index(parameters["axis"]),
                         columns=3,
-                        commit="enter",
+                        commit="tab",
+                        verify=True,
                         **options,
                     )
                     await asyncio.to_thread(ui.key, "escape")
@@ -497,6 +498,23 @@ class NativeWorkflows:
                             continue
                         await asyncio.to_thread(ui.click, label)
                         break
+                    # Stock close_with_confirm uses Yes/No/Cancel. Select No only
+                    # when its unsaved-project prompt is positively identified and
+                    # this request already holds a completed native backup.
+                    try:
+                        await asyncio.to_thread(ui.label, "unsaved changes")
+                        await asyncio.to_thread(ui.click, "No")
+                        await asyncio.sleep(0.5)
+                    except ValueError:
+                        pass
+                    # Keep existing edited presets while replacing the model. The
+                    # native generator applies its own calibration settings next.
+                    try:
+                        await asyncio.to_thread(ui.label, "Some presets are modified")
+                        await asyncio.to_thread(ui.click, "Keep")
+                        await asyncio.sleep(0.5)
+                    except ValueError:
+                        pass
                     await asyncio.sleep(1)
                     phase("exporting_native_calibration")
                     record["export"] = await self.export(parameters["destination"], session_id)
