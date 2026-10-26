@@ -385,7 +385,6 @@ class NativeWorkflows:
                         index="xyz".index(parameters["axis"]),
                         columns=3,
                         commit="tab",
-                        verify=True,
                         **options,
                     )
                     await asyncio.to_thread(ui.key, "escape")
