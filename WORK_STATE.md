@@ -25,3 +25,14 @@ provided MCP configuration into a local stdio-capable client. No development wor
 is pending for this release. GUI interaction and physical printing are not tested;
 new Orca versions are capability-probed and checked by the weekly CI workflow.
 Do not rerun completed generation/tests unless code, engine or requirements change.
+
+# Active extension — 0.2.0
+
+Checked saved state and current origin/main: ea84b238d054707a09cdd2f6586ae498efd11ae3;
+working tree clean. Existing source catalog, published 0.1.1 and real test outputs
+are reused rather than regenerated.
+Planned additions: semantic object/plate settings; profile diff, advisory validation
+and flattened export; structured G-code summaries; persistent batch slicing with
+idempotency and aggregate status/cancellation. Extend tests, business logic and
+real MCP verification, then build and publish a new version.
+Next: implement these modules, save results, run targeted and integration checks.
