@@ -1,0 +1,116 @@
+{
+  "source_commit": "2dc67584fd042c2d0c811dadc4a7abbf4ab30dff",
+  "run": 40368784963,
+  "jobs": [
+    {
+      "id": 121733577339,
+      "name": "smoke",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 121733577753,
+      "name": "test (macos-latest, 3.13)",
+      "status": "in_progress",
+      "conclusion": null
+    },
+    {
+      "id": 121733577812,
+      "name": "test (windows-latest, 3.13)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 121733577839,
+      "name": "test (ubuntu-latest, 3.11)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 121733577858,
+      "name": "test (windows-latest, 3.11)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 121733577874,
+      "name": "test (macos-latest, 3.11)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 121733577935,
+      "name": "test (ubuntu-latest, 3.13)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 121734080601,
+      "name": "host_gui (vfa)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 121734080608,
+      "name": "host_gui (flow_ratio)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 121734080618,
+      "name": "host_gui (all)",
+      "status": "in_progress",
+      "conclusion": null
+    },
+    {
+      "id": 121734080640,
+      "name": "host_gui (input_shaping_frequency)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 121734080687,
+      "name": "host_gui (retraction)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 121734080698,
+      "name": "host_gui (pressure_advance)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 121734080739,
+      "name": "host_gui (cornering)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 121734080740,
+      "name": "host_gui (temperature)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 121734080775,
+      "name": "host_gui (max_volumetric_speed)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 121734080810,
+      "name": "host_gui (text)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 121734080835,
+      "name": "host_gui (input_shaping_damping)",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "acceptance": "pending combined native acceptance and remaining matrix/package jobs",
+  "physical_print_started": false
+}
