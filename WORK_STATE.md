@@ -83,3 +83,9 @@ system CA-certificate selection dialog before opening the editor. Configure the
 isolated runner's standard SSL_CERT_FILE (no TLS checks disabled) and provide an
 X11 window manager for stable keyboard focus. GUI/host API success still pending.
 All six 39-test platform jobs and the stable-engine checks passed.
+
+Code review strengthened native export verification: the copied 3MF must contain
+the unsaved wall setting and must preserve project filename/dirty state. Runtime
+coverage/docs now distinguish the implemented host operations from remaining
+geometry, painting, calibration, slicing-hook and device gaps. Contact draft updated
+with factual implementation details; no upstream post sent.

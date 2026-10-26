@@ -1,39 +1,38 @@
 # Kontakt zum OrcaSlicer-Team
 
-Der passendste konkrete Ort ist die vorhandene offizielle Entwicklungsdiskussion:
-
+Passender vorhandener Entwicklerthread:
 **https://github.com/OrcaSlicer/OrcaSlicer/discussions/14878**
 
-Titel: Help Shape OrcaSlicer's Plugin System: Capabilities, Use Cases, and Developer Needs.
 Alternativ: https://github.com/OrcaSlicer/OrcaSlicer/discussions/categories/dev.
-Ein neuer Bugreport ist für die Vorstellung dieser Integration nicht passend.
-
-Vor dem Posten den aktuellen Stand von `CONTRIBUTING.md` im offiziellen Repository
-lesen. Das Team verlangt, dass ein Mensch den Beitrag vor dem Posten liest und die
-angegebenen Tests versteht. Dieser Entwurf ist noch nicht veröffentlicht.
+Vor dem Posten den aktuellen CONTRIBUTING.md des offiziellen Repositories lesen.
+Dieser Entwurf wurde noch nicht veröffentlicht. Aktuelle Testergebnisse und Grenzen
+stehen in VALIDATION.md und MAINTAINER_REVIEW.md.
 
 ## Vorbereiteter englischer Beitrag
 
-We are developing RRS-ORCASLICER-MCP, a separate local MCP server for external
-automation without maintaining an OrcaSlicer fork:
+We are developing RRS-ORCASLICER-MCP, a separate local MCP server for OrcaSlicer:
 https://github.com/RoellinRacing/RRS-ORCASLICER-MCP
 
-The current bridge uses the installed CLI, JSON presets and Orca 3MF metadata. It
-provides profile inheritance/diffs, object and plate settings, persistent slicing
-jobs, batch cancellation and declared G-code statistics. We have tested actual
-slicing and a read/edit/reslice roundtrip with the official Linux 2.4.2 release;
-the Python/MCP layer is also tested on Windows and macOS. This does not validate
-all GUI functions, printer operations or nightly plugin integration.
+It supports CLI/file workflows and now includes an optional, dependency-free
+Script plugin using the official Python host. The plugin reads live preset/model
+snapshots in GUI callbacks, queues preset changes onto the Script worker and uses
+begin_update/set/commit. It preserves native selection/unsaved-edit dialogs and
+leaves edited presets unsaved. It also exposes the supported 3MF copy export.
 
-Our goal is semantic access to workflows that still require GUI interaction:
-live preset validation, model/instance transformations, painting masks, calibration
-generators and structured slice results. The Python host and staged preset API
-look like a promising direction. We have not yet tested an embedded bridge in a
-nightly build, and do not claim those operations are implemented.
+The external process communicates through a bounded local mailbox in plugin
+storage. Operations are allowlisted. Session/request identities and durable receipts
+prevent accidental repeats; timeouts are explicitly indeterminate. We do not expose
+an eval endpoint, private C++ symbols, a network listener or printer credentials.
 
-Which host capabilities and compatibility/version-negotiation approach would you
-recommend for this use case? Would a small optional local bridge plugin fit the
-intended architecture? We would appreciate guidance on the appropriate extension
-points and can contribute focused tests and feedback. The MCP server would remain
-external, with explicit host-advertised capabilities rather than assuming that
-every GUI operation is available or stable across versions.
+The repository includes reproducible tests, business-logic/protocol notes and a
+maintainer review summary. The validation report identifies exactly which native
+host build/platform was tested; mocked protocol tests are labelled separately.
+We do not claim full GUI/geometry/painting/calibration/device control or compatibility
+with every host version.
+
+Would this approach fit the supported extension architecture? In particular, we
+would appreciate guidance on UI/worker dispatch, API compatibility negotiation and
+future semantic model/slicing operations. The bridge currently uses the documented
+window on_message callback as its GUI-thread entry point. If a preferred host-owned
+scheduling or local transport capability is planned, we would be happy to align
+with it and contribute focused test results.

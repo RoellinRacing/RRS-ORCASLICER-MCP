@@ -3,20 +3,86 @@
   "future_version_guarantee": false,
   "scope": "Explicit feature families; not an exhaustive inventory of every UI action or a percentage claim",
   "features": [
-    {"feature": "Installed CLI options", "route": "cli_run / runtime --help", "status": "supported_runtime_discovery"},
-    {"feature": "Printer, process and filament JSON settings", "route": "settings_read/write, profile_resolve/export", "status": "supported_serialized_settings"},
-    {"feature": "Global 3MF settings", "route": "project_settings_write", "status": "supported_with_reslice"},
-    {"feature": "Object, part and plate print settings", "route": "project_objects_read, project_target_settings_write", "status": "supported_orca_xml_format"},
-    {"feature": "Batch slicing, cancellation and retry identity", "route": "batch_slice/status/cancel", "status": "supported"},
-    {"feature": "Model scaling, rotations, arrangement, duplication and exports", "route": "cli_run when advertised", "status": "depends_on_installed_cli"},
-    {"feature": "Mesh repair, split, cut, Boolean operations and embossing", "route": "CLI where advertised; otherwise desktop", "status": "not_a_complete_semantic_api"},
-    {"feature": "Support, seam and multi-color painting", "route": "desktop screenshots and input", "status": "gui_only_not_semantically_automated"},
-    {"feature": "Calibration generators and dialogs", "route": "desktop", "status": "gui_only_not_semantically_automated"},
-    {"feature": "Printer connection, cloud login, AMS/MMU and physical printing", "route": "Orca desktop/provider", "status": "no_independent_printer_api"},
-    {"feature": "Live GUI preset transactions", "route": "official experimental plugin host", "status": "upstream_api_found_not_integrated"},
-    {"feature": "Live in-memory model and slicing hooks", "route": "official experimental plugin host", "status": "upstream_api_found_not_integrated"},
-    {"feature": "Declared G-code statistics", "route": "gcode_analyze", "status": "supported_text_gcode_only"},
-    {"feature": "Generic GUI input", "route": "desktop_launch/focus/screenshot/action", "status": "optional_local_adapter_not_all_workflows_tested"}
+    {
+      "feature": "Installed CLI options",
+      "route": "cli_run / runtime --help",
+      "status": "supported_runtime_discovery"
+    },
+    {
+      "feature": "Printer, process and filament JSON settings",
+      "route": "settings_read/write, profile_resolve/export",
+      "status": "supported_serialized_settings"
+    },
+    {
+      "feature": "Global 3MF settings",
+      "route": "project_settings_write",
+      "status": "supported_with_reslice"
+    },
+    {
+      "feature": "Object, part and plate print settings",
+      "route": "project_objects_read, project_target_settings_write",
+      "status": "supported_orca_xml_format"
+    },
+    {
+      "feature": "Batch slicing, cancellation and retry identity",
+      "route": "batch_slice/status/cancel",
+      "status": "supported"
+    },
+    {
+      "feature": "Model scaling, rotations, arrangement, duplication and exports",
+      "route": "cli_run when advertised",
+      "status": "depends_on_installed_cli"
+    },
+    {
+      "feature": "Mesh repair, split, cut, Boolean operations and embossing",
+      "route": "CLI where advertised; otherwise desktop",
+      "status": "not_a_complete_semantic_api"
+    },
+    {
+      "feature": "Support, seam and multi-color painting",
+      "route": "desktop screenshots and input",
+      "status": "gui_only_not_semantically_automated"
+    },
+    {
+      "feature": "Calibration generators and dialogs",
+      "route": "desktop",
+      "status": "gui_only_not_semantically_automated"
+    },
+    {
+      "feature": "Printer connection, cloud login, AMS/MMU and physical printing",
+      "route": "Orca desktop/provider",
+      "status": "no_independent_printer_api"
+    },
+    {
+      "feature": "Live GUI preset transactions",
+      "route": "host_preset_read/update via optional official Script plugin",
+      "status": "implemented_when_advertised_by_host"
+    },
+    {
+      "feature": "Live in-memory model reads",
+      "route": "host_snapshot/host_model_read via official GUI callbacks",
+      "status": "implemented_read_only_when_advertised_by_host"
+    },
+    {
+      "feature": "Declared G-code statistics",
+      "route": "gcode_analyze",
+      "status": "supported_text_gcode_only"
+    },
+    {
+      "feature": "Generic GUI input",
+      "route": "desktop_launch/focus/screenshot/action",
+      "status": "optional_local_adapter_not_all_workflows_tested"
+    },
+    {
+      "feature": "Live geometry mutation and slicing hooks",
+      "route": "Official host capabilities not yet integrated",
+      "status": "not_implemented"
+    },
+    {
+      "feature": "Live project copy with unsaved settings",
+      "route": "host_project_export via official Plater API",
+      "status": "implemented_when_advertised_by_host"
+    }
   ],
   "upstream_discussion": "https://github.com/OrcaSlicer/OrcaSlicer/discussions/14878",
   "upstream_dev_category": "https://github.com/OrcaSlicer/OrcaSlicer/discussions/categories/dev",

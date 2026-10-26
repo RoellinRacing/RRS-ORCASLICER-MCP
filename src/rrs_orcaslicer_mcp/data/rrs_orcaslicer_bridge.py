@@ -293,6 +293,7 @@ class HostService:
             return {
                 "app": host.app_info() if hasattr(host, "app_info") else {"version": "not_exposed"},
                 "project_dirty": plater.is_project_dirty(),
+                "project_path": plater.project_path() if hasattr(plater, "project_path") else None,
                 "presets_dirty": plater.is_presets_dirty(),
                 "object_count": host.model().object_count(),
                 "selected_process": bundle.current_process_preset().name,

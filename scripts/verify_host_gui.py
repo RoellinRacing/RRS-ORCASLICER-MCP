@@ -13,6 +13,7 @@ import subprocess
 import time
 import uuid
 import sys
+import zipfile
 from pathlib import Path
 
 from rrs_orcaslicer_mcp.host_bridge.client import HostClient
@@ -210,8 +211,15 @@ async def verify(client):
         assert checked["result"]["values"][key] == value, checked
         category_checks[category] = {"setting": key, "value": value, "result": outcome["result"]}
     destination = client.directory / "exports/live-project.3mf"
+    before_export = await call("host.snapshot", {})
     exported = await call("project.export", {"destination": str(destination)}, mutation=True)
     assert destination.is_file() and destination.stat().st_size > 1000
+    with zipfile.ZipFile(destination) as archive:
+        config = json.loads(archive.read("Metadata/project_settings.config"))
+        assert config["wall_loops"] == changed
+    after_export = await call("host.snapshot", {})
+    for field in ("project_path", "project_dirty", "presets_dirty"):
+        assert before_export["result"][field] == after_export["result"][field]
     # Verify the public MCP entry points as well as the embedded protocol.
     env = {
         **os.environ,
@@ -266,6 +274,8 @@ async def verify(client):
         "after": changed,
         "mutation_id_reused_without_reexecution": repeated == updated,
         "native_invalid_batch_preserved_existing_value": True,
+        "export_contains_unsaved_wall_loops": changed,
+        "export_preserved_project_path_and_dirty_state": True,
         "project_export_bytes": exported["result"]["bytes"],
         "project_export_sha256": digest(destination),
         "session_capabilities": client.status()["capabilities"],

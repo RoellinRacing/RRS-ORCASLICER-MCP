@@ -10,7 +10,7 @@ Implementierung, versionsabhängige CLI-Funktionen und GUI-/Upstream-Lücken.
 
 | Funktionsfamilie | Aktueller Weg | Offene Arbeit für eine vollständige semantische API |
 | --- | --- | --- |
-| Printer-/Prozess-/Filamentsettings | JSON lesen, bearbeiten, auflösen, vergleichen, exportieren | Offizielles Live-Preset-API integrieren, GUI-Validierung und Speicherabläufe prüfen |
+| Printer-/Prozess-/Filamentsettings | JSON lesen, bearbeiten, auflösen, vergleichen, exportieren | Live-Lesen/-Transaktionen sind über das optionale offizielle Plugin angebunden; normales Speichern bleibt Orcas Aufgabe |
 | Globale und objektbezogene Drucksettings | 3MF-JSON/XML, gezielte Objekt-/Teil-/Plattenänderungen | Live-Objektidentität und Undo im laufenden Orca |
 | Slicing, Stapel und Exporte | Installierte CLI, permanente Jobzustände, G-Code-Auswertung | Strukturierte Live-Fortschritts-/Resultatereignisse |
 | Skalieren, Drehen, Anordnen, Kopien | Sämtliche angebotenen CLI-Flags | Vollständige Manipulation des geladenen Szenenmodells |
@@ -36,20 +36,20 @@ Im untersuchten Quellstand gibt es unter anderem:
 - `src/slic3r/plugin/host/`: Host-Bindings für Presets, Modelle, Geometrie, Slicing und UI.
 - `sandboxes/orca_inspector_plugin_any.py`: offizielles Beispiel zur API-Inspektion.
 
-Diese Punkte sind **noch nicht an den externen MCP-Server angeschlossen**. Sie
-ohne Lauf in einer passenden Nightly-Version als funktionierend auszugeben wäre
-falsch. Die externe Grundarchitektur kann bestehen bleiben; eine optionale kleine
-offizielle Host-Erweiterung wäre ein möglicher Weg für den Live-Zugriff. Welche
-Funktionen der Host tatsächlich freigibt und welche ergänzt werden müssen, ist
-mit den Maintainern und anhand realer Tests zu klären.
+In 0.3.0 sind Live-Preset-Abfragen, native Preset-Transaktionen, Modellabfragen
+und die Live-Projektkopie über das optionale offizielle Script-Plugin angebunden.
+Die externe Grundarchitektur bleibt bestehen. `host_bridge_status` handelt die
+vorhandenen Operationen aus; Details stehen in HOST_BRIDGE.md. Die konkreten
+abgeschlossenen Host-Tests stehen in VALIDATION.md, nicht in einer pauschalen
+Alle-Funktionen-Behauptung. Geometrie-/Bemalungsänderungen, Kalibrierung, Live-Slicing-
+Hooks und Geräteoperationen sind damit weiterhin nicht implementiert.
 
 ## Reihenfolge für die restliche Arbeit
 
-1. Unterstützte Nightly und offizielle Host-API gegen einen kleinen Referenzsatz prüfen.
-2. Capability-Aushandlung und einen lokalen, begrenzten Transport implementieren.
-3. Live-Presets, Modelloperationen und Slicing-Ereignisse einzeln anbinden und abnehmen.
-4. Bemalung, Kalibrierung und Printer-Provider nach tatsächlicher API-Verfügbarkeit ergänzen.
-5. Für jede Operation einen Nachweis und die getesteten Versionen dokumentieren.
+1. Die vorhandenen Host-Operationen bei API-/Versionswechseln gegen den Referenzsatz prüfen.
+2. Live-Geometrieänderungen und Slicing-Ereignisse einzeln anbinden und abnehmen.
+3. Bemalung, Kalibrierung und Printer-Provider nach tatsächlicher API-Verfügbarkeit ergänzen.
+4. Für jede Operation einen Nachweis und die getesteten Versionen dokumentieren.
 
 Keine der offenen Zeilen wird allein durch einen erfolgreichen CLI-Slicing-Test
 als erledigt markiert. Es gibt derzeit keine ehrliche 100-%- oder Alle-Versionen-Garantie.
