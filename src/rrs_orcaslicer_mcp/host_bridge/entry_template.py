@@ -6,7 +6,7 @@
 # name = "RRS OrcaSlicer Bridge"
 # description = "Local MCP bridge: live project/preset reads and staged preset transactions."
 # author = "RoellinRacing"
-# version = "0.4.0"
+# version = "0.5.0"
 # ///
 """Generated standalone plugin for the official Orca Python host.
 

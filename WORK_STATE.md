@@ -59,3 +59,13 @@ Physical printer/provider acceptance requires an explicitly configured compatibl
 device; only HTTP contract tests were performed. No physical print was started.
 Windows/macOS native GUI operations are not accepted yet. No every-version or
 future-version guarantee. Existing immutable 0.3.0 evidence remains in docs/evidence.
+
+## 0.5.0 native workflow implementation checkpoint
+
+Saved source: native_ui.py, native_workflows.py, scene.read bridge extension,
+seven public MCP tools, verify_native_workflows.py and GUI harness integration.
+64 local tests passed; source/evidence in docs/evidence/unit-0.5.0.txt.
+Business rationale and limits: docs/NATIVE_WORKFLOWS.md, BUSINESS_LOGIC.md.
+Next: run stock native acceptance for move/rotate/scale + real Undo/Redo, editable
+native text and five native generator families. New GUI behavior is not accepted
+until those actual operation checks pass. Existing 0.4.0 native results stand.

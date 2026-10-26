@@ -79,13 +79,13 @@ jobs:
   host_gui:
     needs: smoke
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: python -m pip install -e . pyautogui pytesseract Pillow
+      - run: python -m pip install -e '.[desktop]' 
       - uses: actions/download-artifact@v4
         with:
           name: real-engine-evidence
@@ -93,7 +93,7 @@ jobs:
       - name: Install isolated GUI test dependencies
         run: |
           sudo timeout 120 apt-get -o Dir::Etc::sourceparts="-" -o Dir::Etc::sourcelist="sources.list.d/ubuntu.sources" -o Acquire::Retries=1 -o Acquire::http::Timeout=15 -o Acquire::https::Timeout=15 update -qq || true
-          sudo timeout 240 env DEBIAN_FRONTEND=noninteractive apt-get -o Acquire::Retries=1 -o Acquire::http::Timeout=20 -o Acquire::https::Timeout=20 install -y --no-install-recommends libwebkit2gtk-4.1-0 libmspack0 libsecret-1-0 libopengl0 libglu1-mesa libgl1-mesa-dri xvfb xauth xdotool scrot tesseract-ocr dbus-x11 openbox
+          sudo timeout 240 env DEBIAN_FRONTEND=noninteractive apt-get -o Acquire::Retries=1 -o Acquire::http::Timeout=20 -o Acquire::https::Timeout=20 install -y --no-install-recommends libwebkit2gtk-4.1-0 libmspack0 libsecret-1-0 libopengl0 libglu1-mesa libgl1-mesa-dri xvfb xauth xdotool scrot tesseract-ocr dbus-x11 openbox xclip
       - name: Download official nightly without modifying its binary
         env:
           GH_TOKEN: ${{ github.token }}

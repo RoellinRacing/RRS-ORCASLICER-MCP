@@ -24,6 +24,7 @@ from . import (
     project_geometry,
     gcode,
 )
+from .native_workflows import NativeWorkflows, CALIBRATIONS
 from .printers import Printers
 from .batches import Batches
 from .desktop import Desktop
@@ -45,6 +46,7 @@ def create_server() -> FastMCP:
     printers = Printers(state / "printer-requests")
     desktop = Desktop()
     host_client = HostClient()
+    native = NativeWorkflows(host_client, desktop, files, state / "native-requests")
     engine = None
     batch_store = None
 
@@ -107,6 +109,140 @@ def create_server() -> FastMCP:
         report["installed_cli"] = await backend().capabilities()
         report["live_host"] = host_client.status()
         return report
+
+    @mcp.tool()
+    def native_ui_capabilities() -> dict[str, Any]:
+        """Inspect opt-in native workflow routes and their platform/locale/scene limits."""
+        return {
+            "desktop": desktop.status(),
+            "bridge": host_client.status(),
+            "calibration_kinds": sorted(CALIBRATIONS),
+            "method": "Orca native visible controls plus official-host readback; stock binary unchanged",
+            "acceptance_scope": "English interface; GUI/native results require operation-level validation",
+            "transform_scope": "one object/instance; other rotation axes zero for relative rotation",
+            "physical_printing": False,
+        }
+
+    @mcp.tool()
+    async def native_scene_read() -> dict[str, Any]:
+        """Read copied live scene identities/poses/settings and an observed revision for typed GUI edits.
+
+        Revision is not a full mesh-content hash. Requires the running official
+        bridge plugin; no desktop input occurs.
+        """
+        return await native.scene()
+
+    @mcp.tool()
+    async def native_transform(
+        kind: str, axis: str, value: float, expected_revision: str, session_id: str, request_id: str
+    ) -> dict[str, Any]:
+        """Edit Orca's live native gizmo and verify actual model pose; native Undo is retained.
+
+        kind move: value is relative millimeters; rotate: relative degrees; scale:
+        target percent on the chosen x/y/z control (Orca's current uniform lock applies).
+        Requires one object/instance, English mm UI and foreground Prepare mainframe.
+        Opt in with ORCA_MCP_DESKTOP=1 and install [desktop] plus system Tesseract.
+        Read native_scene_read and host_bridge_status first. Request IDs are 32 hex.
+        """
+        return await native.run(
+            "transform",
+            {"kind": kind, "axis": axis, "value": value},
+            session_id,
+            request_id,
+            expected_revision,
+        )
+
+    @mcp.tool()
+    async def native_history(
+        direction: str, expected_revision: str, session_id: str, request_id: str, steps: int = 1
+    ) -> dict[str, Any]:
+        """Apply actual Orca undo/redo, 1..20 explicit native history steps, and read the result.
+
+        Operates on Orca's native history, including manual edits. A workflow may
+        create multiple native steps. No file-level pseudo-undo or automatic retries.
+        Requires the foreground Prepare mainframe and a fresh observed scene revision.
+        """
+        return await native.run(
+            "history",
+            {"direction": direction, "steps": steps},
+            session_id,
+            request_id,
+            expected_revision,
+        )
+
+    @mcp.tool()
+    async def native_text(
+        text: str,
+        height_mm: float,
+        depth_mm: float,
+        mode: str,
+        backup: str,
+        destination: str,
+        expected_revision: str,
+        session_id: str,
+        request_id: str,
+    ) -> dict[str, Any]:
+        """Use Orca's editable native text/emboss tool: join, cut (engrave) or modifier.
+
+        Requires one object/instance and foreground English Prepare UI. Saves the
+        unsaved project to backup first. Both paths must be new .3mf files inside
+        configured client/host export roots. Exports and verifies editable native
+        text metadata, height and depth; this is not a faceted text STL substitute.
+        """
+        return await native.run(
+            "text",
+            {
+                "text": text,
+                "height_mm": height_mm,
+                "depth_mm": depth_mm,
+                "mode": mode,
+                "backup": backup,
+                "destination": destination,
+            },
+            session_id,
+            request_id,
+            expected_revision,
+        )
+
+    @mcp.tool()
+    async def native_calibration(
+        kind: str,
+        values: dict[str, Any],
+        backup: str,
+        destination: str,
+        expected_revision: str,
+        session_id: str,
+        request_id: str,
+        replace_scene: bool = False,
+    ) -> dict[str, Any]:
+        """Invoke Orca's actual native calibration generator, not independent coupon sweeps.
+
+        kind temperature (start/end, native fixed 5 C steps), pressure_advance
+        (start/end/step, method tower/line/pattern), max_volumetric_speed, retraction,
+        vfa (start/end/step), cornering (start/end), flow_ratio (test pass_1/pass_2/yolo/
+        yolo_perfectionist), input_shaping_frequency (x_start/x_end/y_start/y_end),
+        input_shaping_damping (freq_x/freq_y/start/end). Firmware-specific dialogs
+        must match visible expected controls. Back up unsaved project and explicitly
+        replace_scene=true; export generated native 3MF. Never starts a print.
+        """
+        return await native.run(
+            "calibration",
+            {
+                "kind": kind,
+                "values": values,
+                "backup": backup,
+                "destination": destination,
+                "replace_scene": replace_scene,
+            },
+            session_id,
+            request_id,
+            expected_revision,
+        )
+
+    @mcp.tool()
+    def native_request_status(request_id: str) -> dict[str, Any]:
+        """Read persistent typed native GUI receipt and screenshot/backup paths without repeating input."""
+        return native.result(request_id)
 
     @mcp.tool()
     def printer_capabilities() -> dict[str, Any]:

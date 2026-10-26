@@ -26,3 +26,27 @@ A version/layout mismatch fails closed, not a universal-version guarantee.
 Implementation order: copied scene revision; native control locator; live move and
 Undo/Redo; native editable text; native temperature/PA/retraction/flowrate generators;
 unit and real GUI acceptance; immutable release and saved continuation state.
+
+## Public tools and input units
+
+`native_scene_read`, `native_ui_capabilities`, `native_request_status` are read
+operations. `native_transform` accepts move (relative mm), rotate (relative degrees)
+or scale (target percent under Orca's current uniform-lock behavior), axis x/y/z,
+value, observed revision, bridge session and a fresh 32-hex request ID.
+`native_history` takes direction undo/redo and an explicit number of native steps.
+`native_text` takes text/height_mm/depth_mm, join/cut/modifier, backup and result
+paths (new .3mf inside both client/host export roots), revision/session/request.
+`native_calibration` takes kind, numeric values/options, backup/result, the same
+identities and explicit replace_scene=true. No print action is invoked.
+
+Generator routes: temperature (start/end; native 5 C step), pressure_advance
+(start/end/step, method tower/line/pattern), max_volumetric_speed/retraction/vfa
+(start/end/step), cornering (start/end), flow_ratio (test pass_1/pass_2/yolo/
+yolo_perfectionist), input_shaping_frequency (x_start/x_end/y_start/y_end),
+input_shaping_damping (freq_x/freq_y/start/end). A declared route is not acceptance
+for every firmware/layout: refer to actual native evidence for tested families.
+
+Setup: install `[desktop]`, system Tesseract OCR and a clipboard backend (xclip on
+Linux X11). Set ORCA_MCP_DESKTOP=1. Keep the modeless bridge running but close the
+modal Plugins manager, and foreground Prepare. The initial selector pack is English.
+No existing install is switched to another locale automatically.

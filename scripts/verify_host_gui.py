@@ -84,7 +84,7 @@ def prepare():
         install / ".install_state.json",
         {
             "installed_from": "local",
-            "installed_version": "0.4.0",
+            "installed_version": "0.5.0",
             "plugin_name": "RRS OrcaSlicer Bridge",
             "enabled": True,
             "capabilities": [{"RRS MCP local bridge": True}, {"RRS MCP slicing observer": True}],
@@ -401,6 +401,11 @@ async def verify(client):
         "project_export_sha256": digest(destination),
         "session_capabilities": client.status()["capabilities"],
     }
+    # Persist the baseline native acceptance before the extended operations.
+    atomic_json(evidence / "report.json", report)
+    from verify_native_workflows import verify as verify_native
+
+    report["native_workflows"] = await verify_native(client, root, evidence, main_window)
     atomic_json(evidence / "report.json", report)
     print(json.dumps(report, indent=2), flush=True)
 
@@ -433,6 +438,11 @@ def main():
                 os.killpg(process.pid, signal.SIGKILL)
                 process.wait()
         log.close()
+        native_state = root / "native-mcp-state/native-requests"
+        if native_state.exists():
+            shutil.copytree(native_state, evidence / "native-requests", dirs_exist_ok=True)
+        for exports in data.glob("orca_plugins/plugin_data/**/rrs-mcp-bridge/exports/native"):
+            shutil.copytree(exports, evidence / "native-projects", dirs_exist_ok=True)
         # Logs are scoped to the disposable fixture, not the user's Orca data.
         logs = data / "log"
         if logs.exists():

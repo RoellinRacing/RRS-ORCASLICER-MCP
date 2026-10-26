@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "rrs-orcaslicer-mcp"
-version = "0.4.0"
+version = "0.5.0"
 description = "Standalone MCP bridge for OrcaSlicer CLI, profiles, 3MF projects and desktop"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -13,7 +13,7 @@ dependencies = ["mcp>=1.20,<2"]
 
 [project.optional-dependencies]
 geometry = ["trimesh>=4.6,<6", "numpy>=1.26", "scipy>=1.12", "manifold3d>=3,<4", "mapbox-earcut>=1", "shapely>=2", "fast-simplification>=0.1"]
-desktop = ["PyAutoGUI>=0.9.54", "Pillow>=10", "pyperclip>=1.9", "psutil>=5.9", "PyGetWindow>=0.0.9; sys_platform == 'win32'"]
+desktop = ["pytesseract>=0.3.13", "PyAutoGUI>=0.9.54", "Pillow>=10", "pyperclip>=1.9", "psutil>=5.9", "PyGetWindow>=0.0.9; sys_platform == 'win32'"]
 test = ["pytest>=8", "pytest-asyncio>=0.24", "ruff>=0.9", "build>=1"]
 
 [project.scripts]

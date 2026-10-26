@@ -203,3 +203,29 @@ HTTP acknowledgements do not prove device execution. Durable exclusive request-I
 reservation prevents concurrent/restarted clients from dispatching the same ID
 twice. Transport uncertainty is retained, not automatically retried. This trades
 availability for avoiding duplicate physical actions. Cloud/AMS is an explicit gap.
+
+## Typed native GUI workflows (0.5.0)
+
+See NATIVE_WORKFLOWS.md. The stock host bindings are read-only, so native actions
+are driven through Orca's own visible controls, not undocumented native memory.
+The adapter requires opt-in desktop control, foreground English Prepare UI,
+current bridge session, an observed scene revision and a durable request ID.
+Observed revisions cover copied identities, poses, bounds, facet counts and exposed
+settings; they are explicitly not cryptographic full mesh hashes. Float noise is
+normalized only for this revision, not the native model.
+
+Transforms set one native gizmo axis and verify the corresponding native pose.
+Move is relative millimeters, rotation relative degrees (other rotation axes must
+be zero), scale is target percent with Orca's existing uniform-lock behavior.
+The initial supported selection has one object/instance. Undo/Redo invokes Orca's
+actual history and reports explicit steps, rather than restoring an exported file.
+A workflow can create multiple native history entries.
+
+Text uses the original emboss gizmo and verifies editable text, height and depth
+in native-exported 3MF metadata. Calibration invokes native dialogs/generators;
+backup and explicit scene replacement are required, and no print action occurs.
+Scene-replacing operations first export the unsaved project. A missing control,
+unexpected dialog/readback or partial native action remains indeterminate and is
+never automatically replayed. The exclusive external journal precedes input and
+retains screenshot/phase/result evidence. Platform/locale/layout acceptance must
+be stated separately from pure Python tests.

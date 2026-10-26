@@ -11,6 +11,8 @@ from pathlib import Path
 
 from .protocol import (
     BRIDGE_PROTOCOL,
+    hashlib,
+    json,
     MAX_REQUEST_BYTES,
     bridge_fingerprint,
     bridge_id,
@@ -122,7 +124,7 @@ class HostService:
             if hasattr(host, attr):
                 result.append(name)
         if hasattr(host, "ModelObject") and hasattr(host.ModelObject, "volume"):
-            result.append("model.detail")
+            result.extend(["model.detail", "scene.read"])
         if hasattr(host, "selected_printer"):
             result.append("printer.read")
         if hasattr(getattr(self.orca, "slicing", None), "SlicingPipelineCapabilityBase"):
@@ -302,6 +304,44 @@ class HostService:
             if preset is None:
                 raise ValueError("Preset not found")
             return {"name": preset.name, "dirty": preset.is_dirty, **host_values(preset, params)}
+        if operation == "scene.read":
+            model = host.model()
+            if model.object_count() > 50:
+                raise ValueError("Native GUI workflows currently support up to 50 objects")
+            objects = []
+            for index in range(model.object_count()):
+                obj = model.object(index)
+                if obj.volume_count() > 50 or obj.instance_count() > 50:
+                    raise ValueError(
+                        "Native GUI workflows support up to 50 volumes/instances per object"
+                    )
+                detail = self.read_or_export(
+                    "model.detail", {"index": index, "object_id": obj.id(), "limit": 50}
+                )
+                for item in detail["volumes"]:
+                    box = obj.volume(item["index"]).bounding_box()
+                    item["bounds_mm"] = (
+                        {"min": list(box.min), "max": list(box.max)} if box.defined else None
+                    )
+                objects.append(detail)
+
+            def normalize(value):
+                if isinstance(value, float):
+                    return 0.0 if abs(value) < 1e-10 else round(value, 9)
+                if isinstance(value, list):
+                    return [normalize(v) for v in value]
+                if isinstance(value, dict):
+                    return {k: normalize(v) for k, v in value.items()}
+                return value
+
+            objects = normalize(objects)
+            raw = json.dumps(objects, sort_keys=True, allow_nan=False).encode()
+            return {
+                "revision": hashlib.sha256(raw).hexdigest(),
+                "objects": objects,
+                "app": host.app_info(),
+                "revision_scope": "Copied identities, poses, bounds, facet counts and exposed settings; not a full mesh-content hash",
+            }
         if operation == "printer.read":
             return {"printer": host.selected_printer(), "physical_print_started": False}
         if operation == "slicing.events":
