@@ -97,3 +97,8 @@ profile_version, require native preset type, validate before writing. Regression
 coverage now 40 passing tests. Native fixture uses versioned user presets and the
 reference STL to avoid the unrelated customized-3MF safety dialog. Next: run native
 GUI verification and record actual host mutations/export evidence before release.
+
+Wheel 0.3.0 installed separately and all 40 tests passed. All six platform CI
+configurations for 1642ee7 also passed. Run 40286557688 is still installing stable
+engine dependencies. Added bounded apt network timeouts and native evidence
+packaging: release sources will contain actual CI report/hash bound to plugin.

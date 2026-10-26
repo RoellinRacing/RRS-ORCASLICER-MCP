@@ -101,3 +101,23 @@ Release-Commit: `735a5f0e4d18beeda71e86ffacb13431a09b5da7`.
 Das veröffentlichte ZIP wurde heruntergeladen und gegen die öffentlichen
 SHA256SUMS sowie auf Archivintegrität geprüft.
 [Release-Prüfung](evidence/github-release-0.2.0.json).
+
+## Prüfungen für 0.3.0
+
+40 Tests bestanden lokal und mit separat installiertem Wheel, einschliesslich
+Protokollidentitäten, Wiederholungsschutz, Timeout-Recovery, GUI-/Worker-Zuordnung,
+Filamentslots, Exportpfaden und nativen Benutzerprofil-Metadaten.
+[Wheel-Prüfung](evidence/wheel-tests-0.3.0.txt).
+
+Die Releasepipeline verlangt zusätzlich einen erfolgreichen Lauf des unveränderten
+offiziellen Nightly-AppImage in X11. Sie prüft die echte Pluginregistrierung,
+Live-Modell-/Presetzugriffe, native Änderungen aller drei Presetkategorien,
+Zurückweisung ungültiger Änderungen sowie ungespeicherte Einstellungen im
+exportierten 3MF. Auch der öffentliche MCP-stdio-Weg wird dabei ausgeführt.
+Vor dem Paketbau wird der Ergebnisbericht mit Pluginhash, Nightly-Prüfsumme,
+Quellcommit und CI-Link in `docs/evidence/host-0.3.0.json` aufgenommen; ein fremder
+Pluginhash oder fehlender Erfolgsnachweis verhindert den Paketbau.
+
+Ein erfolgreicher nativer Linuxlauf beweist keine native Windows-/macOS-GUI-Prüfung
+und keine vollständige Orca-Funktionsabdeckung. Der aktuelle Hostnachweis ist erst
+mit diesem Bericht und dem erfolgreichen CI-Lauf abgeschlossen.

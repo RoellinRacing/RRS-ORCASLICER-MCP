@@ -31,6 +31,7 @@ jobs:
 
   smoke:
     runs-on: ubuntu-24.04
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -38,7 +39,9 @@ jobs:
           python-version: '3.12'
       - run: python -m pip install -e .
       - name: Install official AppImage runtime dependencies
-        run: sudo apt-get update -qq && sudo apt-get install -y libwebkit2gtk-4.1-0 libmspack0 libsecret-1-0 libopengl0 libglu1-mesa
+        run: |
+          sudo apt-get -o Acquire::Retries=1 -o Acquire::http::Timeout=20 -o Acquire::https::Timeout=20 update -qq
+          sudo env DEBIAN_FRONTEND=noninteractive apt-get -o Acquire::Retries=1 -o Acquire::http::Timeout=20 -o Acquire::https::Timeout=20 install -y --no-install-recommends libwebkit2gtk-4.1-0 libmspack0 libsecret-1-0 libopengl0 libglu1-mesa
       - name: Download official engine
         env:
           GH_TOKEN: ${{ github.token }}
@@ -132,6 +135,11 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m pip install -e '.[test]' 'setuptools>=77' wheel
+      - uses: actions/download-artifact@v4
+        with:
+          name: real-host-plugin-evidence
+          path: native-evidence
+      - run: python scripts/record_host_evidence.py native-evidence
       - run: python scripts/package.py
       - uses: actions/upload-artifact@v4
         with:
