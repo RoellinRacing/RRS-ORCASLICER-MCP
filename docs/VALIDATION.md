@@ -104,7 +104,7 @@ SHA256SUMS sowie auf Archivintegrität geprüft.
 
 ## Prüfungen für 0.3.0
 
-42 Tests bestanden lokal und mit separat installiertem Wheel, einschliesslich
+43 Tests bestanden lokal und mit separat installiertem Wheel, einschliesslich
 Protokollidentitäten, Wiederholungsschutz, Timeout-Recovery, GUI-/Worker-Zuordnung,
 Filamentslots, Exportpfaden, nativen Benutzerprofil-Metadaten, Windows-Dateisperren
 und dem Quittungsausfall nach einer angewendeten Änderung.

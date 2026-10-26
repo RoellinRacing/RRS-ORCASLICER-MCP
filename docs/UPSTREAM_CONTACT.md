@@ -33,6 +33,7 @@ with every host version.
 Would this approach fit the supported extension architecture? In particular, we
 would appreciate guidance on UI/worker dispatch, API compatibility negotiation and
 future semantic model/slicing operations. The bridge currently uses the documented
-window on_message callback as its GUI-thread entry point. If a preferred host-owned
+window on_message callback as its GUI-thread entry point, and the supported plain
+Script worker entry to avoid an unnecessary asyncio wakeup socket pair. If a preferred host-owned
 scheduling or local transport capability is planned, we would be happy to align
 with it and contribute focused test results.

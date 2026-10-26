@@ -383,3 +383,24 @@ def test_receipt_failure_after_commit_keeps_outcome_indeterminate(host, monkeypa
     journal = bridge_read(service.folder / "journal" / f"{request['request_id']}.json")
     assert journal["status"] == "started"
     assert not (service.folder / "responses" / f"{request['request_id']}.json").exists()
+
+
+def test_bridge_writes_under_path_targeted_python_audit(tmp_path):
+    import subprocess
+    import sys
+
+    code = """
+import sys
+from pathlib import Path
+from rrs_orcaslicer_mcp.host_bridge.protocol import bridge_write, bridge_read
+
+def audit(event, args):
+    if event == 'open' and not isinstance(args[0], (str, bytes)):
+        raise PermissionError('Untargeted open rejected by host audit')
+
+sys.addaudithook(audit)
+path = Path(sys.argv[1]) / 'session.json'
+bridge_write(path, {'state': 'online'})
+assert bridge_read(path) == {'state': 'online'}
+"""
+    subprocess.run([sys.executable, "-c", code, str(tmp_path)], check=True)

@@ -5,7 +5,7 @@ Plugins dialog. The MCP server remains a separate process. Neither component
 patches Orca or loads private C++ symbols. The plugin has no third-party Python
 dependencies, socket listener, arbitrary expression evaluator or printer endpoint.
 
-The plugin requires a compatible 2.5 development build with asynchronous Script
+The plugin requires a compatible 2.5 development build with background Script
 execution and `orca.host.ui.create_window`. Older Orca versions can keep using the
 CLI/file MCP tools. Do not install the plugin in 2.4.2 and expect an embedded host.
 
@@ -56,9 +56,9 @@ not imply model mutation, painting, calibration or device-control support.
 
 ## Thread and object lifetime rules
 
-The Script invocation owns an asyncio loop on Orca's Script worker. It opens a
+The plain Script invocation runs on Orca's background Script worker. It opens a
 host-managed HTML window and stays alive until that panel closes or Orca cancels
-the capability. The window sends small tick messages; its `on_message` callback
+the capability. No asyncio event loop or internal socket pair is needed. The window sends small tick messages; its `on_message` callback
 runs on the GUI thread. This callback performs native model/preset reads and the
 3MF copy export, converts native values immediately to JSON data, and drops the
 native handles before returning.
@@ -66,7 +66,7 @@ native handles before returning.
 Preset mutations are queued as plain JSON. The Script worker takes one request,
 calls the official staged preset API and waits for its native GUI handoff. It
 never enumerates the live model from the worker. No native model/preset pointers
-are retained in queues, journals or across coroutine suspension points.
+are retained in queues, journals or between worker ticks.
 
 Native target-selection and unsaved-edit dialogs remain authoritative. The
 bridge does not choose a response or save a dirty preset. A successful commit
@@ -136,3 +136,9 @@ host. A documentation example or mocked unit test is not reported as native proo
 
 Public upstream documentation may lag current source (notably the Script-thread
 description); the test evidence must identify the actual Orca build used.
+
+The native audit test exposed that creating an asyncio loop in the current host
+requests socket permission for CPython's internal wakeup pair. The bridge uses the
+official plain Script worker path instead. Atomic writes retain their originally
+path-opened descriptor and use `os.write`/`fsync`, avoiding an additional untargeted
+`open(fd)` audit event. No audit permission is bypassed or pre-approved.

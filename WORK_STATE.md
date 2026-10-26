@@ -122,3 +122,10 @@ operations are never retried. Review also separated native failures from receipt
 persistence: an applied commit with a failed final write keeps the started journal
 and indeterminate outcome. Two regression tests added; 42 local tests pass.
 Generated standalone plugin updated from reviewed modules.
+
+Run 40287888161 reached real plugin Run. Native audit rejected asyncio's internal
+socketpair before execute ran; no socket permission was approved. Upstream async
+design confirms plain def execute also runs on its official worker. Switched to
+that simpler path with standard sleep. Also retain mkstemp's descriptor and use
+os.write/fsync to avoid untargeted open(fd) audit events. Added subprocess audit
+regression. Next native run must prove startup/transactions with audit enabled.

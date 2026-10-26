@@ -43,10 +43,18 @@ def bridge_write(path: Path, value: dict, limit: int = MAX_RESPONSE_BYTES) -> No
     path.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
     fd, temporary = tempfile.mkstemp(prefix=".rrs-", dir=path.parent)
     try:
-        with os.fdopen(fd, "wb") as stream:
-            stream.write(raw)
-            stream.flush()
-            os.fsync(stream.fileno())
+        try:
+            # Keep the mkstemp descriptor: fdopen would emit an untargeted open
+            # audit event in the embedded host. The original open had a full path.
+            pending = memoryview(raw)
+            while pending:
+                written = os.write(fd, pending)
+                if written <= 0:
+                    raise OSError("Incomplete bridge document write")
+                pending = pending[written:]
+            os.fsync(fd)
+        finally:
+            os.close(fd)
         # NTFS can deny replacement briefly while a concurrent reader or scanner
         # holds the destination. Retry persistence only, never the native action.
         for attempt in range(10):
