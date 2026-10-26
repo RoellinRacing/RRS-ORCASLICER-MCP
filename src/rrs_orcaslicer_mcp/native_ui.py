@@ -203,11 +203,15 @@ class NativeControls:
             )
         return candidates[0]
 
-    def label(self, phrase, region=None):
+    def label(self, phrase, region=None, psm=None):
         # Native dialogs can finish painting after their first visible frame.
         # Retry observation only; no click or key is repeated by this wait.
         for attempt in range(3):
-            words = self.words(region) if attempt < 2 else self.words(region, psm=6)
+            words = (
+                self.words(region, psm=psm)
+                if psm
+                else (self.words(region) if attempt < 2 else self.words(region, psm=6))
+            )
             try:
                 return self.locate(words, phrase, region)
             except ValueError:
@@ -245,14 +249,14 @@ class NativeControls:
             ["xdotool", "getactivewindow", "getwindowname"], text=True
         ).strip()
 
-    def dialog_button(self, phrase, expected_title):
+    def dialog_button(self, phrase, expected_title, footer_height=75):
         title = self.window_title()
         if title != expected_title or self.bounds() == self.main_bounds:
             raise ValueError(
                 f"Expected native dialog {expected_title!r} is not active; observed {title!r}"
             )
         left, top, right, bottom = self.bounds()
-        footer = (left, max(top, bottom - 75), right, bottom)
+        footer = (left, max(top, bottom - footer_height), right, bottom)
         try:
             # Preset explanations also contain "transfer". Search its footer.
             box = self.label(phrase, footer)
@@ -262,13 +266,13 @@ class NativeControls:
             # A failure after input must propagate, never trigger another click.
             self.point_click(box)
             return
-        # Sparse OCR omits short white labels on Orca's teal primary buttons.
+        # Sparse OCR omits short labels on teal primary / grey secondary buttons.
         # Identify button rectangles only inside this verified dialog's footer,
         # then read each inset as black text on white. Never click color alone.
         from PIL import ImageOps
 
         left, top, right, bottom = self.bounds()
-        top = max(top, bottom - 75)
+        top = max(top, bottom - footer_height)
         picture = self.desktop._api().screenshot().crop((left, top, right, bottom)).convert("RGB")
         pixels = picture.load()
         colored = {}
@@ -276,11 +280,14 @@ class NativeControls:
             ys = [
                 y
                 for y in range(picture.height)
-                if pixels[x, y][0] <= 50
-                and 100 <= pixels[x, y][1] <= 190
-                and 80 <= pixels[x, y][2] <= 180
+                if (
+                    pixels[x, y][0] <= 50
+                    and 100 <= pixels[x, y][1] <= 190
+                    and 80 <= pixels[x, y][2] <= 180
+                )
+                or (max(pixels[x, y]) - min(pixels[x, y]) <= 3 and 210 <= pixels[x, y][0] <= 235)
             ]
-            if ys:
+            if len(ys) >= 12:
                 colored[x] = ys
         groups = []
         for x in sorted(colored):
@@ -294,9 +301,19 @@ class NativeControls:
             y0, y1 = min(ys), max(ys) + 1
             if x1 - x0 < 50 or y1 - y0 < 20 or len(ys) < (x1 - x0) * (y1 - y0) * 0.45:
                 continue
+            grey = (
+                sum(
+                    max(pixels[x, y]) - min(pixels[x, y]) <= 3 and 210 <= pixels[x, y][0] <= 235
+                    for x in group
+                    for y in colored[x]
+                )
+                > len(ys) * 0.5
+            )
             inset = picture.crop((x0 + 5, y0 + 4, x1 - 5, y1 - 4)).convert("L")
             inset = ImageOps.expand(
-                inset.point(lambda v: 0 if v > 220 else 255), border=8, fill=255
+                inset.point(lambda v, grey=grey: 0 if (v < 130 if grey else v > 220) else 255),
+                border=8,
+                fill=255,
             )
             stream = io.BytesIO()
             inset.resize((inset.width * 3, inset.height * 3)).save(stream, format="PNG")
@@ -314,6 +331,41 @@ class NativeControls:
         if len(matches) != 1:
             raise ValueError(f"Native dialog button {phrase!r} missing or ambiguous")
         self.point_click(matches[0])
+
+    def resolve_calibration_dialog(self, kind):
+        title = self.window_title()
+        if kind != "flow_ratio" or title not in ("Orca Slicer info", "OrcaSlicer info"):
+            return None
+        left, top, right, bottom = self.bounds()
+        body = (left + 90, top + 30, right - 10, bottom - 50)
+        self.label("Spiral mode only works", body, psm=6)
+        self.label("Cancel enabling spiral mode", body, psm=6)
+        screenshot = self.capture("inherited_spiral_prompt")
+        # Flow calibration loads flat coupons. Decline re-enabling inherited
+        # vase mode, rather than accepting automatic wall/infill/support edits.
+        # The body repeats "No"; only the bottom button row may receive input.
+        self.dialog_button("No", title, footer_height=55)
+        time.sleep(0.5)
+        return {"cancelled_inherited_spiral_mode": True, "screenshot": screenshot}
+
+    def wait_prepared(self, timeout=60):
+        # Disposable GUI fixtures must wait for actual controls, not just a
+        # painted title bar or a splash window that will shortly be replaced.
+        deadline = time.monotonic() + timeout
+        while True:
+            try:
+                left, top, right, bottom = self.bounds()
+                words = self.words((left, top, min(right, left + 500), bottom))
+                if all(
+                    self.locate(words, label, all_matches=True)
+                    for label in ("Filament", "Process", "Quality")
+                ):
+                    return
+            except (ValueError, subprocess.CalledProcessError):
+                pass
+            if time.monotonic() >= deadline:
+                raise ValueError("Native Prepare controls did not finish loading")
+            time.sleep(0.5)
 
     def radio_choice(self, group, full_label, unique_word):
         end = self.label("Settings")

@@ -482,3 +482,63 @@ def test_native_readback_reobserves_decimal_without_repeating_input(tmp_path, mo
     monkeypatch.setattr(native_ui.time, "sleep", lambda _: None)
     assert ui.numeric("Damp", value=0.2, verify=True)["observed"] == 0.2
     assert actions == [("click", 90), ("write", "0.2")]
+
+
+@pytest.mark.parametrize(
+    "kind,title,missing,accepted",
+    [
+        ("flow_ratio", "Orca Slicer info", False, True),
+        ("flow_ratio", "Other dialog", False, False),
+        ("max_volumetric_speed", "Orca Slicer info", False, False),
+        ("flow_ratio", "Orca Slicer info", True, False),
+    ],
+)
+def test_flow_spiral_resolution_requires_exact_dialog_and_both_body_anchors(
+    tmp_path, monkeypatch, kind, title, missing, accepted
+):
+    from rrs_orcaslicer_mcp import native_ui
+
+    ui = NativeControls(None, tmp_path)
+    ui.window_title = lambda: title
+    actions = []
+
+    ui.bounds = lambda: (0, 0, 600, 500)
+
+    def label(phrase, region=None, **kwargs):
+        if missing and phrase == "Cancel enabling spiral mode":
+            raise ValueError("unknown prompt")
+        return {"x": 0, "y": 0, "w": 1, "h": 1}
+
+    ui.label = label
+    ui.capture = lambda phase: phase
+    ui.dialog_button = lambda *args, **kwargs: actions.append((args, kwargs))
+    monkeypatch.setattr(native_ui.time, "sleep", lambda _: None)
+    if missing:
+        with pytest.raises(ValueError, match="unknown prompt"):
+            ui.resolve_calibration_dialog(kind)
+    else:
+        result = ui.resolve_calibration_dialog(kind)
+        assert bool(result) == accepted
+    expected = [(("No", title), {"footer_height": 55})] if accepted else []
+    assert actions == expected
+
+
+def test_prepare_readiness_waits_for_loaded_sidebar_without_input(tmp_path, monkeypatch):
+    from rrs_orcaslicer_mcp import native_ui
+    from rrs_orcaslicer_mcp.native_ui import tokens
+
+    ui = NativeControls(None, tmp_path)
+
+    def word(text):
+        return dict(text=text, tokens=tokens(text), x=10, y=10, w=50, h=12)
+
+    frames = iter([[word("Prepare")], [word(x) for x in ["Filament", "Process", "Quality"]]])
+    ui.bounds = lambda: (0, 0, 1200, 800)
+    ui.words = lambda region=None: next(frames)
+    waits = []
+    monkeypatch.setattr(native_ui.time, "sleep", waits.append)
+    ui.wait_prepared()
+    assert waits == [0.5]
+    ui.words = lambda region=None: [word("Prepare")]
+    with pytest.raises(ValueError, match="did not finish loading"):
+        ui.wait_prepared(timeout=0)

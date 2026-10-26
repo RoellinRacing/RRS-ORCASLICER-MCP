@@ -246,3 +246,19 @@ that whole-row OCR can omit. Readback may observe up to three rendered frames;
 these waits never re-click, retype or re-run a native operation. A mismatch still
 fails the operation before generation. Full-height border removal cannot erase a
 partially occupied column, which could otherwise remove a decimal point itself.
+
+### Native calibration transitions
+
+Max-volumetric-speed generation enables spiral mode in Orca's edited process.
+Loading the flat flow-ratio coupon project while transferring those edits can open
+Orca's spiral consistency prompt. For flow_ratio only, require its exact native
+info-dialog title plus both spiral-mode and cancel-enabling explanation anchors,
+then select No in the bottom button row. Upstream ConfigManipulation.cpp confirms
+No clears only spiral_mode; Yes would also change wall/infill/support/timelapse
+settings. The original project is already backed up. The receipt records this
+specific adjustment. Other unknown dialogs still fail closed, and export requires
+the actual Prepare MainFrame so a modal-blocked empty project cannot be accepted.
+Grey secondary-button rectangles receive cropped black-text OCR; geometry/color
+alone never authorizes a click. Thin grey separator lines cannot join buttons.
+The isolated GUI fixture waits for Filament/Process/Quality before moving/clicking
+the real MainFrame, avoiding interaction with a startup/splash frame.

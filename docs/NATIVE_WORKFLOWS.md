@@ -74,3 +74,9 @@ preset dialog. The latter's current Keep action is labeled Transfer; edited
 presets are retained. Neither a generic Discard button nor a color-only match is
 used to authorize replacement. Primary-button fallback requires the exact dialog
 title plus OCR of the button's isolated label.
+
+When a Max Flowrate project is followed by Flow Ratio, Orca may ask to re-enable
+inherited spiral/vase mode after transferring edits. The Flow Ratio route declines
+that specific re-enable request (No), keeping the flat coupon's wall/infill settings.
+It verifies the exact dialog and explanation, records the adjustment, and requires
+the actual MainFrame before export. Other dialogs remain unsupported and stop input.

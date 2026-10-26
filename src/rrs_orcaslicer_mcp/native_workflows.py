@@ -536,6 +536,13 @@ class NativeWorkflows:
                         await asyncio.to_thread(ui.dialog_button, "Transfer", title)
                         await asyncio.sleep(0.5)
                     await asyncio.sleep(1)
+                    phase("settling_native_calibration")
+                    record["native_adjustment"] = await asyncio.to_thread(
+                        ui.resolve_calibration_dialog, kind
+                    )
+                    # Never export an intermediate empty project while an
+                    # unhandled modal dialog is blocking native generation.
+                    await asyncio.to_thread(ui.main)
                     phase("exporting_native_calibration")
                     record["export"] = await self.export(parameters["destination"], session_id)
                     record["native_metadata"] = archive_metadata(record["export"]["path"])

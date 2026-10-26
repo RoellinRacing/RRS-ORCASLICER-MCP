@@ -1,0 +1,27 @@
+{
+  "status": "partial_checkpoint_not_release_acceptance",
+  "source_commit": "d4ed888e5cb5afbcdcf616e02e796d38787117e2",
+  "workflow": "https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/actions/runs/40363467681",
+  "successful_operations": 25,
+  "transform_kinds": [
+    "move",
+    "rotate",
+    "scale"
+  ],
+  "text_modes": [
+    "cut",
+    "join",
+    "modifier"
+  ],
+  "successful_generator_kinds": [
+    "temperature",
+    "pressure_advance",
+    "retraction",
+    "max_volumetric_speed"
+  ],
+  "failure": {
+    "kind": "flow_ratio",
+    "reason": "Native generator did not produce a nonempty scene",
+    "native_prompt": "Inherited spiral/vase setting requires declining re-enable for flat flow coupons"
+  }
+}

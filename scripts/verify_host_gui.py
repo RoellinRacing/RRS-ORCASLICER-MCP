@@ -16,6 +16,9 @@ import uuid
 import sys
 import zipfile
 from pathlib import Path
+from types import SimpleNamespace
+
+from rrs_orcaslicer_mcp.native_ui import NativeControls
 
 from rrs_orcaslicer_mcp.host_bridge.client import HostClient
 from rrs_orcaslicer_mcp.storage import atomic_json, digest
@@ -148,9 +151,14 @@ def open_bridge(process):
     global main_window
     import pyautogui
 
-    time.sleep(12)
+    time.sleep(2)
     if process.poll() is not None:
         raise RuntimeError("Orca exited during startup")
+    try:
+        NativeControls(SimpleNamespace(_api=lambda: pyautogui), evidence).wait_prepared(60)
+    except Exception:
+        pyautogui.screenshot().save(evidence / "00-startup-not-ready.png")
+        raise
     main_window = subprocess.check_output(["xdotool", "getactivewindow"], text=True).strip()
     # Openbox may initially place a 1200px mainframe partly offscreen. Keep
     # the disposable acceptance desktop deterministic and fully visible.

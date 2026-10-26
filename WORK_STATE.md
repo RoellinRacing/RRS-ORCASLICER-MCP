@@ -210,3 +210,22 @@ bridge consistency passed. Source, business rules and actual replay/test results
 are saved before the next native computation. The earlier local installed-wheel
 87-test pass is retained explicitly bound to e09bfe1, including its first flaky
 fixture result; the final published wheel still requires its own verification.
+
+Native d4ed888 / run 40363467681: all six matrix checks and all nine independent
+native generators passed. The combined session passed move/rotate/scale/history,
+all three editable text modes and temperature/PA/retraction/max-flow (25 successful
+operations), then caught a real cross-generator state: Max Flowrate leaves spiral
+mode enabled, and transferring that into flat Flow Ratio coupons opens Orca's
+spiral consistency dialog. Source inspection confirms No clears only spiral_mode;
+Yes would alter additional wall/infill/support/timelapse settings. Added an exact
+Flow Ratio-only prompt/No path with a recorded adjustment and MainFrame export gate.
+Actual No-button replay is saved in native-spiral-prompt-0.5.0.json; reproduction:
+scripts/replay_spiral_prompt.py (artifact 12669488298, dialog bounds 228 403 1172 614).
+The independent text run stopped during fixture startup before model input: the
+12-second sleep caught a partially loaded/splash MainFrame. The fixture now waits
+for loaded Filament/Process/Quality controls before input. Regression tests cover
+allowed/unknown/wrong-generator prompts and loading readiness. Next: complete local
+checks, push, require the full combined native session and publish/verify 0.5.0.
+The exact real spiral prompt replay and 94 local tests passed. Static checks and
+bridge consistency passed. Source/business rules/actual partial native results and
+prompt replay are saved before the next full native run. No physical print started.
