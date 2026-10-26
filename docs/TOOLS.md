@@ -97,3 +97,8 @@ und einer eigenen UUID-Hex-ID (`request_id`, 32 kleine Hex-Zeichen) beauftragen.
 Bei `outcome_unknown` dieselben IDs über `host_request_status` prüfen; keinen
 neuen Änderungsauftrag als vermeintlich sicheren Retry erfinden. Erfolg liegt
 nur bei `status: succeeded` vor. Native Dialoge können eine lokale Antwort benötigen.
+
+`profile_export` preserves a valid source `version`. For vendor profiles without
+one, pass `profile_version` explicitly (for example the generating engine version).
+The source must declare `type` as machine, process or filament; validation happens
+before any file is written.

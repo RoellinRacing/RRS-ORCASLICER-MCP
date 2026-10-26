@@ -289,10 +289,16 @@ def create_server() -> FastMCP:
 
     @mcp.tool()
     def profile_export(
-        source: str, destination: str, name: str, search_directories: list[str]
+        source: str,
+        destination: str,
+        name: str,
+        search_directories: list[str],
+        profile_version: str | None = None,
     ) -> dict[str, Any]:
         """Create a new flattened user profile with inherited values and no parent dependency."""
-        return profile_settings.export_profile(files, source, destination, name, search_directories)
+        return profile_settings.export_profile(
+            files, source, destination, name, search_directories, profile_version
+        )
 
     @mcp.tool()
     def project_inspect(path: str, metadata_member: str = projects.SETTINGS) -> dict[str, Any]:

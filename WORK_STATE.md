@@ -89,3 +89,11 @@ the unsaved wall setting and must preserve project filename/dirty state. Runtime
 coverage/docs now distinguish the implemented host operations from remaining
 geometry, painting, calibration, slicing-hook and device gaps. Contact draft updated
 with factual implementation details; no upstream post sent.
+
+Native run 40285359025 proved plugin discovery/loading on official Python 3.12,
+but revealed that flattened vendor JSON lacked mandatory version metadata for
+Orca user presets. Fixed profile_export: preserve valid version or require explicit
+profile_version, require native preset type, validate before writing. Regression
+coverage now 40 passing tests. Native fixture uses versioned user presets and the
+reference STL to avoid the unrelated customized-3MF safety dialog. Next: run native
+GUI verification and record actual host mutations/export evidence before release.

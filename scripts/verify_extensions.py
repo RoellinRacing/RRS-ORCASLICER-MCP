@@ -7,6 +7,7 @@ checkpointed before slicing and after each finished section.
 import asyncio
 import json
 import os
+import re
 import sys
 from pathlib import Path
 
@@ -93,6 +94,12 @@ async def main():
                         "destination": str(flat_profile),
                         "name": "MCP independent process",
                         "search_directories": [],
+                        "profile_version": re.match(
+                            r"OrcaSlicer-([^: ]+):",
+                            json.loads((root / "report.json").read_text(encoding="utf-8"))[
+                                "capabilities"
+                            ]["help"],
+                        ).group(1),
                     },
                 )
             difference = await call(

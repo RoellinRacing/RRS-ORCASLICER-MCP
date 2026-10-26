@@ -43,22 +43,48 @@ def test_validation_reports_bad_types_and_preserves_future_keys():
 
 def test_profile_export_is_flat_and_never_overwrites(tmp_path):
     files = Files([tmp_path])
-    files.write("base.json", {"name": "base", "layer_height": "0.2", "unknown": "keep"}, [], None)
+    files.write(
+        "base.json",
+        {"name": "base", "type": "process", "layer_height": "0.2", "unknown": "keep"},
+        [],
+        None,
+    )
     source = files.write(
         "leaf.json",
         {"name": "leaf", "inherits": "base", "setting_id": "system-id", "wall_loops": "3"},
         [],
         None,
     )
-    result = settings.export_profile(files, "leaf.json", "flat.json", "My profile", [str(tmp_path)])
+    result = settings.export_profile(
+        files, "leaf.json", "flat.json", "My profile", [str(tmp_path)], "2.4.2"
+    )
     assert result["settings"]["layer_height"] == "0.2"
     assert result["settings"]["unknown"] == "keep"
     assert result["settings"]["from"] == "User"
+    assert result["settings"]["version"] == "2.4.2"
     assert "inherits" not in result["settings"]
     assert "setting_id" not in result["settings"]
     assert files.read("leaf.json")["sha256"] == source["sha256"]
     with pytest.raises(ValueError, match="new destination"):
         settings.export_profile(files, "leaf.json", "flat.json", "Overwrite", [str(tmp_path)])
+
+
+def test_profile_export_requires_native_metadata_before_writing(tmp_path):
+    files = Files([tmp_path])
+    files.write("source.json", {"name": "source", "type": "process"}, [], None)
+    for invalid in (None, "", "current", "2.4"):
+        with pytest.raises(ValueError, match="profile_version"):
+            settings.export_profile(files, "source.json", "new.json", "New", [], invalid)
+        assert not (tmp_path / "new.json").exists()
+    files.write("valid.json", {"name": "valid", "type": "process", "version": "2.4.2"}, [], None)
+    assert (
+        settings.export_profile(files, "valid.json", "new.json", "New", [])["settings"]["version"]
+        == "2.4.2"
+    )
+    files.write("untyped.json", {"name": "untyped", "version": "2.4.2"}, [], None)
+    with pytest.raises(ValueError, match="type"):
+        settings.export_profile(files, "untyped.json", "untyped-export.json", "New", [])
+    assert not (tmp_path / "untyped-export.json").exists()
 
 
 def scene(path):

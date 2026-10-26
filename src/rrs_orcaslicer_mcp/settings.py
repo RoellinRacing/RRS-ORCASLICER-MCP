@@ -2,6 +2,7 @@
 
 import math
 import json
+import re
 
 from .catalog import snapshot
 from .profiles import resolve
@@ -117,7 +118,12 @@ def validate(values: dict) -> dict:
 
 
 def export_profile(
-    files: Files, source: str, destination: str, name: str, directories: list[str]
+    files: Files,
+    source: str,
+    destination: str,
+    name: str,
+    directories: list[str],
+    profile_version: str | None = None,
 ) -> dict:
     target = files.path(destination)
     if target.exists():
@@ -126,6 +132,16 @@ def export_profile(
         raise ValueError("Supply a nonempty profile name")
     resolved = resolve(files, source, directories)
     values = resolved["settings"].copy()
+    version = profile_version if profile_version is not None else values.get("version")
+    if not isinstance(version, str) or not re.fullmatch(
+        r"[0-9]+(?:\.[0-9]+){2,3}(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?", version
+    ):
+        raise ValueError(
+            "Supply a valid profile_version when the source lacks valid Orca version metadata"
+        )
+    if values.get("type") not in {"machine", "process", "filament"}:
+        raise ValueError("Source profile must declare type machine, process or filament")
+    values["version"] = version
     values.pop("inherits", None)
     values.pop("setting_id", None)
     values.update(name=name.strip(), **{"from": "User"})

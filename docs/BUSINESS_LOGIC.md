@@ -134,3 +134,11 @@ von einem Client-Timeout rückgängig gemacht.
 Details, Betrieb, Wiederaufnahme und Threadregeln stehen in HOST_BRIDGE.md;
 MAINTAINER_REVIEW.md beschreibt die geprüften Codegrenzen und verbleibenden Risiken
 für die spätere sachliche Vorstellung beim OrcaSlicer-Team.
+
+### Importierbare Benutzerprofile
+
+`profile_export` benötigt einen nativen Profiltyp und gültige Versionsmetadaten.
+Eine vorhandene Version wird übernommen; fehlt sie im Herstellerprofil, muss der
+Aufrufer `profile_version` angeben. Der Server erfindet keine Hostversion. Ungültige
+Metadaten erzeugen keine Datei. Dies behebt einen im echten GUI-Test gefundenen
+Unterschied zwischen akzeptierten CLI-Einstellungen und importierbaren Profilen.

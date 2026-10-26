@@ -7,6 +7,7 @@ Xvfb, xdotool, screenshot support and Tesseract. Save diagnostics on every failu
 import asyncio
 import json
 import os
+import re
 import shutil
 import signal
 import subprocess
@@ -31,13 +32,17 @@ source_root = Path(__file__).resolve().parents[1]
 
 
 def prepare():
+    version = re.match(
+        r"OrcaSlicer-([^: ]+):",
+        json.loads((root / "report.json").read_text(encoding="utf-8"))["capabilities"]["help"],
+    ).group(1)
     for kind, directory in (
         ("machine", "machine"),
         ("process", "process"),
         ("filament", "filament"),
     ):
         value = json.loads((root / f"{kind}.json").read_text(encoding="utf-8"))
-        value.update(name=f"RRS Test {kind}", **{"from": "User"})
+        value.update(name=f"RRS Test {kind}", version=version, **{"from": "User"})
         value.pop("inherits", None)
         value.pop("setting_id", None)
         if kind == "machine":
@@ -86,7 +91,7 @@ def prepare():
         {
             "plugin_sha256": digest(plugin),
             "data_directory": str(data),
-            "source_project_sha256": digest(root / "output/cube-sliced.3mf"),
+            "source_model_sha256": digest(root / "cube.stl"),
         },
     )
 
@@ -294,7 +299,7 @@ def main():
             str(data),
             "--debug",
             "3",
-            str(root / "output/cube-sliced.3mf"),
+            str(root / "cube.stl"),
         ],
         stdout=log,
         stderr=subprocess.STDOUT,
