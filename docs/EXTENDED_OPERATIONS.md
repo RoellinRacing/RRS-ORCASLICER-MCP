@@ -101,3 +101,13 @@ Stock PluginHostModel bindings remain read-only at upstream commit
 calibration generator invocation, GUI slice/cancel/export commands and cloud/AMS
 commands do not have integrated supported entry points. File/HTTP operations above
 are explicit independent workflows, not a claim of full native GUI coverage.
+
+
+## Native additions in 0.5.0
+
+The host model API is still read-only. `native_transform`, `native_history`,
+`native_text` and `native_calibration` now drive stock visible controls and verify
+native results through the bridge/export. Setup, explicit limits, receipt recovery
+and accepted operation evidence: [NATIVE_WORKFLOWS.md](NATIVE_WORKFLOWS.md).
+The earlier missing native binding entry points remain missing; these new external
+GUI workflows do not assert that C++ mutation APIs have appeared.

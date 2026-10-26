@@ -35,8 +35,8 @@
     },
     {
       "feature": "Mesh repair, split, cut, Boolean operations and embossing",
-      "route": "mesh_operation with optional geometry engines: repair/split/cut/booleans/merge/hull/simplify/transform",
-      "status": "offline_mesh_operations_embossing_not_implemented"
+      "route": "mesh_operation offline topology; native_text editable emboss/engrave through Orca UI",
+      "status": "offline_topology_and_typed_native_text_workflows"
     },
     {
       "feature": "Support, seam and multi-color painting",
@@ -45,8 +45,8 @@
     },
     {
       "feature": "Calibration generators and dialogs",
-      "route": "calibration_series_create: four controlled coupon series from supplied model",
-      "status": "independent_parameter_sweeps_native_generators_not_bound"
+      "route": "native_calibration original dialogs/generators; calibration_series_create independent coupons",
+      "status": "typed_native_generator_workflows_require_matching_firmware_and_ui"
     },
     {
       "feature": "Printer connection, cloud login, AMS/MMU and physical printing",
@@ -75,8 +75,8 @@
     },
     {
       "feature": "Live geometry mutation and slicing hooks",
-      "route": "host_slicing_events via optional observer; live model mutations not exposed upstream",
-      "status": "synchronous_stage_observer_implemented_live_mutation_gap"
+      "route": "native_transform/native_history through stock visible gizmos; host_slicing_events",
+      "status": "typed_native_ui_pose_and_history_workflows_with_explicit_layout_limits"
     },
     {
       "feature": "Live project copy with unsaved settings",
@@ -97,9 +97,20 @@
       "feature": "Selected live printer diagnostics",
       "route": "host_printer_read",
       "status": "redacted_read_when_host_exposes_it"
+    },
+    {
+      "feature": "Native editable text, emboss, engrave and modifiers",
+      "route": "native_text; native export verifies text/shape metadata and volume type",
+      "status": "typed_native_ui_workflow_single_object_instance_english"
     }
   ],
   "upstream_discussion": "https://github.com/OrcaSlicer/OrcaSlicer/discussions/14878",
   "upstream_dev_category": "https://github.com/OrcaSlicer/OrcaSlicer/discussions/categories/dev",
-  "source_revision": "1433316b550bac676136f618e215ece8c884bb8c"
+  "source_revision": "1433316b550bac676136f618e215ece8c884bb8c",
+  "native_ui_limits": {
+    "selector_pack": "English stock shortcuts and Prepare layout",
+    "transform_selection": "one object/instance; other rotation axes zero for relative rotation",
+    "actual_acceptance": "See bundled docs/evidence/host-0.5.0.json, not a blanket claim for every platform or firmware",
+    "mesh_revision": "Observed fields, not a full mesh-content hash"
+  }
 }

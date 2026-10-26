@@ -1,8 +1,9 @@
-> **Neu in 0.4.0: 54 MCP-Werkzeuge.** Gezielte 3MF-Transformationen und Bemalung,
-> optionale Mesh-Bearbeitung, Kalibrierungsreihen, native Slicing-Ereignisse und
-> konfigurierte Moonraker-/OctoPrint-Adapter. [Paket herunterladen](https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/releases/tag/v0.4.0)
-> · [Bedienung und Grenzen](docs/EXTENDED_OPERATIONS.md). Vollständige native
-> GUI-Abdeckung und Kompatibilität mit jeder Version sind weiterhin nicht erreicht.
+> **Neu in 0.5.0: 61 MCP-Werkzeuge.** Gezielte Live-Transformationen mit nativer
+> Undo-/Redo-Historie, editierbarer Text/Embossing und originale Kalibrierungsgeneratoren
+> über Orcas sichtbare Bedienoberfläche. Der Server bleibt separat und Orca unverändert.
+> [Paket](https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/releases/tag/v0.5.0)
+> · [Einrichtung, Umfang und Grenzen](docs/NATIVE_WORKFLOWS.md). Der erste Selector-Pack
+> benötigt englische Oberfläche, Standardkürzel, Tesseract und den Desktop-Opt-in.
 
 # RRS-ORCASLICER-MCP
 

@@ -1,3 +1,19 @@
+## Stand 0.5.0 — gezielte native Bedienabläufe
+
+`native_transform` bearbeitet Live-Position/Drehung/Skalierung und liest die echte
+Pose zurück. `native_history` nutzt Orcas eigene Undo-/Redo-Historie.
+`native_text` prüft editierbaren Text, Höhe/Tiefe und Volumentyp in der nativen
+Projektkopie. `native_calibration` ruft die Originaldialoge und Generatoren auf.
+Die neun Familien und die konkreten getesteten Varianten stehen in
+[NATIVE_WORKFLOWS.md](NATIVE_WORKFLOWS.md) bzw. den nativen CI-Nachweisen.
+
+Das ist ein gezielter Desktop-Adapter mit nativer Ergebnisprüfung, keine neue
+öffentliche C++-Dokument-API. Englisches Prepare-Layout, Standardkürzel und expliziter
+Desktop-Opt-in sind erforderlich. Transformation/Text: zunächst ein Objekt/eine
+Instanz; relative Drehung bei sonst ungedrehten Achsen. Kein vollständiger Mesh-Hash,
+keine generelle Plattform-/Versions-/Firmwaregarantie. Die älteren Tabellen unten
+sind versionsbezogene Ausgangsstände und werden dadurch nicht rückwirkend umgedeutet.
+
 ## Stand 0.4.0 — native Nachweise bestanden
 
 Neue semantische Wege: `project_geometry_read/project_transform_write`,

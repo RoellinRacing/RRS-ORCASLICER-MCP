@@ -80,3 +80,6 @@ Saved follow-up: namespace-unaware parsing of Orca's native unbound slic3rpe:tex
 shape tags, exact numeric-field readback for generator parameters, nonempty native
 model/type checks, and nine generator families plus all three text modes in the
 acceptance script. 65-test suite is being rechecked before the next native run.
+65 local tests now passed. Follow-up source/coverage/docs are synchronized for
+61 tools and explicit native UI limits. Native acceptance is expanded to three
+text volume modes and nine generator families; it still must pass actual CI.
