@@ -112,3 +112,11 @@ per-operation preflight screenshots. Source is saved in b31cddf; active acceptan
 run 40342059188. Stock project replacement dialogs are recognized with a completed
 native backup; edited presets are kept. Next: inspect actual operation receipts,
 fix any remaining native selector/commit behavior, then release only on full pass.
+
+Native pilot c534598 passed move X+7 mm and rotate Z+15 degrees, each with actual
+Undo, Redo, Undo and exact native revision restoration. Saved receipts are in run
+40343988068 / artifact 12659199872. Scale did not reach the text editor reliably:
+typing reached canvas shortcuts instead. Native ImGui mouse clicks now hold down
+across a render frame; numeric focus/commit screenshots are saved per field.
+No all-workflows success/release yet. Continue through scale, native editable text
+and nine generators. Source before this follow-up: c53459878e331471397c2549bab5b092e649ce6e.

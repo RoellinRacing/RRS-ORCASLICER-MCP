@@ -150,9 +150,13 @@ class NativeControls:
         # wx forwards a click according to the previous ImGui hover/capture
         # frame. Let the GL canvas observe the pointer before pressing a button.
         api.moveTo(box["x"] + box["w"] / 2, box["y"] + box["h"] / 2, duration=0.15)
-        time.sleep(0.35)
-        self.desktop._api().click()
-        time.sleep(0.35)
+        time.sleep(0.6)
+        # Hold across a render frame. An instantaneous down/up can be lost by
+        # ImGui on a software-rendered desktop even after the pointer is over it.
+        self.desktop._api().mouseDown()
+        time.sleep(0.2)
+        self.desktop._api().mouseUp()
+        time.sleep(0.4)
 
     def click(self, phrase, region=None):
         self.point_click(self.label(phrase, region))
@@ -217,12 +221,15 @@ class NativeControls:
         if type(target) not in (int, float) or not math.isfinite(target):
             raise ValueError("Native numeric value must be finite")
         self.point_click(box)
+        evidence_name = re.sub(r"\W+", "_", label).strip("_") + f"_{index}"
+        self.capture("numeric_" + evidence_name + "_focused")
         self.key("command" if sys.platform == "darwin" else "ctrl", "a")
         # Numeric fields accept ASCII directly; this avoids clipboard ownership
         # races between X11/wx and the native ImGui canvas.
         self.desktop._api().write(format(target, ".10g"), interval=0.05)
         self.key(commit)
         time.sleep(0.3)
+        self.capture("numeric_" + evidence_name + "_committed")
         result = {"before": old, "requested": target}
         if verify:
             _, observed = self.read_numeric(label, region, index, columns, required_unit)
