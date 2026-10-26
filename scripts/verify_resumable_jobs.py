@@ -71,7 +71,11 @@ async def main():
                 offset = part["next_offset"]
                 if part["at_end"]:
                     break
-            assert offset > 0
+            # Stock Orca may write nothing to stdout for a successful slice; the
+            # contract is that the cursor reproduces exactly the saved log bytes.
+            saved_log = Path(job["log"]).read_bytes() if Path(job["log"]).exists() else b""
+            assert offset == part["size_bytes"] == len(saved_log)
+            assert "".join(chunks) == saved_log.decode("utf-8", errors="replace")
             report.update(phase="sliced", log_bytes=offset, log_text="".join(chunks))
             atomic_json(report_path, report)
     # A separate server process must return the same completed job, not reslice.

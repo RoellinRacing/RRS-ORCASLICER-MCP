@@ -123,7 +123,9 @@ async def test_wait_timeout_and_cancelled_observer_leave_job_running(engine, tmp
 
 async def test_log_cursors_preserve_unicode_and_survive_restart(engine, tmp_path):
     script = tmp_path / "unicode.py"
-    script.write_text("import sys; sys.stdout.buffer.write('A温度🙂B'.encode('utf-8'))")
+    script.write_text(
+        "import sys; sys.stdout.buffer.write('A温度🙂B'.encode('utf-8'))", encoding="utf-8"
+    )
     job = await engine.submit([str(script)])
     ident = job["id"]
     await engine.wait(ident, 5)
