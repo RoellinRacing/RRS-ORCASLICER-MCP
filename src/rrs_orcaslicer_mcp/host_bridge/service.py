@@ -6,6 +6,7 @@ import secrets
 import time
 import uuid
 import math
+import threading
 from pathlib import Path
 
 from .protocol import (
@@ -16,6 +17,47 @@ from .protocol import (
     bridge_read,
     bridge_write,
 )
+
+
+class SliceEvents:
+    """Bounded copied observations, never retain ctx/Print/Model native references."""
+
+    def __init__(self):
+        self.lock = threading.Lock()
+        self.epoch = uuid.uuid4().hex
+        self.sequence = 0
+        self.events = collections.deque(maxlen=512)
+
+    def observe(self, ctx):
+        event = {
+            "time": time.time(),
+            "step": str(ctx.step),
+            "orca_version": str(ctx.orca_version),
+            "cancelled": bool(ctx.cancelled()),
+            "object_id": ctx.object.id() if ctx.object is not None else None,
+            "postprocess": bool(getattr(ctx, "gcode_path", "")),
+        }
+        with self.lock:
+            self.sequence += 1
+            self.events.append({"sequence": self.sequence, **event})
+
+    def read(self, after=0, limit=100):
+        if type(after) is not int or after < 0 or type(limit) is not int or not 1 <= limit <= 200:
+            raise ValueError("after >= 0 and limit 1..200 required")
+        with self.lock:
+            first = self.events[0]["sequence"] if self.events else self.sequence + 1
+            return {
+                "epoch": self.epoch,
+                "latest_sequence": self.sequence,
+                "oldest_sequence": first,
+                "gap": after < first - 1,
+                "events": [dict(e) for e in self.events if e["sequence"] > after][:limit],
+                "selection_required": "RRS MCP slicing observer in process slicing_pipeline_plugin",
+                "notice": "Stage observations, not percent progress or proof of a physical print",
+            }
+
+
+SLICE_EVENTS = SliceEvents()
 
 
 def secret_setting(key: str) -> bool:
@@ -79,6 +121,12 @@ class HostService:
         ):
             if hasattr(host, attr):
                 result.append(name)
+        if hasattr(host, "ModelObject") and hasattr(host.ModelObject, "volume"):
+            result.append("model.detail")
+        if hasattr(host, "selected_printer"):
+            result.append("printer.read")
+        if hasattr(getattr(self.orca, "slicing", None), "SlicingPipelineCapabilityBase"):
+            result.append("slicing.events")
         # Export and transaction support are checked against concrete handles at
         # execution. The transaction API is opt-in and advertised only when bound.
         if hasattr(host, "Plater") and hasattr(host.Plater, "export_3mf_copy"):
@@ -254,6 +302,73 @@ class HostService:
             if preset is None:
                 raise ValueError("Preset not found")
             return {"name": preset.name, "dirty": preset.is_dirty, **host_values(preset, params)}
+        if operation == "printer.read":
+            return {"printer": host.selected_printer(), "physical_print_started": False}
+        if operation == "slicing.events":
+            return SLICE_EVENTS.read(params.get("after", 0), params.get("limit", 100))
+        if operation == "model.detail":
+            model = host.model()
+            index = params.get("index")
+            if type(index) is not int or not 0 <= index < model.object_count():
+                raise ValueError("Object index out of range")
+            obj = model.object(index)
+            if obj.id() != params.get("object_id"):
+                raise ValueError("Object identity changed; read model again")
+            offset, limit = params.get("offset", 0), params.get("limit", 20)
+            if (
+                type(offset) is not int
+                or offset < 0
+                or type(limit) is not int
+                or not 1 <= limit <= 50
+            ):
+                raise ValueError("offset >= 0 and limit 1..50 required")
+
+            def pose(handle):
+                return {
+                    key: list(getattr(handle, key)())
+                    for key in ("offset", "rotation", "scaling_factor", "mirror")
+                }
+
+            volumes = []
+            for n in range(offset, min(obj.volume_count(), offset + limit)):
+                vol = obj.volume(n)
+                volumes.append(
+                    {
+                        "index": n,
+                        "id": vol.id(),
+                        "name": vol.name,
+                        "type": str(vol.type()),
+                        "extruder_id": vol.extruder_id(),
+                        "facets": vol.facets_count(),
+                        "manifold": vol.is_manifold(),
+                        "mesh_errors": vol.mesh_errors_count(),
+                        **pose(vol),
+                        "settings": host_values(vol, {"limit": 100}),
+                    }
+                )
+            instances = []
+            for n in range(offset, min(obj.instance_count(), offset + limit)):
+                instance = obj.instance(n)
+                instances.append(
+                    {
+                        "index": n,
+                        "id": instance.id(),
+                        "printable": instance.is_printable(),
+                        **pose(instance),
+                    }
+                )
+            return {
+                "index": index,
+                "id": obj.id(),
+                "name": obj.name,
+                "volume_count": obj.volume_count(),
+                "instance_count": obj.instance_count(),
+                "volumes": volumes,
+                "instances": instances,
+                "offset": offset,
+                "rotation_unit": "radians",
+                "offset_unit": "millimeters",
+            }
         if operation == "model.read":
             model = host.model()
             offset, limit = (

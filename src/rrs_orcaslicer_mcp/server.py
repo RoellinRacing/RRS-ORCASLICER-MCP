@@ -141,6 +141,34 @@ def create_server() -> FastMCP:
         return await host_client.call("model.read", {"offset": offset, "limit": limit})
 
     @mcp.tool()
+    async def host_model_detail(
+        index: int, object_id: int, offset: int = 0, limit: int = 20
+    ) -> dict[str, Any]:
+        """Read volumes, types, poses, material slots and instances for a known live object ID.
+
+        Use host_model_read first. Rotations are radians and offsets millimeters.
+        Values are copied on the GUI thread; no native handles leave the callback.
+        """
+        return await host_client.call(
+            "model.detail",
+            {"index": index, "object_id": object_id, "offset": offset, "limit": limit},
+        )
+
+    @mcp.tool()
+    async def host_printer_read() -> dict[str, Any]:
+        """Read selected printer agent/link/online/firmware if exposed. No credentials or commands."""
+        return await host_client.call("printer.read", {})
+
+    @mcp.tool()
+    async def host_slicing_events(after: int = 0, limit: int = 100) -> dict[str, Any]:
+        """Read bounded native pipeline events after a sequence cursor, including dropped-event gaps.
+
+        Select RRS MCP slicing observer in the process preset slicing_pipeline_plugin
+        first. Compare epoch on reload. Events describe stages, not progress percentage.
+        """
+        return await host_client.call("slicing.events", {"after": after, "limit": limit})
+
+    @mcp.tool()
     async def host_presets_list(
         kind: str, query: str = "", offset: int = 0, limit: int = 100
     ) -> dict[str, Any]:

@@ -169,3 +169,17 @@ Edits always produce a new .3mf. They check the source checksum before publicati
 reject ambiguous ZIP members, retain opaque payloads, and remove cached slicing
 outputs/references. New files must be reopened and resliced; they do not mutate the
 running GUI or its undo stack. Native import validation is separate evidence.
+
+## Live model details, printer state and slicing events
+
+Detailed reads bind an index to the object ID previously returned by model.read;
+reordered/replaced objects reject stale identities. Instance/volume poses are
+copied on the GUI callback, rotations in radians and offsets in millimeters.
+Selected-printer reads expose only upstream's redacted diagnostic snapshot.
+
+The optional synchronous SlicingPipeline observer copies stage name, version,
+cancellation state and object ID while ctx is valid. It never retains native
+handles or accesses GUI/files/network from a slicing worker. A locked 512-event
+ring bounds memory; sequence/epoch and a gap flag expose loss/reload. Observation
+requires the capability to be enabled and selected in slicing_pipeline_plugin.
+These stages are not percentages, successful exports or physical print evidence.

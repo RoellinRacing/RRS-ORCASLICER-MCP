@@ -57,3 +57,14 @@ invalid paint trees and atomic validation covered. `python -m pytest -q`: 48 pas
 Generation source: project_geometry.py; no expensive native work repeated.
 Next: native reopen/reslice evidence, detailed host reads and synchronous slicing
 observations; then reconcile calibration/device gaps. No complete-API claim.
+
+## Extension checkpoint — live observations
+
+Implemented host_model_detail (identity-bound paged volumes/instances),
+host_printer_read (upstream diagnostic snapshot), host_slicing_events and a separate
+optional synchronous SlicingPipeline observer. Added ring overflow/cursor and live
+identity tests. Source generator saved before native validation.
+CI scripts now exercise stock Orca reopen/reslice of transformed four-channel paint,
+and detailed GUI reads plus actual pipeline events. Native results are pending;
+only prior 0.3.0 operations currently have completed native evidence.
+Next: inspect CI; independent provider operations and calibration sweep semantics.

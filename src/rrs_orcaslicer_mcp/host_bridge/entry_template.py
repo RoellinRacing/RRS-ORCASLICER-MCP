@@ -21,7 +21,7 @@ import html
 
 import orca
 from .protocol import Path, json
-from .service import HostService
+from .service import HostService, SLICE_EVENTS
 
 # %%BRIDGE_PROTOCOL%%
 # %%BRIDGE_SERVICE%%
@@ -91,7 +91,21 @@ class RRSHostBridge(orca.script.ScriptPluginCapabilityBase):
         self.stopping = True
 
 
+if hasattr(getattr(orca, "slicing", None), "SlicingPipelineCapabilityBase"):
+
+    class RRSSliceObserver(orca.slicing.SlicingPipelineCapabilityBase):
+        def get_name(self):
+            return "RRS MCP slicing observer"
+
+        def execute(self, ctx):
+            # Synchronous, no filesystem/UI/network access from the slicing thread.
+            SLICE_EVENTS.observe(ctx)
+            return orca.ExecutionResult.success()
+
+
 @orca.plugin
 class RRSBridgePackage(orca.base):
     def register_capabilities(self):
         orca.register_capability(RRSHostBridge)
+        if "RRSSliceObserver" in globals():
+            orca.register_capability(RRSSliceObserver)

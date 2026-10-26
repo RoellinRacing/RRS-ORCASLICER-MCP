@@ -69,6 +69,7 @@ jobs:
           python scripts/smoke_orca.py
           python scripts/verify_roundtrip.py
           python scripts/verify_extensions.py
+          python scripts/verify_semantics.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:

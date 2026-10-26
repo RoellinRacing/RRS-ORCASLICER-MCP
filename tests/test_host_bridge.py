@@ -404,3 +404,75 @@ bridge_write(path, {'state': 'online'})
 assert bridge_read(path) == {'state': 'online'}
 """
     subprocess.run([sys.executable, "-c", code, str(tmp_path)], check=True)
+
+
+def test_slicing_observer_copies_context_and_reports_ring_gaps():
+    from rrs_orcaslicer_mcp.host_bridge.service import SliceEvents
+
+    events = SliceEvents()
+
+    class Context:
+        step = "Step.posSlice"
+        orca_version = "test"
+        object = types.SimpleNamespace(id=lambda: 7)
+        gcode_path = ""
+
+        def cancelled(self):
+            return False
+
+    ctx = Context()
+    for _ in range(520):
+        events.observe(ctx)
+    del ctx
+    result = events.read(0, 200)
+    assert result["gap"] is True and result["oldest_sequence"] == 9
+    assert len(result["events"]) == 200
+    assert result["events"][0]["object_id"] == 7
+    assert not events.read(519)["gap"]
+    assert [e["sequence"] for e in events.read(519)["events"]] == [520]
+    with pytest.raises(ValueError):
+        events.read(-1)
+
+
+async def test_host_detail_identity_and_optional_printer_api(host):
+    service, client, _, _ = host
+    pose = dict(
+        offset=lambda: (1, 2, 3),
+        rotation=lambda: (0, 0, 0),
+        scaling_factor=lambda: (1, 1, 1),
+        mirror=lambda: (1, 1, 1),
+    )
+    vol = types.SimpleNamespace(
+        id=lambda: 11,
+        name="part",
+        type=lambda: "ModelPart",
+        extruder_id=lambda: 1,
+        facets_count=lambda: 12,
+        is_manifold=lambda: True,
+        mesh_errors_count=lambda: 0,
+        config_keys=lambda: [],
+        **pose,
+    )
+    instance = types.SimpleNamespace(id=lambda: 12, is_printable=lambda: True, **pose)
+    obj = types.SimpleNamespace(
+        id=lambda: 10,
+        name="cube",
+        volume_count=lambda: 1,
+        instance_count=lambda: 1,
+        volume=lambda n: vol,
+        instance=lambda n: instance,
+    )
+    service.orca.host.model = lambda: types.SimpleNamespace(
+        object_count=lambda: 1, object=lambda n: obj
+    )
+    service.orca.host.ModelObject = types.SimpleNamespace(volume=True)
+    service.orca.host.selected_printer = lambda: None
+    service.capabilities = service.detect()
+    service.heartbeat()
+    result = await exchange(service, client, "model.detail", {"index": 0, "object_id": 10})
+    assert result["result"]["volumes"][0]["offset"] == [1, 2, 3]
+    assert result["result"]["instances"][0]["id"] == 12
+    stale = await exchange(service, client, "model.detail", {"index": 0, "object_id": 9})
+    assert stale["status"] == "failed"
+    result = await exchange(service, client, "printer.read", {})
+    assert result["result"]["printer"] is None

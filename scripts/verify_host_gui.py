@@ -86,7 +86,7 @@ def prepare():
             "installed_version": "0.3.0",
             "plugin_name": "RRS OrcaSlicer Bridge",
             "enabled": True,
-            "capabilities": [{"RRS MCP local bridge": True}],
+            "capabilities": [{"RRS MCP local bridge": True}, {"RRS MCP slicing observer": True}],
         },
     )
     atomic_json(
@@ -204,6 +204,13 @@ async def verify(client):
     snapshot = await call("host.snapshot", {})
     model = await call("model.read", {})
     assert model["result"]["total"] > 0
+    detail = await call(
+        "model.detail", {"index": 0, "object_id": model["result"]["objects"][0]["id"]}
+    )
+    assert detail["result"]["volumes"] and detail["result"]["instances"]
+    printer = await call("printer.read", {})
+    assert printer["result"]["printer"] is None
+    events_before = await call("slicing.events", {})
     preset = await call("preset.read", {"kind": "process", "keys": ["wall_loops"]})
     name = preset["result"]["name"]
     original = preset["result"]["values"]["wall_loops"]
@@ -297,9 +304,36 @@ async def verify(client):
                 },
             )
             assert not repeated_export.isError and repeated_export.structuredContent == exported
+    # Select the observer through the native process transaction, then invoke the
+    # normal isolated GUI Slice action. No arbitrary GUI access from the callback.
+    await call(
+        "preset.update",
+        {
+            "kind": "process",
+            "preset_name": name,
+            "changes": {"slicing_pipeline_plugin": "RRS MCP slicing observer"},
+        },
+        mutation=True,
+    )
+    import pyautogui
+
+    if not click_word("Slice", partial=True):
+        # Ctrl+R is Orca's normal Slice Plate shortcut on Linux.
+        pyautogui.hotkey("ctrl", "r")
+    events = None
+    for _ in range(60):
+        events = await call("slicing.events", {})
+        if events["result"]["events"]:
+            break
+        await asyncio.sleep(1)
+    assert events["result"]["events"], events
     report = {
         "status": "succeeded",
         "real_embedded_host": True,
+        "model_detail": detail["result"],
+        "selected_printer": printer["result"],
+        "slicing_events_before": events_before["result"],
+        "slicing_events": events["result"],
         "stdio_mcp_verified": True,
         "mcp_updated_wall_loops": "6",
         "additional_preset_categories": category_checks,
