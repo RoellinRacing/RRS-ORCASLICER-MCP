@@ -291,3 +291,15 @@ that extra trim while retaining exact-title/both-anchor checks and observation
 retries. A constant-bounds regression and exact screenshot replay now verify the
 real failure instead of assuming the window moves. Source/business rules saved;
 next require the new combined acceptance, immutable release and asset verification.
+
+## Reproducible verification supplement
+
+The five public assets were independently downloaded again and matched their
+GitHub digests. The ZIP, wheel and source archive contain identical Python/JSON
+package files; bridge copies match. A second isolated-wheel run passed all 97
+tests in 19.03 seconds. Reproduce with scripts/verify_release_bundle.py and
+docs/RELEASE_VALIDATION.md. Actual supplementary results: docs/evidence/
+release-bundle-verification-0.5.0.json and wheel-recheck-0.5.0.txt. Bare GitHub
+release metadata is retained as release-metadata-0.5.0.json. Application source
+and immutable v0.5.0 assets remain those of 1101d5f. This verification/documentation
+supplement does not require repeating the already accepted native work.
