@@ -385,7 +385,6 @@ class NativeWorkflows:
                         index="xyz".index(parameters["axis"]),
                         columns=3,
                         commit="enter",
-                        required_unit="mm" if parameters["kind"] == "move" else None,
                         **options,
                     )
                     await asyncio.to_thread(ui.key, "escape")
