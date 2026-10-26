@@ -102,3 +102,10 @@ Wheel 0.3.0 installed separately and all 40 tests passed. All six platform CI
 configurations for 1642ee7 also passed. Run 40286557688 is still installing stable
 engine dependencies. Added bounded apt network timeouts and native evidence
 packaging: release sources will contain actual CI report/hash bound to plugin.
+
+Run 40287100915: all platform/stable-engine checks passed. Native GUI now loads
+the versioned user profiles and model successfully. Its Linux title bar exposes
+Plugins under the More icon beside File, so Alt-F was not the correct entry.
+Adjusted only the disposable UI driver and corrected installation instructions.
+Nightly also needs an extrusion reset in the fixture printer's layer G-code; added
+it to the isolated no-device profile, preserving the stable source artifact.

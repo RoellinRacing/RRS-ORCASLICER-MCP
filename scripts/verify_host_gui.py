@@ -46,6 +46,9 @@ def prepare():
         value.pop("inherits", None)
         value.pop("setting_id", None)
         if kind == "machine":
+            # The nightly validates relative-extrusion resets more strictly than 2.4.2.
+            # This disposable printer never connects to a physical device.
+            value["layer_change_gcode"] = value.get("layer_change_gcode", "") + "\nG92 E0\n"
             value["default_print_profile"] = "RRS Test process"
             value["default_filament_profile"] = ["RRS Test filament"]
         else:
@@ -108,7 +111,7 @@ def screenshot(label):
     return image
 
 
-def click_word(word, partial=False):
+def click_word(word, partial=False, dx=0):
     import pyautogui
     import pytesseract
 
@@ -117,7 +120,8 @@ def click_word(word, partial=False):
         normalized = value.strip(" .,:!()[]").lower()
         if normalized == word.lower() or (partial and normalized.startswith(word.lower())):
             pyautogui.click(
-                words["left"][i] + words["width"][i] // 2, words["top"][i] + words["height"][i] // 2
+                words["left"][i] + words["width"][i] // 2 + dx,
+                words["top"][i] + words["height"][i] // 2,
             )
             return True
     return False
@@ -135,7 +139,15 @@ def open_bridge(process):
     time.sleep(1)
     screenshot("02-file-menu")
     if not click_word("Plugins"):
-        raise RuntimeError("Could not locate the official Plugins menu item")
+        # The current Linux custom title bar puts Plugins in the adjacent More
+        # menu, not the macOS File menu. Anchor the icon to visible File text.
+        pyautogui.press("esc")
+        if not click_word("File", dx=38):
+            raise RuntimeError("Could not locate the Linux title-bar menu anchor")
+        time.sleep(1)
+        screenshot("02-more-menu")
+        if not click_word("Plugins"):
+            raise RuntimeError("Could not locate the official Plugins menu item")
     time.sleep(8)
     screenshot("03-plugins")
     if not click_word("RRS", partial=True):

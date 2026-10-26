@@ -13,7 +13,8 @@ CLI/file MCP tools. Do not install the plugin in 2.4.2 and expect an embedded ho
 
 1. Download `rrs_orcaslicer_bridge.py` from the release, or call MCP
    `host_plugin_export` with a new `.py` destination.
-2. In a compatible Orca build open **File > Plugins > Install local plugin** and
+2. In a compatible Orca build open **Plugins > Install local plugin** (Linux:
+   the menu icon beside File; macOS: File menu) and
    select the file. Select **RRS MCP local bridge** and press **Run**.
 3. Keep the bridge's non-modal panel open. It shows the private mailbox directory.
 4. Add `ORCA_MCP_BRIDGE` with that directory to the external MCP configuration,
