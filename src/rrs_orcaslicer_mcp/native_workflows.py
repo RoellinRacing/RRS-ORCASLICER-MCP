@@ -10,6 +10,7 @@ import uuid
 import zipfile
 from pathlib import Path
 from xml.etree import ElementTree as ET
+from xml.parsers import expat
 
 from .host_bridge.protocol import bridge_id
 from .native_ui import NativeControls
@@ -114,7 +115,11 @@ def validate_calibration(kind, parameters):
 
 def verify_transform(before, after, parameters):
     old, new = before["objects"][0], after["objects"][0]
-    if old["id"] != new["id"] or old["instance_count"] != new["instance_count"]:
+    if (
+        len(after["objects"]) != 1
+        or old["id"] != new["id"]
+        or old["instance_count"] != new["instance_count"]
+    ):
         raise ValueError("Native transform changed an unexpected object/instance identity")
     a, b = old["instances"][0], new["instances"][0]
     axis, kind, value = "xyz".index(parameters["axis"]), parameters["kind"], parameters["value"]
@@ -149,12 +154,27 @@ def archive_metadata(path):
         info = archive.getinfo("Metadata/model_settings.config")
         if info.file_size > 32 * 1024**2:
             raise ValueError("Native model metadata exceeds 32 MiB")
-        root = ET.fromstring(archive.read(info))
+        raw = archive.read(info)
+        if b"<!DOCTYPE" in raw.upper() or b"<!ENTITY" in raw.upper():
+            raise ValueError("DTD/entity declarations are not accepted in native metadata")
+        # Orca writes raw slic3rpe:text/shape names in this config without an
+        # xmlns declaration and reads them with namespace-unaware Expat itself.
+        builder = ET.TreeBuilder()
+        parser = expat.ParserCreate()
+        parser.StartElementHandler = builder.start
+        parser.EndElementHandler = builder.end
+        parser.CharacterDataHandler = builder.data
+        parser.Parse(raw, True)
+        root = builder.close()
         texts = []
         for part in root.iter("part"):
             for text in part:
-                if text.tag.rsplit("}", 1)[-1] == "text":
-                    shapes = [c.attrib for c in part if c.tag.rsplit("}", 1)[-1] == "shape"]
+                if text.tag.rsplit("}", 1)[-1].rsplit(":", 1)[-1] == "text":
+                    shapes = [
+                        c.attrib
+                        for c in part
+                        if c.tag.rsplit("}", 1)[-1].rsplit(":", 1)[-1] == "shape"
+                    ]
                     texts.append(
                         {"text": dict(text.attrib), "shapes": shapes, "part": dict(part.attrib)}
                     )
@@ -459,6 +479,7 @@ class NativeWorkflows:
                             value=values[field[0]],
                             index=field[2] if len(field) == 3 else 0,
                             commit="tab",
+                            verify=True,
                         )
                     record["parameters_screenshot"] = await asyncio.to_thread(
                         ui.capture, "parameters"
@@ -484,6 +505,26 @@ class NativeWorkflows:
                     raise ValueError("No native model change was observed")
                 if operation == "transform":
                     record["verified_transform"] = verify_transform(before, after, parameters)
+                if operation == "calibration" and (
+                    not after["objects"]
+                    or record["native_metadata"]["object_count"] < 1
+                    or not any(v["facets"] > 0 for o in after["objects"] for v in o["volumes"])
+                ):
+                    raise ValueError("Native generator did not produce a nonempty scene")
+                if operation == "text":
+                    old_ids = {v["id"] for o in before["objects"] for v in o["volumes"]}
+                    added = [
+                        v for o in after["objects"] for v in o["volumes"] if v["id"] not in old_ids
+                    ]
+                    required = {
+                        "join": "ModelPart",
+                        "cut": "NegativeVolume",
+                        "modifier": "ParameterModifier",
+                    }[parameters["mode"]]
+                    if not any(v["type"].endswith("." + required) for v in added):
+                        raise ValueError(
+                            "Native text volume type does not match requested operation"
+                        )
                 record["after"] = after
                 record["after_screenshot"] = await asyncio.to_thread(ui.capture, "after")
                 record.update(

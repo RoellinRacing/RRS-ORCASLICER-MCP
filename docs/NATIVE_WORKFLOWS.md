@@ -50,3 +50,9 @@ Setup: install `[desktop]`, system Tesseract OCR and a clipboard backend (xclip 
 Linux X11). Set ORCA_MCP_DESKTOP=1. Keep the modeless bridge running but close the
 modal Plugins manager, and foreground Prepare. The initial selector pack is English.
 No existing install is switched to another locale automatically.
+
+The selector pack uses Orca's shipped M/R/S/T and Ctrl/Cmd+A/Z/Y shortcuts;
+custom shortcut remappings are outside this pack's acceptance scope. Pose
+operations verify requested-axis native readback; generator numeric fields are
+read back before clicking OK. Native calibration success also requires nonempty
+exported geometry. Text operation type is verified as model part/negative/modifier.

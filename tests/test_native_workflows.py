@@ -1,4 +1,5 @@
 import copy
+import sys
 import json
 import zipfile
 
@@ -94,7 +95,7 @@ async def test_native_receipt_no_replay_and_stale_revision_rejection(tmp_path):
 
         def key(self, *keys):
             actions.append(keys)
-            if keys == ("ctrl", "z"):
+            if keys[-1] == "z":
                 current["revision"] = "after"
 
     service = NativeWorkflows(Host(), None, Files([tmp_path]), tmp_path / "requests", Controls)
@@ -108,7 +109,10 @@ async def test_native_receipt_no_replay_and_stale_revision_rejection(tmp_path):
     repeated = await service.run(
         "history", {"direction": "undo", "steps": 1}, "a" * 32, "b" * 32, "before"
     )
-    assert repeated == first and actions == [("escape",), ("ctrl", "z")]
+    assert repeated == first and actions == [
+        ("escape",),
+        ("command" if sys.platform == "darwin" else "ctrl", "z"),
+    ]
     with pytest.raises(ValueError, match="conflicts"):
         await service.run("history", {"direction": "redo", "steps": 1}, "a" * 32, "b" * 32, "after")
 
@@ -158,3 +162,14 @@ def test_native_export_parser_requires_real_editable_text_metadata(tmp_path):
     result = archive_metadata(path)
     assert result["editable_texts"][0]["text"]["text"] == "RRS"
     assert result["editable_texts"][0]["shapes"][0]["depth"] == "1"
+
+
+def test_native_metadata_accepts_upstream_unbound_slic3rpe_names(tmp_path):
+    path = tmp_path / "stock-text.3mf"
+    with zipfile.ZipFile(path, "w") as archive:
+        archive.writestr(
+            "Metadata/model_settings.config",
+            '<config><object id="1"><part id="2"><slic3rpe:text text="RRS" line_height="8"/><slic3rpe:shape depth="1"/></part></object></config>',
+        )
+        archive.writestr("Metadata/project_settings.config", "{}")
+    assert archive_metadata(path)["editable_texts"][0]["text"]["text"] == "RRS"

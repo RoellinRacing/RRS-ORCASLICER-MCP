@@ -144,17 +144,7 @@ class NativeControls:
         finally:
             pyperclip.copy(previous)
 
-    def numeric(
-        self,
-        label,
-        value=None,
-        delta=None,
-        region=None,
-        index=0,
-        columns=None,
-        commit="tab",
-        required_unit=None,
-    ):
+    def read_numeric(self, label, region=None, index=0, columns=None, required_unit=None):
         words = self.words()
         rows = []
         for anchor in self.locate(words, label, region, all_matches=True):
@@ -178,7 +168,22 @@ class NativeControls:
         if len(rows) != 1:
             raise ValueError(f"Numeric row next to {label!r} missing or ambiguous")
         box = rows[0][index]
-        old = float(re.sub(r"[^0-9.,+-]", "", box["text"]).replace(",", "."))
+        observed = float(re.sub(r"[^0-9.,+-]", "", box["text"]).replace(",", "."))
+        return box, observed
+
+    def numeric(
+        self,
+        label,
+        value=None,
+        delta=None,
+        region=None,
+        index=0,
+        columns=None,
+        commit="tab",
+        required_unit=None,
+        verify=False,
+    ):
+        box, old = self.read_numeric(label, region, index, columns, required_unit)
         target = old + delta if delta is not None else value
         if type(target) not in (int, float) or not math.isfinite(target):
             raise ValueError("Native numeric value must be finite")
@@ -187,7 +192,13 @@ class NativeControls:
         self.paste(format(target, ".10g"))
         self.key(commit)
         time.sleep(0.3)
-        return {"before": old, "requested": target}
+        result = {"before": old, "requested": target}
+        if verify:
+            _, observed = self.read_numeric(label, region, index, columns, required_unit)
+            if not math.isclose(observed, target, rel_tol=1e-5, abs_tol=1e-5):
+                raise ValueError(f"Native field {label!r} did not retain the requested value")
+            result["observed"] = observed
+        return result
 
     def capture(self, phase):
         self.evidence.mkdir(parents=True, exist_ok=True)

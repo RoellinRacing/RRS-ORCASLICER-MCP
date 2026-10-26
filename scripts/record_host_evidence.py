@@ -20,6 +20,15 @@ if not (
     and prepared.get("plugin_sha256") == digest(plugin)
 ):
     raise SystemExit("Native evidence failed or does not match this plugin")
+package_version = tomllib.loads((root / "pyproject.toml").read_text())["project"]["version"]
+if tuple(map(int, package_version.split("."))) >= (0, 5, 0):
+    native = report.get("native_workflows", {})
+    if not (
+        native.get("status") == "succeeded"
+        and native.get("actual_native_undo_redo") is True
+        and native.get("editable_native_text") is True
+    ):
+        raise SystemExit("Typed native workflow acceptance is missing or failed")
 checksum = next(artifacts.rglob("nightly-SHA256SUMS")).read_text(encoding="utf-8").strip()
 result = {
     "report": report,
@@ -32,6 +41,5 @@ result = {
         else None
     ),
 }
-package_version = tomllib.loads((root / "pyproject.toml").read_text())["project"]["version"]
 atomic_json(root / f"docs/evidence/host-{package_version}.json", result)
 print("Recorded native evidence matching plugin SHA256", prepared["plugin_sha256"])

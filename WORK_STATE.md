@@ -69,3 +69,14 @@ Business rationale and limits: docs/NATIVE_WORKFLOWS.md, BUSINESS_LOGIC.md.
 Next: run stock native acceptance for move/rotate/scale + real Undo/Redo, editable
 native text and five native generator families. New GUI behavior is not accepted
 until those actual operation checks pass. Existing 0.4.0 native results stand.
+
+First CI checkpoint 541b7bf: Linux/Windows suites passed; macOS test double used
+Ctrl instead of Command and was corrected without changing product key mapping.
+Native GUI job never started the app: Azure Ubuntu mirror stalled downloading a
+font package and hit the bounded installer timeout. CI now uses the official Ubuntu
+HTTPS archive rather than the slow Azure mirror.
+
+Saved follow-up: namespace-unaware parsing of Orca's native unbound slic3rpe:text/
+shape tags, exact numeric-field readback for generator parameters, nonempty native
+model/type checks, and nine generator families plus all three text modes in the
+acceptance script. 65-test suite is being rechecked before the next native run.
