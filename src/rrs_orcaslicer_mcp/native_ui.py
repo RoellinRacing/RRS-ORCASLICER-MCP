@@ -188,7 +188,11 @@ class NativeControls:
                     for w in words
                     if w["x"] > anchor["x"] + anchor["w"] + 5
                     and abs(w["y"] + w["h"] / 2 - mid) <= 10
-                    and re.fullmatch(r"[-+]?\d+(?:[.,]\d+)?(?:%|mm|°)?", w["text"])
+                    and re.fullmatch(
+                        r"[-+]?\d+(?:[.,]\d+)?(?:%|mm|°C?|℃|Hz|mm/s|mm[³3]/s)?",
+                        w["text"],
+                        re.IGNORECASE,
+                    )
                 ],
                 key=lambda w: w["x"],
             )
@@ -201,7 +205,7 @@ class NativeControls:
         if len(rows) != 1:
             raise ValueError(f"Numeric row next to {label!r} missing or ambiguous")
         box = rows[0][index]
-        observed = float(re.sub(r"[^0-9.,+-]", "", box["text"]).replace(",", "."))
+        observed = float(re.match(r"[-+]?\d+(?:[.,]\d+)?", box["text"])[0].replace(",", "."))
         return box, observed
 
     def numeric(

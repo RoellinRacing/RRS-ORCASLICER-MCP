@@ -204,3 +204,18 @@ def test_bridge_window_search_intersects_title_and_pid(tmp_path, monkeypatch):
     assert ui.park_bridge()["kept_running"]
     assert actions[0] == ["xdotool", "windowsize", "12345", "350", "180"]
     assert actions[1] == ["xdotool", "windowmove", "12345", "0", "800"]
+
+
+@pytest.mark.parametrize(
+    "visible,expected",
+    [("220°C", 220), ("220℃", 220), ("30Hz", 30), ("5mm3/s", 5), ("5mm³/s", 5), ("1.2mm", 1.2)],
+)
+def test_native_numeric_units_do_not_change_value(tmp_path, visible, expected):
+    from rrs_orcaslicer_mcp.native_ui import tokens
+
+    def word(text, x):
+        return {"text": text, "tokens": tokens(text), "x": x, "y": 10, "w": 30, "h": 12}
+
+    ui = NativeControls(None, tmp_path)
+    ui.words = lambda region=None: [word("Start", 10), word(visible, 100)]
+    assert ui.read_numeric("Start")[1] == expected
