@@ -1,0 +1,32 @@
+{
+  "source_commit": "17fad59e83c58ae4bfc37acafece592c114020ef",
+  "workflow": "https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/actions/runs/40321854807",
+  "report": {
+    "status": "succeeded",
+    "last_channel": "fuzzy_skin",
+    "file": "/home/runner/work/RRS-ORCASLICER-MCP/RRS-ORCASLICER-MCP/smoke-output/semantics/fuzzy_skin.3mf",
+    "batch_id": "c21561082032f2c58d04fb4077ef3e5b",
+    "native_roundtrip_masks": {
+      "paint_supports": "4",
+      "paint_seam": "4",
+      "paint_color": "4",
+      "paint_fuzzy_skin": "4"
+    },
+    "transform_after": [
+      1.1,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      99.0,
+      90.0,
+      5.0
+    ],
+    "gcode_sha256": "0697d7064d193725147c779a42a49dd1571db710b6971a3e95a834a29d45d6cf",
+    "physical_print_started": false
+  }
+}

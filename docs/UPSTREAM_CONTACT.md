@@ -1,44 +1,57 @@
 # Kontakt zum OrcaSlicer-Team
 
-Passender vorhandener Entwicklerthread:
-**https://github.com/OrcaSlicer/OrcaSlicer/discussions/14878**
+Bestehender Entwicklerthread:
+https://github.com/OrcaSlicer/OrcaSlicer/discussions/14878
 
-Alternativ: https://github.com/OrcaSlicer/OrcaSlicer/discussions/categories/dev.
-Vor dem Posten den aktuellen CONTRIBUTING.md des offiziellen Repositories lesen.
-Dieser Entwurf wurde noch nicht veröffentlicht. Aktuelle Testergebnisse und Grenzen
-stehen in VALIDATION.md und MAINTAINER_REVIEW.md.
+Vor einem Beitrag den aktuellen CONTRIBUTING.md des Upstreams lesen. Dani will
+selbst Kontakt aufnehmen; kein Beitrag, Issue oder PR wurde gesendet.
 
-## Vorbereiteter englischer Beitrag
+## Sachlicher englischer Entwurf
 
-We are developing RRS-ORCASLICER-MCP, a separate local MCP server for OrcaSlicer:
+We develop RRS-ORCASLICER-MCP, a separate local MCP server:
 https://github.com/RoellinRacing/RRS-ORCASLICER-MCP
 
-It supports CLI/file workflows and now includes an optional, dependency-free
-Script plugin using the official Python host. The plugin reads live preset/model
-snapshots in GUI callbacks, queues preset changes onto the Script worker and uses
-begin_update/set/commit. It preserves native selection/unsaved-edit dialogs and
-leaves edited presets unsaved. It also exposes the supported 3MF copy export.
+Version 0.4.0 exposes 54 tools. The optional dependency-free official Script plugin
+uses GUI callbacks for copied reads and a Script worker for begin_update/set/commit.
+It preserves native validation, unsaved-edit dialogs and dirty state. The external
+process uses a bounded local mailbox with session/request identities and durable
+receipts; uncertain native outcomes are never retried automatically.
 
-The external process communicates through a bounded local mailbox in plugin
-storage. Operations are allowlisted. Session/request identities and durable receipts
-prevent accidental repeats; timeouts are explicitly indeterminate. We do not expose
-an eval endpoint, private C++ symbols, a network listener or printer credentials.
+The expansion adds identity-bound live volume/instance diagnostics, selected-printer
+reads and an optional synchronous SlicingPipeline observer. The observer copies
+only stage/version/object IDs into a bounded cursor/epoch ring and never retains
+borrowed native references or calls the GUI/filesystem from a slicing callback.
 
-The native integration passed on the official Linux nightly 2.5.0-dev, build
-2dfcba39: live reads, all three preset categories, invalid staged settings, duplicate
-receipts, unsaved 3MF copy export and external stdio MCP calls. The 43-test protocol
-suite also passed on Linux, macOS and Windows with Python 3.11/3.13.
+Independent workflows cover revision-bound 3MF transforms and four-channel facet
+painting, including validated subdivision trees, optional measured STL topology
+operations, calibration coupon series and configured Moonraker/OctoPrint adapters.
+The last two are explicitly separate workflows, not claims of native calibration
+API coverage or Orca cloud/AMS control. Printer dispatch uses durable request IDs
+and separates upload from explicit physical job commands; no real printer was
+commanded during development.
 
-The repository includes reproducible tests, business-logic/protocol notes and a
-maintainer review summary. The validation report identifies exactly which native
-host build/platform was tested; mocked protocol tests are labelled separately.
-We do not claim full GUI/geometry/painting/calibration/device control or compatibility
-with every host version.
+The stock OrcaSlicer 2.4.2 Linux CLI successfully reopened/resliced transformed and
+painted projects and preserved all four masks. This caught an actual compatibility
+issue: namespace-equivalent ns0:model XML is treated as empty by the lexical Expat
+handlers, so we retain unprefixed core tags and original extension prefixes.
+The repository includes exact version/build/checksum/CI evidence and distinguishes
+native integration results from HTTP mocks and pure Python tests. See VALIDATION.md,
+MAINTAINER_REVIEW.md and docs/evidence for completed results.
 
-Would this approach fit the supported extension architecture? In particular, we
-would appreciate guidance on UI/worker dispatch, API compatibility negotiation and
-future semantic model/slicing operations. The bridge currently uses the documented
-window on_message callback as its GUI-thread entry point, and the supported plain
-Script worker entry to avoid an unnecessary asyncio wakeup socket pair. If a preferred host-owned
-scheduling or local transport capability is planned, we would be happy to align
-with it and contribute focused test results.
+We inspected host bindings at upstream commit
+1433316b550bac676136f618e215ece8c884bb8c. ModelObject/Volume/Instance bindings are
+read-only; we do not use private pointers, arbitrary eval or binary patches to
+pretend that this is complete control of Orca. We would appreciate guidance on:
+
+1. A supported document transaction API for model/instance changes with stable IDs,
+   validation, undo and correct slicing invalidation.
+2. Native facet-paint edits with triangle/subtriangle identity and roundtrip rules.
+3. Asynchronous slice/cancel/export jobs with structured lifecycle/result events.
+4. Parameterized native calibration model generation and result/application flows.
+5. Capability-negotiated printer/provider/AMS actions without credential exposure.
+6. A versioned scheduling/transport contract so external automation can remain
+   separate and compatible across supported host versions.
+
+Would these fit the planned extension architecture? We can contribute focused
+operation-level test cases and compatibility results rather than a broad unsafe
+method-dispatch endpoint.

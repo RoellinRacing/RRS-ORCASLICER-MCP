@@ -181,6 +181,19 @@ def open_bridge(process):
             candidate = HostClient(path.parent)
             if candidate.status().get("online"):
                 screenshot("05-live-bridge")
+                # The Plugins manager is modal. Close that manager (not our
+                # modeless bridge, parented to MainFrame) before normal slicing.
+                managers = subprocess.check_output(
+                    ["xdotool", "search", "--onlyvisible", "--name", "^Plugins$"], text=True
+                ).splitlines()
+                if len(managers) != 1:
+                    raise RuntimeError("Expected one isolated Plugins manager")
+                subprocess.run(["xdotool", "windowactivate", "--sync", managers[0]], check=True)
+                pyautogui.hotkey("alt", "f4")
+                time.sleep(2)
+                screenshot("06-manager-closed")
+                if not candidate.status().get("online"):
+                    raise RuntimeError("Closing manager stopped the modeless bridge")
                 return candidate
         time.sleep(1)
     screenshot("05-bridge-start-failed")
@@ -304,6 +317,17 @@ async def verify(client):
                 },
             )
             assert not repeated_export.isError and repeated_export.structuredContent == exported
+    atomic_json(
+        evidence / "partial-report.json",
+        {
+            "status": "native_reads_transactions_exports_passed",
+            "app": snapshot["result"]["app"],
+            "model_detail": detail["result"],
+            "selected_printer": printer["result"],
+            "stdio_mcp_verified": True,
+            "physical_print_started": False,
+        },
+    )
     # Select the observer through the native process transaction, then invoke the
     # normal isolated GUI Slice action. No arbitrary GUI access from the callback.
     await call(
@@ -315,8 +339,14 @@ async def verify(client):
         },
         mutation=True,
     )
+    selected = await call(
+        "preset.read", {"kind": "process", "keys": ["slicing_pipeline_plugin", "plugins"]}
+    )
+    atomic_json(evidence / "observer-selection.json", selected)
+    assert "RRS MCP slicing observer" in str(selected["result"]["values"])
     import pyautogui
 
+    screenshot("07-before-slice")
     if not click_word("Slice", partial=True):
         # Ctrl+R is Orca's normal Slice Plate shortcut on Linux.
         pyautogui.hotkey("ctrl", "r")
@@ -326,6 +356,7 @@ async def verify(client):
         if events["result"]["events"]:
             break
         await asyncio.sleep(1)
+    screenshot("08-after-slice")
     assert events["result"]["events"], events
     report = {
         "status": "succeeded",

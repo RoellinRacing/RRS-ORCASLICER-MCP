@@ -63,3 +63,22 @@ The intended discussion is whether these integration points and compatibility
 boundaries fit the supported host architecture, and which missing capabilities
 should be proposed separately. The integration should not be described as full
 control of every Orca feature or every past/future version.
+
+## 0.4.0 extension review
+
+The independent server now has 54 tools. Offline geometry/painting targets explicit
+file revisions and never treats a modified archive as a live GUI edit. Unknown ZIP
+payloads and unrelated paint channels are retained; stale slicing outputs removed.
+Stock 2.4.2 has successfully reimported/resliced all four changed paint channels and
+an affine instance transform. Namespace lexical compatibility has a regression test.
+
+Optional mesh topology results are measured after STL reload, not inferred from a
+successful library call. Calibration series preserve non-target filament slots and
+checkpoint individual outputs. Native tower/line generators remain unbound.
+Printer adapters are configured external HTTP providers, not Orca credential/cloud
+bridges; protocol mocks prove request formation and conservative duplicate recovery,
+not physical-device acceptance. Selected native printer state is still read-only.
+
+The earlier limits refer to the original embedded-host adapter. Independent offline
+painting/geometry and provider actions now exist, while live scene undo/mutation,
+native calibration, cloud/AMS/MMU and complete GUI command coverage remain open.

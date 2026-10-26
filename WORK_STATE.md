@@ -86,3 +86,11 @@ Native test on 5dda5fd discovered Orca compares lexical XML core tag names:
 ElementTree's namespace-equivalent ns0:model was interpreted as empty. Fixed
 serialization to retain unprefixed core tags/original extension prefixes and added
 an explicit lexical regression assertion. New native run must confirm this fix.
+
+Native roundtrip succeeded on 17fad59 (semantics-0.4.0.json saved). All six
+Windows/macOS/Linux matrix entries passed. GUI reads/details/printer diagnostics,
+preset transactions and export succeeded; observer stage check found no events.
+Inspection of its screenshot showed the modal Plugins manager was still open,
+blocking the mainframe Slice action. Test now closes only that modal manager,
+keeps the separate modeless bridge running, and saves selection/partial-report
+and before/after screenshots. No application bridge code changed for this test fix.
