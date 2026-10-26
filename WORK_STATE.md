@@ -77,3 +77,9 @@ Native run 40283792526 reached GUI startup, but its screenshot helper did not de
 Xvfb as X11. Set XDG_SESSION_TYPE=x11 in the disposable test job. This is a test-
 fixture issue, not evidence of a passing embedded-host integration.
 Version 0.3.0 prepared; package release remains gated on the native host job.
+
+Native run 40284916201 captured a real startup screenshot: Orca paused at its
+system CA-certificate selection dialog before opening the editor. Configure the
+isolated runner's standard SSL_CERT_FILE (no TLS checks disabled) and provide an
+X11 window manager for stable keyboard focus. GUI/host API success still pending.
+All six 39-test platform jobs and the stable-engine checks passed.
