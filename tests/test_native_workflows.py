@@ -556,16 +556,35 @@ def test_spiral_prompt_reacquires_recentered_modal_before_input(tmp_path, monkey
     def label(phrase, region, **kwargs):
         observed.append((phrase, region))
         assert not clicks
-        if region[1] == 472:
-            raise ValueError("First line outside stale modal crop")
+        if region[1] == 442:
+            raise ValueError("Modal body not painted yet")
 
     ui.label = label
     ui.capture = lambda _: "settled.png"
     ui.dialog_button = lambda *a, **k: clicks.append((a, k))
     monkeypatch.setattr(native_ui.time, "sleep", lambda _: None)
     assert ui.resolve_calibration_dialog("flow_ratio")["cancelled_inherited_spiral_mode"]
-    assert [region[1] for _, region in observed] == [472, 433, 433]
+    assert [region[1] for _, region in observed] == [442, 403, 403]
     assert len(clicks) == 1
+
+
+def test_spiral_prompt_retains_first_line_with_stable_reported_bounds(tmp_path, monkeypatch):
+    from rrs_orcaslicer_mcp import native_ui
+
+    ui = NativeControls(None, tmp_path)
+    ui.window_title = lambda: "Orca Slicer info"
+    ui.bounds = lambda: (229, 442, 1172, 633)
+    words = [
+        {"text": phrase, "tokens": native_ui.tokens(phrase), "x": 337, "y": y, "w": 200, "h": 14}
+        for phrase, y in [("Spiral mode only works", 445), ("Cancel enabling spiral mode", 547)]
+    ]
+    ui.words = lambda region=None, **kwargs: [w for w in words if region[1] <= w["y"] <= region[3]]
+    ui.capture = lambda _: "stable.png"
+    clicks = []
+    ui.dialog_button = lambda *a, **k: clicks.append((a, k))
+    monkeypatch.setattr(native_ui.time, "sleep", lambda _: None)
+    assert ui.resolve_calibration_dialog("flow_ratio")["cancelled_inherited_spiral_mode"]
+    assert clicks == [(("No", "Orca Slicer info"), {"footer_height": 55})]
 
 
 def test_primary_button_fallback_ignores_unrelated_grey_panels(tmp_path, monkeypatch):

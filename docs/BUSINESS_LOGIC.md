@@ -275,3 +275,10 @@ thin borders and separate radio marks above a button cannot merge into its bound
 Six actual primary-dialog screenshots and the separate spiral No screenshot are
 replayed without input; the synthetic regression includes a grey panel and a radio
 mark directly above a primary button.
+
+A repeated geometry observation is not proof of a recentered modal. The reported
+X11 top can remain at Y=442 while the first visible body line is Y=445. Preserve
+that first line by starting semantic body OCR at reported Y, without another
+30-pixel title-bar crop. Both exact text anchors, exact title and a single footer
+No dispatch remain mandatory. The fixed-bounds replay proves the route without
+simulating a geometry change; the observation retry still handles actual movement.

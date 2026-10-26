@@ -252,3 +252,13 @@ replay_spiral_prompt.py accepts artifact/run provenance and initial bounds.
 The actual image replay is retained in native-recentered-spiral-prompt-0.5.0.json.
 Next: require fresh combined native acceptance before immutable publication.
 The exact saved-dialog replay, 96 local tests, static checks and diff checks passed.
+
+Continuation after bf644eb / run 40371494749: all six matrix jobs and all ten
+independent native sections passed again. The combined session still stopped
+at Flow Ratio after 25 completed operations: repeated bounds observations did
+not restore the first explanation line. The reported Y=442 and first line Y=445
+are compatible only if the body crop does not add another 30 pixels. Removed
+that extra trim while retaining exact-title/both-anchor checks and observation
+retries. A constant-bounds regression and exact screenshot replay now verify the
+real failure instead of assuming the window moves. Source/business rules saved;
+next require the new combined acceptance, immutable release and asset verification.

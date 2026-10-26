@@ -1,3 +1,4 @@
-96 passed in 22.00s
-All checks passed!
-Actual recentered spiral prompt replay succeeded (run 40368784963, artifact 12671424474); no desktop input.
+97 passed in 44.35s
+ruff check src scripts tests: passed
+build_host_plugin.py --check: passed
+Actual failed spiral prompt replay passed with constant bounds 229 442 1172 633, run 40371494749 artifact 12673152552.

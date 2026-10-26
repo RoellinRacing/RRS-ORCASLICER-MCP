@@ -354,7 +354,9 @@ class NativeControls:
             if self.window_title() != title:
                 raise ValueError("Native spiral prompt changed while settling")
             left, top, right, bottom = self.bounds()
-            body = (left + 90, top + 30, right - 10, bottom - 50)
+            # Reported X11 Y can already lie inside the visible body. The
+            # first line starts just below it; do not crop another title bar.
+            body = (left + 90, top, right - 10, bottom - 50)
             try:
                 self.label("Spiral mode only works", body, psm=6)
                 self.label("Cancel enabling spiral mode", body, psm=6)
