@@ -52,7 +52,7 @@ class NativeControls:
         x, y, width, height = [int(data[k]) for k in ("X", "Y", "WIDTH", "HEIGHT")]
         return x, y, x + width, y + height
 
-    def words(self, region=None, psm=11):
+    def words(self, region=None, psm=11, numeric=False):
 
         api = self.desktop._api()
         left, top, right, bottom = self.bounds()
@@ -78,7 +78,7 @@ class NativeControls:
                     )
                     for y in range(crop.height)
                 )
-                if border >= crop.height * 0.8:
+                if border == crop.height:
                     for y in range(crop.height):
                         pixels[x, y] = (255, 255, 255)
             from PIL import ImageOps
@@ -86,13 +86,15 @@ class NativeControls:
             crop = ImageOps.expand(crop, border=6, fill="white")
             left, top = left - 6, top - 6
         stream = io.BytesIO()
-        scale = 3 if psm == 7 else 2
+        scale = 4 if numeric else 3 if psm == 7 else 2
         crop.resize((crop.width * scale, crop.height * scale)).save(stream, format="PNG")
         # Bound OCR wall time and use a per-child OpenMP setting. Full-screen
         # Tesseract can otherwise spend minutes on a dense GL/UI composition.
         try:
             response = subprocess.run(
-                ["tesseract", "stdin", "stdout", "--psm", str(psm), "tsv"],
+                ["tesseract", "stdin", "stdout", "--psm", str(psm)]
+                + (["-c", "tessedit_char_whitelist=0123456789.,+-"] if numeric else [])
+                + ["tsv"],
                 input=stream.getvalue(),
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
@@ -408,6 +410,23 @@ class NativeControls:
         if len(rows) != 1:
             raise ValueError(f"Numeric row next to {label!r} missing or ambiguous")
         box = rows[0][index]
+        if re.fullmatch(r"[+\-]?(?:\d+[.,]\d+|0\d+)", box["text"].strip("()[]|")):
+            # A row can merge a decimal point into the neighboring glyph when
+            # a caret/border is visible. Re-read the identified numeric glyphs
+            # alone, with digits/punctuation only, before using their value.
+            glyph_region = (
+                math.floor(box["x"]) - 1,
+                math.floor(box["y"]) - 1,
+                math.ceil(box["x"] + box["w"]) + 2,
+                math.ceil(box["y"] + box["h"]) + 2,
+            )
+            glyphs = self.words(glyph_region, psm=7, numeric=True)
+            values = [
+                w for w in glyphs if re.fullmatch(r"[-+]?\d+(?:[.,]\d+)?", w["text"].strip("()[]|"))
+            ]
+            if len(values) != 1:
+                raise ValueError(f"Native numeric glyphs next to {label!r} are ambiguous")
+            box = {**box, "text": values[0]["text"]}
         observed = float(
             re.match(r"[-+]?\d+(?:[.,]\d+)?", box["text"].strip("()[]|"))[0].replace(",", ".")
         )
@@ -466,8 +485,13 @@ class NativeControls:
         self.capture("numeric_" + evidence_name + "_committed")
         result = {"before": old, "requested": target}
         if verify:
-            _, observed = self.read_numeric(label, region, index, columns, required_unit)
-            if not math.isclose(observed, target, rel_tol=1e-5, abs_tol=1e-5):
+            for attempt in range(3):
+                _, observed = self.read_numeric(label, region, index, columns, required_unit)
+                if math.isclose(observed, target, rel_tol=1e-5, abs_tol=1e-5):
+                    break
+                if attempt < 2:
+                    time.sleep(0.3)
+            else:
                 raise ValueError(f"Native field {label!r} did not retain the requested value")
             result["observed"] = observed
         return result

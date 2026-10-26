@@ -393,6 +393,8 @@ def test_native_numeric_reads_separate_row_instead_of_tall_merged_word(tmp_path)
         observations.append((region, kwargs))
         if region is None:
             return [word("Frequency", 10), word("20", 100, h=49)]
+        if kwargs.get("numeric"):
+            return [word("30", 200)]
         return [word("30", 100), word("30", 200)]
 
     ui.words = words
@@ -442,3 +444,41 @@ def test_flow_group_missing_heading_requires_exact_dialog_title(tmp_path, title)
         with pytest.raises(ValueError, match="clipped heading"):
             ui.radio_choice("Calibration Test Type", "Pass 1 Coarse", "Coarse")
         assert clicked == []
+
+
+def test_numeric_glyph_read_preserves_decimal_lost_in_row_ocr(tmp_path):
+    from rrs_orcaslicer_mcp.native_ui import tokens
+
+    def word(text, x):
+        return dict(text=text, tokens=tokens(text), x=x, y=10, w=25, h=12)
+
+    ui = NativeControls(None, tmp_path)
+    ui.bounds = lambda: (0, 0, 500, 500)
+
+    def words(region=None, **kwargs):
+        if region is None:
+            return [word("Step", 10)]
+        return [word("0.5" if kwargs.get("numeric") else "05", 100)]
+
+    ui.words = words
+    assert ui.read_numeric("Step")[1] == 0.5
+
+
+def test_native_readback_reobserves_decimal_without_repeating_input(tmp_path, monkeypatch):
+    from rrs_orcaslicer_mcp import native_ui
+
+    actions = []
+    api = types.SimpleNamespace(
+        moveTo=lambda *a, **k: None,
+        write=lambda value, **k: actions.append(("write", value)),
+        position=lambda: (95, 16),
+    )
+    ui = NativeControls(types.SimpleNamespace(_api=lambda: api), tmp_path)
+    values = iter([0.4, 0.4, 2.0, 0.2])
+    ui.read_numeric = lambda *a: ({"x": 90, "y": 10, "w": 20, "h": 12}, next(values))
+    ui.point_click = lambda box: actions.append(("click", box["x"]))
+    ui.key = lambda *keys: None
+    ui.capture = lambda phase: phase
+    monkeypatch.setattr(native_ui.time, "sleep", lambda _: None)
+    assert ui.numeric("Damp", value=0.2, verify=True)["observed"] == 0.2
+    assert actions == [("click", 90), ("write", "0.2")]

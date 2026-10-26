@@ -195,3 +195,18 @@ All six saved screenshot cases passed the exact-value/choice replay, including
 0.1/0.002/0.5 decimals and both 30 Hz fields. 87 local tests passed; static checks
 and generated-plugin consistency passed. Actual results and reproduction manifest
 are committed with source/business rules before the next native CI computation.
+
+Native e09bfe1 / run 40361174972: all six OS/Python checks passed. Independent
+text, temperature, PA, retraction, flow ratio, VFA, cornering and frequency generators
+passed. Max flowrate and damping generated no result because immediate numeric
+readback intermittently dropped decimal points; screenshots retain the correct
+0.5/0.2 inputs. Added isolated decimal-glyph OCR and observation-only readback waits.
+Ten saved before/committed/failure screenshots now require exact numeric values.
+New regression verifies readback observation never dispatches a second input.
+Next: finish exact screenshot replay + ordinary tests, push, require combined native
+acceptance and both remaining generators, then verify the immutable public package.
+Ten exact screenshot cases and 89 local tests passed; static checks and generated
+bridge consistency passed. Source, business rules and actual replay/test results
+are saved before the next native computation. The earlier local installed-wheel
+87-test pass is retained explicitly bound to e09bfe1, including its first flaky
+fixture result; the final published wheel still requires its own verification.

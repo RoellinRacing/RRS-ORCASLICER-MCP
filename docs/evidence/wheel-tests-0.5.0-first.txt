@@ -1,0 +1,30 @@
+.............................F.......................................... [ 82%]
+...............                                                          [100%]
+=================================== FAILURES ===================================
+___________ test_timeout_is_indeterminate_and_receipt_is_recoverable ___________
+
+host = (<rrs_orcaslicer_mcp.host_bridge.service.HostService object at 0x7f3f36997260>, <rrs_orcaslicer_mcp.host_bridge.client...997e30>, {'wall_loops': '2', 'layer_height': '0.2', 'printhost_apikey': 'DO-NOT-EXPOSE'}, {'commits': 0, 'delay': 1.2})
+
+    async def test_timeout_is_indeterminate_and_receipt_is_recoverable(host):
+        service, client, _, stats = host
+        stats["delay"] = 1.2
+        ident = uuid.uuid4().hex
+        task = asyncio.create_task(
+            client.call(
+                "preset.update", params(), timeout=1, session_id=service.session_id, request_id=ident
+            )
+        )
+        await asyncio.sleep(0.05)
+        service.poll_ui()
+        worker = asyncio.create_task(asyncio.to_thread(service.poll_worker))
+        result = await task
+>       assert result["status"] == "outcome_unknown"
+E       AssertionError: assert 'rejected' == 'outcome_unknown'
+E         
+E         - outcome_unknown
+E         + rejected
+
+tests/test_host_bridge.py:301: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_host_bridge.py::test_timeout_is_indeterminate_and_receipt_is_recoverable
+1 failed, 86 passed in 18.01s

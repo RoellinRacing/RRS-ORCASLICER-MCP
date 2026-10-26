@@ -240,3 +240,9 @@ word spanning two native fields. Exact numeric readback remains mandatory before
 generation. Missing flow-ratio heading may use the single group above Settings
 only with exact active title `Flow Ratio Calibration`, and still requires one
 exact matching choice. These are observation fallbacks, never input retries.
+
+Decimal values receive an additional cropped glyph read, retaining decimal points
+that whole-row OCR can omit. Readback may observe up to three rendered frames;
+these waits never re-click, retype or re-run a native operation. A mismatch still
+fails the operation before generation. Full-height border removal cannot erase a
+partially occupied column, which could otherwise remove a decimal point itself.
