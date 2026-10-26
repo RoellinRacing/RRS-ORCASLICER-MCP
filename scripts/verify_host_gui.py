@@ -142,20 +142,39 @@ def open_bridge(process):
         # The current Linux custom title bar puts Plugins in the adjacent More
         # menu, not the macOS File menu. Anchor the icon to visible File text.
         pyautogui.press("esc")
-        if not click_word("File", dx=38):
-            raise RuntimeError("Could not locate the Linux title-bar menu anchor")
+        geometry = subprocess.check_output(
+            ["xdotool", "getactivewindow", "getwindowgeometry", "--shell"], text=True
+        )
+        bounds = dict(line.split("=", 1) for line in geometry.splitlines() if "=" in line)
+        # Observed official Linux title bar: File at +42, More at +80.
+        pyautogui.click(int(bounds["X"]) + 80, int(bounds["Y"]) + 16)
         time.sleep(1)
         screenshot("02-more-menu")
         if not click_word("Plugins"):
             raise RuntimeError("Could not locate the official Plugins menu item")
     time.sleep(8)
     screenshot("03-plugins")
-    if not click_word("RRS", partial=True):
-        raise RuntimeError("Installed host plugin did not appear in Plugins")
+    if not click_word("Search", partial=True):
+        raise RuntimeError("Could not locate the installed-plugins search field")
+    pyautogui.write("RRS MCP local bridge", interval=0.05)
     time.sleep(2)
     screenshot("04-selected-plugin")
-    if not click_word("Run"):
-        raise RuntimeError("Could not locate the selected Script capability's Run button")
+    # Searching the capability name auto-expands the official capability row.
+    # Its Run control is an icon, not text (PluginsDialog/styles.css #37c871).
+    image = pyautogui.screenshot().convert("RGB")
+    pixels = [
+        (x, y)
+        for y in range(image.height)
+        for x in range(image.width)
+        if all(abs(a - b) <= 5 for a, b in zip(image.getpixel((x, y)), (55, 200, 113)))
+    ]
+    if len(pixels) < 8:
+        raise RuntimeError("The official Script Run icon was not visible")
+    left, right = min(x for x, _ in pixels), max(x for x, _ in pixels)
+    top, bottom = min(y for _, y in pixels), max(y for _, y in pixels)
+    if right - left > 24 or bottom - top > 24:
+        raise RuntimeError("Ambiguous Run icon: refusing to click an unrelated control")
+    pyautogui.click((left + right) // 2, (top + bottom) // 2)
     deadline = time.monotonic() + 45
     while time.monotonic() < deadline:
         for path in data.glob("orca_plugins/plugin_data/**/rrs-mcp-bridge/session.json"):

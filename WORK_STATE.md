@@ -109,3 +109,9 @@ Plugins under the More icon beside File, so Alt-F was not the correct entry.
 Adjusted only the disposable UI driver and corrected installation instructions.
 Nightly also needs an extrusion reset in the fixture printer's layer G-code; added
 it to the isolated no-device profile, preserving the stable source artifact.
+
+Driver review against the shipped official PluginsDialog JS/CSS found that Run is
+an icon-only control, and OCR misreads the custom File title. Use the active test
+window's observed More position, search by the unique capability name (official
+search auto-expands), then require one small Run-color region before clicking.
+These coordinates/colors are disposable CI-driver details, not product API logic.
