@@ -42,6 +42,12 @@ def main():
     with zipfile.ZipFile(directory / f"rrs-orcaslicer-mcp-{version}.zip") as archive:
         assert archive.testzip() is None
         native_source = archive.read(prefix + "src/rrs_orcaslicer_mcp/native_ui.py")
+        package_sources = {
+            name.removeprefix(prefix + "src/"): archive.read(name)
+            for name in archive.namelist()
+            if name.startswith(prefix + "src/rrs_orcaslicer_mcp/")
+            and name.endswith((".py", ".json"))
+        }
         plugin_source = archive.read(
             prefix + "src/rrs_orcaslicer_mcp/data/rrs_orcaslicer_bridge.py"
         )
@@ -75,6 +81,8 @@ def main():
         assert wheel.testzip() is None
         assert wheel.read("rrs_orcaslicer_mcp/native_ui.py") == native_source
         assert wheel.read("rrs_orcaslicer_mcp/data/rrs_orcaslicer_bridge.py") == plugin_source
+        for name, content in package_sources.items():
+            assert wheel.read(name) == content, name
     assert (directory / "rrs_orcaslicer_bridge.py").read_bytes() == plugin_source
     with tarfile.open(directory / f"rrs_orcaslicer_mcp-{version}.tar.gz") as source:
         prefix_tar = f"rrs_orcaslicer_mcp-{version}/"
