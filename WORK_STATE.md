@@ -240,3 +240,17 @@ and native-primary-buttons-0.5.0.json retain the exact targets. A regression cov
 unrelated grey panels and a radio mark above the button. Next: require new full
 native acceptance after this isolated selector correction; do not release on the
 older failed pilot or on screenshot-only results.
+
+Continuation checkpoint after 2dc6758: 96 local tests passed, static checks and
+generated-plugin consistency passed. Seven actual primary button screenshots
+(including temperature from run 40367241859) now replay against source SHA256
+and exact target rectangles. Saved script: scripts/replay_native_buttons.py;
+manifest: docs/evidence/native-primary-buttons-manifest.json; actual results:
+docs/evidence/native-primary-buttons-0.5.0.json and unit-0.5.0.txt. Added separate
+regression for a selected control in the same X columns above the primary button.
+Business rationale is saved in docs/BUSINESS_LOGIC.md. Main's selector correction
+is already saved as 2dc67584fd042c2d0c811dadc4a7abbf4ab30dff. Its native CI
+40368784963 is in progress; preserve that run rather than cancelling it for
+evidence-only changes. Next: inspect the combined result and all independent
+checks, then verify the public 0.5.0 package if acceptance/release succeeds.
+Screenshot replays alone do not establish native acceptance. No physical print.

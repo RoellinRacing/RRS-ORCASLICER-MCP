@@ -570,4 +570,31 @@ def test_primary_button_fallback_ignores_unrelated_grey_panels(tmp_path, monkeyp
     )
     ui.dialog_button("OK", "Temperature calibration")
     assert len(clicked) == 1 and clicked[0]["x"] == 220
+
+
+def test_primary_button_separates_selected_control_in_same_columns(tmp_path, monkeypatch):
+    from rrs_orcaslicer_mcp import native_ui
+
+    image_module = pytest.importorskip("PIL.Image")
+    picture = image_module.new("RGB", (400, 200), "white")
+    picture.paste((0, 150, 136), (220, 125, 320, 140))
+    picture.paste((0, 150, 136), (220, 150, 320, 185))
+    ui = NativeControls(
+        types.SimpleNamespace(_api=lambda: types.SimpleNamespace(screenshot=lambda: picture)),
+        tmp_path,
+    )
+    ui.bounds = lambda: (0, 0, 400, 200)
+    ui.window_title = lambda: "Temperature calibration"
+
+    def missing(*a, **k):
+        raise ValueError("sparse OCR misses label")
+
+    ui.label = missing
+    clicked = []
+    ui.point_click = clicked.append
+    monkeypatch.setattr(
+        native_ui.subprocess, "run", lambda *a, **k: types.SimpleNamespace(stdout=b"OK")
+    )
+    ui.dialog_button("OK", "Temperature calibration")
+    assert clicked == [{"x": 220, "y": 150, "w": 100, "h": 35}]
     assert clicked[0]["y"] == 150 and clicked[0]["h"] == 35

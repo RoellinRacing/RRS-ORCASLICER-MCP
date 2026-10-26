@@ -1,6 +1,6 @@
 {
   "status": "succeeded",
-  "test": "Read-only exact primary OK button replays; no desktop input",
+  "no_desktop_input": true,
   "cases": [
     {
       "kind": "input_shaping_damping",
@@ -58,6 +58,16 @@
       "target": {
         "x": 685,
         "y": 587,
+        "w": 100,
+        "h": 32
+      }
+    },
+    {
+      "kind": "temperature",
+      "sha256": "6af9e03a1c22af472fd278cb112ffe887719527ee965ed36323c594879f2685c",
+      "target": {
+        "x": 633,
+        "y": 690,
         "w": 100,
         "h": 32
       }

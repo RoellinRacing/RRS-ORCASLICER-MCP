@@ -24,6 +24,7 @@ def main():
             continue
         seen.add(case["kind"])
         path = args.evidence_root / case["image"]
+        assert hashlib.sha256(path.read_bytes()).hexdigest() == case["sha256"]
         picture = Image.open(path)
         ui = NativeControls(
             SimpleNamespace(
@@ -39,6 +40,8 @@ def main():
         ui.dialog_button("OK", title)
         assert len(clicked) == 1 and clicked[0]["y"] >= case["bounds"][3] - 75
         assert 20 <= clicked[0]["h"] <= 45
+        if "expected_target" in case:
+            assert clicked == [case["expected_target"]], (case["kind"], clicked)
         results.append(
             {
                 "kind": case["kind"],

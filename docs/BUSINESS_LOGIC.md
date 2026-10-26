@@ -267,6 +267,10 @@ Grey fallback is restricted to the exact spiral-info No route with its narrow
 55-pixel button row. All primary calibration OK buttons retain teal-only fallback.
 Two-dimensional connected components identify actual buttons; unrelated grey panels,
 thin borders and separate radio marks above a button cannot merge into its bounds.
-Six actual primary-dialog screenshots and the separate spiral No screenshot are
+Seven hash-bound primary-dialog screenshots and the separate spiral No screenshot are
 replayed without input; the synthetic regression includes a grey panel and a radio
 mark directly above a primary button.
+
+Replay requires the source image SHA256 and exact expected target rectangle,
+including the latest temperature failure. Reproduce with replay_native_buttons.py
+and docs/evidence/native-primary-buttons-manifest.json.
