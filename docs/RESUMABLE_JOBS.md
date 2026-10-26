@@ -30,3 +30,6 @@ für einen erfolgreichen neuen Lauf gewertet. `cli_run` bleibt ein bewusst allge
 CLI-Zugang; dessen beliebige Argumente werden nicht als Modellpfade interpretiert.
 Diese Funktionen steuern den separaten CLI-Prozess. Sie steuern keinen GUI-Slicejob
 und starten keinen Drucker.
+
+Hinweis: Das offizielle Orca 2.4.2 schreibt bei erfolgreichem CLI-Slicing nichts auf
+stdout; ein leeres Log (`size_bytes: 0`) ist dann normal. Abnahme: docs/VALIDATION.md.

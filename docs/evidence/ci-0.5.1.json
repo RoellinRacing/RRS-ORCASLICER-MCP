@@ -1,0 +1,31 @@
+{
+  "pr": "https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/pull/1",
+  "pr_run": {
+    "id": 40395210779,
+    "head": "af0fc98745f2538b1f0aa777b11eacf88ce06b7d",
+    "conclusion": "success",
+    "jobs": 19
+  },
+  "main_run": {
+    "id": 40397479271,
+    "url": "https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/actions/runs/40397479271",
+    "head": "6c855556d55de116f567afefadb8adb1f70461a4",
+    "conclusion": "success",
+    "jobs": 19
+  },
+  "jobs": [
+    "test x6 (ubuntu/windows/macos x py3.11/3.13)",
+    "smoke (official Orca 2.4.2 CLI incl. verify_resumable_jobs.py)",
+    "host_gui x11 (all + 10 sections)",
+    "package"
+  ],
+  "findings_fixed_during_acceptance": [
+    "Keyed retry could not reclaim a job folder left by a crash between mkdir and receipt write (engine fix + regression test)",
+    "Windows cp1252 test fixture wrote UTF-8 test script without explicit encoding (test fix)",
+    "Stock Orca 2.4.2 writes no stdout for a successful slice; verifier now proves the byte cursor reproduces exactly the saved log instead of assuming non-empty output"
+  ],
+  "earlier_failed_run": {
+    "id": 40394353961,
+    "reason": "the two findings above (windows test, smoke log assumption)"
+  }
+}

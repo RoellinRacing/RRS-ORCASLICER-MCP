@@ -1,3 +1,7 @@
+> **Abgeschlossen (2026-10-26):** v0.5.1 veröffentlicht — https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/releases/tag/v0.5.1
+> Quellcommit `6c85555`, CI https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/actions/runs/40397479271 (19/19). Ergebnis und Nachweise: WORK_STATE.md,
+> docs/VALIDATION.md, docs/evidence/*-0.5.1.*. Dieser Auftrag ist erledigt.
+
 # Claude: OrcaSlicer MCP 0.5.1 abschliessen und abnehmen
 
 ## Auftrag und Ausgangspunkt

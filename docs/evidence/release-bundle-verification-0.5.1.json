@@ -1,0 +1,24 @@
+{
+  "status": "succeeded",
+  "version": "0.5.1",
+  "source_commit": "6c855556d55de116f567afefadb8adb1f70461a4",
+  "native_operations": 30,
+  "app": {
+    "app_config_version": "2.5.0",
+    "build": "e52c735d",
+    "is_bambu_signed_in": false,
+    "is_signed_in": false,
+    "language": "en_US",
+    "mode": "editor",
+    "network_plugin_error": "",
+    "network_plugin_version": "",
+    "stealth_mode": true,
+    "version": "2.5.0-dev"
+  },
+  "sha256": {
+    "rrs-orcaslicer-mcp-0.5.1.zip": "e62d5d8822ecd5fb6f46791abd2904d5edef138e0209534d3068763abf5e6083",
+    "rrs_orcaslicer_bridge.py": "0ed3ed5e7bfecaaef02f732b2abc1f251f25b68d1add28ee259fc92f67022c17",
+    "rrs_orcaslicer_mcp-0.5.1-py3-none-any.whl": "bf6c126116a325ba39265a9b90ea6541872b9702869399b1eca5368324ccc36a",
+    "rrs_orcaslicer_mcp-0.5.1.tar.gz": "466c433daff65d9deb3d8b50e125d59f07c4f0657e733245a0e7e963b5af129f"
+  }
+}

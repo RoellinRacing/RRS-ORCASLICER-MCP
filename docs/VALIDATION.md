@@ -1,15 +1,28 @@
-# Lokaler Kandidat 0.5.1 — öffentliche Abnahme ausstehend
+# Abnahme für 0.5.1
 
-Die vollständige lokale Suite besteht 103 Tests. Einzel-Slicing wird auf
-Wiederholungsschutz, Modell-/Profiländerungen und Serverneustart geprüft;
-Log-Cursor, UTF-8-Grenzen, die 10-MiB-Obergrenze und abgebrochene Beobachter
-werden geprüft. Neue Status-/Log-Abfragen laufen zusätzlich über echten MCP-stdio.
-Das sind Auftrags-/Protokolltests, kein neuer nativer Orca-Abnahmebericht.
+[CI 40397479271](https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/actions/runs/40397479271) und [Release v0.5.1](https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/releases/tag/v0.5.1) gehören zum Quellcommit
+`6c855556d55de116f567afefadb8adb1f70461a4`. Alle 19 Jobs bestanden, ebenso der PR-Lauf 40395210779.
+Sechs Windows/macOS/Linux-Prüfungen mit Python 3.11/3.13 bestanden.
 
-Reproduzierbares echtes CLI-Slicing ist in scripts/verify_resumable_jobs.py
-vorbereitet und im Smoke-CI-Schritt eingebunden. Diese CI und die erneute native
-Gesamtabnahme warten auf Freigabe des öffentlichen Uploads. 0.5.1 ist hier ein
-lokaler Prüfkandidat; der veröffentlichte stabile Stand ist weiterhin 0.5.0.
+Echtes CLI-Slicing mit dem offiziellen Linux-Build 2.4.2 über MCP-stdio
+(scripts/verify_resumable_jobs.py): zwei gleichzeitige identische Aufrufe ergeben
+genau einen Auftrag, G-Code und 3MF entstehen, job_wait und job_log funktionieren,
+ein neuer Serverprozess liefert denselben fertigen Auftrag ohne Neuberechnung,
+geänderte Parameter werden abgewiesen. Stock-Orca 2.4.2 schreibt bei erfolgreichem
+Slicing nichts auf stdout; geprüft wird, dass der Cursor exakt die gespeicherten
+Log-Bytes liefert. Nicht-leere Logs, UTF-8-Grenzen und 10-MiB-Grenze prüfen die
+Unit-/stdio-Tests.
+
+Native Gesamtabnahme auf der unveränderten Nightly 2.5.0-dev, Build `e52c735d`:
+30 Operationen (Transformation mit Undo/Redo, drei Textmodi, neun Generatorfamilien)
+plus alle zehn Einzelabschnitte. Kein physischer Druck.
+
+Öffentliche Downloads stimmen mit SHA256SUMS und GitHub-Digests; 26 Modul-/
+Datendateien sind in Wheel, ZIP und sdist identisch mit dem Releasecommit. Das
+separat installierte Wheel besteht 102 Tests (2 Pillow-Skips) und bietet 63 Tools
+über stdio. [Releaseprüfung](evidence/github-release-0.5.1.json),
+[CI](evidence/ci-0.5.1.json), [Wheeltests](evidence/wheel-tests-0.5.1.txt),
+[Native Quittungen](evidence/native-workflows-0.5.1.json).
 
 # Abnahme für 0.5.0
 

@@ -1,0 +1,71 @@
+{
+  "status": "succeeded",
+  "release": "https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/releases/tag/v0.5.1",
+  "source_commit": "6c855556d55de116f567afefadb8adb1f70461a4",
+  "sha256sums": "all 4 entries OK",
+  "github_digests": "all 5 assets match",
+  "package_files_matching_release_commit": {
+    "wheel": 26,
+    "zip": 26,
+    "sdist": 26
+  },
+  "native_operations": 30,
+  "native_app": {
+    "app_config_version": "2.5.0",
+    "build": "e52c735d",
+    "is_bambu_signed_in": false,
+    "is_signed_in": false,
+    "language": "en_US",
+    "mode": "editor",
+    "network_plugin_error": "",
+    "network_plugin_version": "",
+    "stealth_mode": true,
+    "version": "2.5.0-dev"
+  },
+  "text_modes": [
+    "join",
+    "cut",
+    "modifier"
+  ],
+  "generators": [
+    "temperature",
+    "pressure_advance",
+    "retraction",
+    "max_volumetric_speed",
+    "flow_ratio",
+    "vfa",
+    "cornering",
+    "input_shaping_frequency",
+    "input_shaping_damping"
+  ],
+  "wheel_tests": "102 passed, 2 skipped (installed public wheel, import from site-packages)",
+  "stdio_tool_count": 63,
+  "physical_print_started": false,
+  "assets": [
+    {
+      "name": "rrs-orcaslicer-mcp-0.5.1.zip",
+      "size": 379351,
+      "digest": "sha256:e62d5d8822ecd5fb6f46791abd2904d5edef138e0209534d3068763abf5e6083"
+    },
+    {
+      "name": "rrs_orcaslicer_bridge.py",
+      "size": 27960,
+      "digest": "sha256:0ed3ed5e7bfecaaef02f732b2abc1f251f25b68d1add28ee259fc92f67022c17"
+    },
+    {
+      "name": "rrs_orcaslicer_mcp-0.5.1-py3-none-any.whl",
+      "size": 169998,
+      "digest": "sha256:bf6c126116a325ba39265a9b90ea6541872b9702869399b1eca5368324ccc36a"
+    },
+    {
+      "name": "rrs_orcaslicer_mcp-0.5.1.tar.gz",
+      "size": 314664,
+      "digest": "sha256:466c433daff65d9deb3d8b50e125d59f07c4f0657e733245a0e7e963b5af129f"
+    },
+    {
+      "name": "SHA256SUMS",
+      "size": 392,
+      "digest": "sha256:83830508a57eab112f8da9fc5e854b05aff980c04a8501182ebf7f007ba22588"
+    }
+  ]
+}

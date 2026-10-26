@@ -1,7 +1,7 @@
 > **Neu in 0.5.1: 63 MCP-Werkzeuge.** Einzel-Slicing mit optionalem
 > Wiederholungsschlüssel und Prüfung der Modell-/Profilinhalte. `job_log` liest
 > Protokolle mit fortsetzbarem Byte-Cursor; `job_wait` wartet begrenzt auf Ergebnisse.
-> [Ablauf und Geschäftsregeln](docs/RESUMABLE_JOBS.md).
+> [Paket](https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/releases/tag/v0.5.1) · [Ablauf und Geschäftsregeln](docs/RESUMABLE_JOBS.md) · [Abnahme](docs/VALIDATION.md).
 
 > **Neu in 0.5.0: 61 MCP-Werkzeuge.** Gezielte Live-Transformationen mit nativer
 > Undo-/Redo-Historie, editierbarer Text/Embossing und originale Kalibrierungsgeneratoren

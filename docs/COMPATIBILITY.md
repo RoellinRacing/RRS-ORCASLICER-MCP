@@ -26,7 +26,7 @@ aus. Ein separater Linux-Test lädt beim regulären Build das festgelegte Releas
 stabile Release. Die Resultate sind Testnachweise, keine Garantie für beliebige
 Versionen. Ein zusätzlicher isolierter Linux-X11-Test bedient die offizielle
 Nightly tatsächlich: Live-Transformationen mit Undo/Redo, native Textmodi und neun
-Generatorfamilien. Die Veröffentlichung von 0.5.0 erfordert den vollständigen
+Generatorfamilien. Jede Veröffentlichung (zuletzt 0.5.1) erfordert den vollständigen
 kombinierten Nachweis; Einzelprüfungen ersetzen ihn nicht. Die genauen Build- und
 Plugin-Prüfsummen stehen im jeweiligen Paketnachweis. Windows/macOS-GUI und andere
 Sprachen/Layouts sind durch diese Linux-Prüfung nicht abgenommen.

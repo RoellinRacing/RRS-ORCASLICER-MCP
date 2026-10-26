@@ -111,3 +111,16 @@ The host bridge keeps its public allowlist and GUI/worker ownership rules.
 Supported native document transactions, paint mutations, job lifecycle and
 provider APIs would reduce the desktop selector dependency; these are the
 concrete questions in UPSTREAM_CONTACT.md.
+
+## 0.5.1 resumable CLI jobs
+
+Source 6c85555 (PR #1), CI 40397479271 and public v0.5.1 are the reference points.
+slice_project binds an optional idempotency_key to CLI arguments, timeout and the
+SHA256 of all models/explicit profiles; submission is serialized in-process and the
+job directory is locked per server, so identical concurrent calls compute once.
+job_log/job_wait observe without cancelling work; restarts mark open jobs
+interrupted and never re-run them. Review fix: a keyed retry reclaims a job folder
+that a crash left without job.json. Stock Orca 2.4.2 writes no stdout on a
+successful slice, so the real-CLI check binds the cursor to the saved log bytes.
+All 19 CI jobs, native combined acceptance (30 operations, nightly e52c735d) and
+public asset verification passed. Scope limits unchanged (CLI only, no GUI job API).

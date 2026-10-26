@@ -1,4 +1,36 @@
-# Claude handoff checkpoint — 0.5.1 candidate
+# Published checkpoint — 0.5.1
+
+Release/source commit: 6c855556d55de116f567afefadb8adb1f70461a4 (merge of PR #1).
+Release: https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/releases/tag/v0.5.1
+CI: https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/actions/runs/40397479271 — all 19 jobs succeeded (PR run 40395210779 also all 19 green).
+63 tools. slice_project idempotency_key, job_log byte cursor, job_wait bounded
+observation. Six OS/Python jobs passed; official Orca 2.4.2 CLI passed
+verify_resumable_jobs.py over MCP stdio (two concurrent identical calls → one job,
+real G-code/3MF, job_wait/job_log, new server process returns the same finished job
+without reslicing, changed parameters rejected). Native nightly 2.5.0-dev build
+e52c735d passed 30 combined operations plus all ten separate GUI sections.
+
+Fixed during acceptance: keyed retry now reclaims a job folder left before the
+receipt write (regression test); Windows test fixture encoding; the real-CLI log
+check no longer assumes stdout output (stock Orca 2.4.2 writes none on success)
+and instead proves the cursor reproduces exactly the saved log bytes.
+
+Public ZIP/wheel/source/plugin downloaded: SHA256SUMS and GitHub digests match;
+26 module/data files identical to the release commit in wheel, ZIP and sdist;
+public wheel in an isolated venv passed 102 tests (2 Pillow skips) and listed 63
+tools over actual stdio. Evidence: docs/evidence/github-release-0.5.1.json,
+ci-0.5.1.json, release-bundle-verification-0.5.1.json, release-metadata-0.5.1.json,
+wheel-tests-0.5.1.txt, tool-inventory-public-0.5.1.json, host-/native-workflows-0.5.1.json.
+*-local-0.5.1 files remain pre-release candidate evidence, not public downloads.
+
+No remaining requested 0.5.1 work. Limits unchanged: CLI jobs only (no GUI slice-job
+API), Linux X11/English GUI scope, no Windows/macOS GUI, cloud/AMS/MMU or
+future-version guarantee. No physical print started. Upstream contact stays with Dani.
+Leftover branch diag/ci-annotations (CI diagnostics, not merged) could not be deleted
+through this session's proxy; delete it manually.
+
+## Previous 0.5.1 candidate notes (historical)
+
 
 Implementation checkpoint: 53335cd (local commit only).
 Latest completed step: local ZIP/source/wheel/plugin built; all four SHA256SUMS
