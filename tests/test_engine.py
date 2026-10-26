@@ -183,3 +183,16 @@ async def test_log_cursor_waits_for_incomplete_live_utf8(engine, tmp_path):
     path.write_bytes(encoded)
     assert engine.read_log(job["id"])["text"] == "温"
     await engine.close()
+
+
+async def test_retry_reclaims_folder_left_before_receipt_write(engine, tmp_path):
+    ident = "c" * 32
+    (engine.state / ident).mkdir()  # simulated crash after mkdir, before job.json
+    script = tmp_path / "ok.py"
+    script.write_text("print('ok')")
+    try:
+        job = await engine.submit([str(script)], job_id=ident)
+        assert (await engine.wait(job["id"], 5))["status"] == "succeeded"
+        assert (await engine.submit([str(script)], job_id=ident))["status"] == "succeeded"
+    finally:
+        await engine.close()

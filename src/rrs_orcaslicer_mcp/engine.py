@@ -178,7 +178,9 @@ class Engine:
                 elif re.match(r"^-[A-Za-z]", argument):
                     raise ValueError("Use documented long flags, not short aliases")
             folder = self.state / ident
-            folder.mkdir()
+            # A crash between mkdir and the receipt write leaves an empty folder
+            # without job.json: nothing ran, so the same key may claim it again.
+            folder.mkdir(exist_ok=True)
             job = {
                 "id": ident,
                 "status": "queued",
