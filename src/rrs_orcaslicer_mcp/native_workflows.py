@@ -54,6 +54,19 @@ CALIBRATIONS = {
 }
 
 
+CALIBRATION_TITLES = {
+    "temperature": "Temperature calibration",
+    "pressure_advance": "PA Calibration",
+    "max_volumetric_speed": "Max volumetric speed test",
+    "retraction": "Retraction",
+    "vfa": "VFA test",
+    "cornering": "Cornering test",
+    "flow_ratio": "Flow Ratio Calibration",
+    "input_shaping_frequency": "Input shaping Frequency test",
+    "input_shaping_damping": "Input shaping Damp test",
+}
+
+
 def validate_calibration(kind, parameters):
     if kind not in CALIBRATIONS or not isinstance(parameters, dict):
         raise ValueError("Unknown native calibration kind")
@@ -407,11 +420,7 @@ class NativeWorkflows:
                     await asyncio.to_thread(ui.key, "t")
                     await asyncio.sleep(2)
                     phase("editing_native_text")
-                    await asyncio.to_thread(ui.click, "Embossed text")
-                    await asyncio.to_thread(
-                        ui.key, "ctrl" if sys.platform != "darwin" else "command", "a"
-                    )
-                    await asyncio.to_thread(ui.paste, parameters["text"])
+                    await asyncio.to_thread(ui.replace_emboss_text, parameters["text"])
                     # Clicking a numeric setting commits the native text rebuild.
                     await asyncio.to_thread(
                         ui.numeric, "Height", value=parameters["height_mm"], commit="enter"
@@ -489,34 +498,29 @@ class NativeWorkflows:
                         ui.capture, "parameters"
                     )
                     phase("generating_native_calibration")
-                    await asyncio.to_thread(ui.click, "OK")
+                    await asyncio.to_thread(ui.dialog_button, "OK", CALIBRATION_TITLES[kind])
                     await asyncio.sleep(1)
-                    # Only an explicitly authorized scene replacement backed by a
-                    # completed native copy can dismiss the save-current-project prompt.
-                    for label in ("Don't save", "Discard"):
-                        try:
-                            await asyncio.to_thread(ui.label, label)
-                        except ValueError:
-                            continue
-                        await asyncio.to_thread(ui.click, label)
-                        break
-                    # Stock close_with_confirm uses Yes/No/Cancel. Select No only
-                    # when its unsaved-project prompt is positively identified and
-                    # this request already holds a completed native backup.
-                    try:
+                    # These are different native dialogs. Only the backed-up
+                    # project may be replaced; edited presets must be retained.
+                    title = await asyncio.to_thread(ui.window_title)
+                    if title == "OrcaSlicer - Save":
+                        phase("confirming_backed_up_scene_replacement")
                         await asyncio.to_thread(ui.label, "unsaved changes")
+                        record["replacement_prompt"] = await asyncio.to_thread(
+                            ui.capture, "replacement_prompt"
+                        )
                         await asyncio.to_thread(ui.click, "No")
                         await asyncio.sleep(0.5)
-                    except ValueError:
-                        pass
-                    # Keep existing edited presets while replacing the model. The
-                    # native generator applies its own calibration settings next.
-                    try:
-                        await asyncio.to_thread(ui.label, "Some presets are modified")
-                        await asyncio.to_thread(ui.click, "Keep")
+                    title = await asyncio.to_thread(ui.window_title)
+                    if title == "Creating a new project: unsaved changes":
+                        phase("preserving_native_presets")
+                        record["presets_prompt"] = await asyncio.to_thread(
+                            ui.capture, "presets_prompt"
+                        )
+                        # Current UnsavedChangesDialog names ActionButtons::KEEP
+                        # "Transfer". Discard would lose the edited presets.
+                        await asyncio.to_thread(ui.dialog_button, "Transfer", title)
                         await asyncio.sleep(0.5)
-                    except ValueError:
-                        pass
                     await asyncio.sleep(1)
                     phase("exporting_native_calibration")
                     record["export"] = await self.export(parameters["destination"], session_id)

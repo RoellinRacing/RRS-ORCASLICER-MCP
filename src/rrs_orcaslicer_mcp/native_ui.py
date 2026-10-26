@@ -161,6 +161,91 @@ class NativeControls:
     def click(self, phrase, region=None):
         self.point_click(self.label(phrase, region))
 
+    def window_title(self):
+        if sys.platform != "linux":
+            raise ValueError("Native dialog title fallback currently requires Linux X11")
+        return subprocess.check_output(
+            ["xdotool", "getactivewindow", "getwindowname"], text=True
+        ).strip()
+
+    def dialog_button(self, phrase, expected_title):
+        if self.window_title() != expected_title or self.bounds() == self.main_bounds:
+            raise ValueError("Expected native generator dialog is not active")
+        try:
+            self.click(phrase)
+            return
+        except ValueError:
+            pass
+        # Sparse OCR omits short white labels on Orca's teal primary buttons.
+        # Identify button rectangles only inside this verified dialog's footer,
+        # then read each inset as black text on white. Never click color alone.
+        from PIL import ImageOps
+
+        left, top, right, bottom = self.bounds()
+        top = max(top, bottom - 75)
+        picture = self.desktop._api().screenshot().crop((left, top, right, bottom)).convert("RGB")
+        pixels = picture.load()
+        colored = {}
+        for x in range(picture.width):
+            ys = [
+                y
+                for y in range(picture.height)
+                if pixels[x, y][0] <= 50
+                and 100 <= pixels[x, y][1] <= 190
+                and 80 <= pixels[x, y][2] <= 180
+            ]
+            if ys:
+                colored[x] = ys
+        groups = []
+        for x in sorted(colored):
+            if not groups or x > groups[-1][-1] + 1:
+                groups.append([])
+            groups[-1].append(x)
+        matches = []
+        for group in groups:
+            x0, x1 = group[0], group[-1] + 1
+            ys = [y for x in group for y in colored[x]]
+            y0, y1 = min(ys), max(ys) + 1
+            if x1 - x0 < 50 or y1 - y0 < 20 or len(ys) < (x1 - x0) * (y1 - y0) * 0.45:
+                continue
+            inset = picture.crop((x0 + 5, y0 + 4, x1 - 5, y1 - 4)).convert("L")
+            inset = ImageOps.expand(
+                inset.point(lambda v: 0 if v > 220 else 255), border=8, fill=255
+            )
+            stream = io.BytesIO()
+            inset.resize((inset.width * 3, inset.height * 3)).save(stream, format="PNG")
+            response = subprocess.run(
+                ["tesseract", "stdin", "stdout", "--psm", "7"],
+                input=stream.getvalue(),
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                timeout=12,
+                check=True,
+                env={**os.environ, "OMP_THREAD_LIMIT": "1"},
+            )
+            if tokens(response.stdout.decode("utf-8")) == tokens(phrase):
+                matches.append({"x": left + x0, "y": top + y0, "w": x1 - x0, "h": y1 - y0})
+        if len(matches) != 1:
+            raise ValueError(f"Native dialog button {phrase!r} missing or ambiguous")
+        self.point_click(matches[0])
+
+    def replace_emboss_text(self, value):
+        # The part notification repeats the default text. Anchor the editable
+        # text area above the gizmo's Style row instead of matching that name
+        # anywhere in the viewport.
+        style = self.label("Style")
+        _, top, right, _ = self.bounds()
+        editor_region = (style["x"] - 5, top + 110, right, style["y"] - 5)
+        # Orca retains the previous text when opening another emboss gizmo.
+        # Any glyph in this identified text area is a focus target; its content
+        # is not a fixed label and need not equal the factory default.
+        words = self.words(editor_region)
+        if not words:
+            raise ValueError("Native emboss text area could not be identified")
+        self.point_click(min(words, key=lambda w: (w["y"], w["x"])))
+        self.key("command" if sys.platform == "darwin" else "ctrl", "a")
+        self.paste(value)
+
     def key(self, *keys):
         self.desktop._api().hotkey(*keys)
         time.sleep(0.2)

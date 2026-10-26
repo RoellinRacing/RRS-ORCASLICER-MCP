@@ -219,3 +219,62 @@ def test_native_numeric_units_do_not_change_value(tmp_path, visible, expected):
     ui = NativeControls(None, tmp_path)
     ui.words = lambda region=None: [word("Start", 10), word(visible, 100)]
     assert ui.read_numeric("Start")[1] == expected
+
+
+def test_native_numeric_reacquires_editor_after_hover_layout_change(tmp_path, monkeypatch):
+    from rrs_orcaslicer_mcp import native_ui
+
+    actions = []
+    api = types.SimpleNamespace(
+        moveTo=lambda *a, **k: None,
+        write=lambda value, **k: actions.append(("write", value)),
+        position=lambda: (95, 16),
+    )
+    ui = NativeControls(types.SimpleNamespace(_api=lambda: api), tmp_path)
+    boxes = iter([110, 90, 90])
+    ui.read_numeric = lambda *a: ({"x": next(boxes), "y": 10, "w": 10, "h": 12}, 100)
+    ui.point_click = lambda box: actions.append(("click", box["x"]))
+    ui.key = lambda *keys: None
+    ui.capture = lambda phase: phase
+    monkeypatch.setattr(native_ui.time, "sleep", lambda _: None)
+    result = ui.numeric("Scale", value=110, columns=3)
+    assert actions == [("click", 90), ("write", "110")]
+    assert result == {"before": 100, "requested": 110}
+
+
+def test_native_numeric_rejects_changed_value_before_click(tmp_path, monkeypatch):
+    from rrs_orcaslicer_mcp import native_ui
+
+    actions = []
+    api = types.SimpleNamespace(moveTo=lambda *a, **k: None)
+    ui = NativeControls(types.SimpleNamespace(_api=lambda: api), tmp_path)
+    values = iter([100, 101])
+    ui.read_numeric = lambda *a: ({"x": 90, "y": 10, "w": 10, "h": 12}, next(values))
+    ui.point_click = lambda box: actions.append(box)
+    monkeypatch.setattr(native_ui.time, "sleep", lambda _: None)
+    with pytest.raises(ValueError, match="changed while acquiring"):
+        ui.numeric("Scale", value=110)
+    assert actions == []
+
+
+def test_emboss_editor_accepts_remembered_text_in_identified_area(tmp_path):
+    actions = []
+    ui = NativeControls(None, tmp_path)
+    ui.label = lambda phrase: {"x": 600, "y": 300}
+    ui.bounds = lambda: (0, 0, 1000, 800)
+    ui.words = lambda region: [{"text": "RRS", "x": 610, "y": 210}]
+    ui.point_click = lambda box: actions.append(("focus", box["text"]))
+    ui.key = lambda *keys: None
+    ui.paste = lambda value: actions.append(("text", value))
+    ui.replace_emboss_text("Neu")
+    assert actions == [("focus", "RRS"), ("text", "Neu")]
+
+
+def test_native_generator_confirmation_rejects_unexpected_dialog(tmp_path):
+    actions = []
+    ui = NativeControls(None, tmp_path)
+    ui.window_title = lambda: "Other Orca dialog"
+    ui.click = lambda *args: actions.append(args)
+    with pytest.raises(ValueError, match="not active"):
+        ui.dialog_button("OK", "Temperature calibration")
+    assert actions == []

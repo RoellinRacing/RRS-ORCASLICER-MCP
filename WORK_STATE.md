@@ -120,3 +120,25 @@ typing reached canvas shortcuts instead. Native ImGui mouse clicks now hold down
 across a render frame; numeric focus/commit screenshots are saved per field.
 No all-workflows success/release yet. Continue through scale, native editable text
 and nine generators. Source before this follow-up: c53459878e331471397c2549bab5b092e649ce6e.
+
+Current continuation 7c756f2 / run 40347148596: re-acquire numeric boxes after
+hover to allow native gizmo width fitting to settle. Focus/commit images and
+pointer/box JSON are retained. 72 full local tests passed; two further targeted
+regressions now cover moving editor bounds and changed values before a click.
+The GUI CI matrix independently exercises all/text/calibration in isolated stock
+Orca sessions; only the all report with three text modes and nine generators may
+be packaged. Product sources remain unchanged by these diagnostic sections.
+Active jobs: all=121657780105, text=121657779965, calibration=121657779963.
+Next: read the three native outcomes, fix selectors using their screenshots,
+then require the combined run and all ordinary checks before publishing 0.5.0.
+
+Native 7c756f2: all three transforms (move/rotate/scale) now passed with Undo,
+Redo and exact scene restoration (12 native operations). Text stopped safely on
+two matching default-name labels (editor and part notification); anchor its text
+area above Style, independent of remembered text content. Temperature parameters
+220/210 were set and read back, but sparse OCR missed white OK on teal. Fallback
+now requires the exact native dialog title, isolates footer button rectangles and
+reads their inset label; color alone never triggers a click. Read-only replay of
+the actual text/temperature screenshots passed, saved in native-dialog-selectors-
+0.5.0.json. Remaining: actual text modes and all nine generator successes, package
+only after all combined acceptance checks. Further targeted regressions passed.
