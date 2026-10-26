@@ -53,3 +53,10 @@ this execution environment; a real GUI test must run in GitHub Actions, with an
 isolated data directory. Do not claim embedded-host validation until that test passes.
 Next: implement shared protocol, client, plugin adapter, generation and real-host
 verification scripts; test, review business rules, publish a new version.
+
+Implementation checkpoint: shared versioned protocol, external HostClient and
+allowlisted HostService implemented; generated dependency-free official plugin
+builds and passes source consistency/lint checks. 36 tests pass, including thread
+separation, redaction, timeout receipts, duplicate prevention, limits and export roots.
+Real-host verification script and isolated GitHub Actions job saved before execution.
+Next: inspect real GUI result; fix any observed host/API mismatch before release.

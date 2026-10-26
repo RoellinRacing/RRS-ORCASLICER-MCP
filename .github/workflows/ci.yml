@@ -25,6 +25,7 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
       - run: python -m pip install -e '.[test]'
+      - run: python scripts/build_host_plugin.py --check
       - run: python -m pytest -q
       - run: python -m ruff check src scripts tests
 
@@ -71,8 +72,49 @@ jobs:
           name: real-engine-evidence
           path: smoke-output/
 
+  host_gui:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -e . pyautogui pytesseract Pillow
+      - name: Install isolated GUI test dependencies
+        run: sudo apt-get update -qq && sudo apt-get install -y libwebkit2gtk-4.1-0 libmspack0 libsecret-1-0 libopengl0 libglu1-mesa libgl1-mesa-dri xvfb xauth xdotool scrot tesseract-ocr dbus-x11
+      - name: Download official nightly without modifying its binary
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release download nightly-builds --repo OrcaSlicer/OrcaSlicer --pattern 'OrcaSlicer_Linux_AppImage_Ubuntu2404_nightly.AppImage'
+          chmod +x *.AppImage
+          ./OrcaSlicer_Linux_AppImage_Ubuntu2404_nightly.AppImage --appimage-extract > /dev/null
+          chmod +x squashfs-root/bin/orca-slicer
+          sha256sum *.AppImage > nightly-SHA256SUMS
+      - name: Verify native plugin, live reads, transactions and project export
+        env:
+          ORCA_SLICER_BIN: ${{ github.workspace }}/squashfs-root/AppRun
+          ORCA_TEST_RESOURCES: ${{ github.workspace }}/squashfs-root/resources
+          ORCA_TEST_OUTPUT: ${{ github.workspace }}/host-output
+          XDG_RUNTIME_DIR: /tmp/rrs-host-runtime
+          LIBGL_ALWAYS_SOFTWARE: '1'
+          WEBKIT_DISABLE_COMPOSITING_MODE: '1'
+        run: |
+          mkdir -p "$XDG_RUNTIME_DIR"
+          chmod 700 "$XDG_RUNTIME_DIR"
+          python scripts/smoke_orca.py
+          dbus-run-session -- xvfb-run -a -s '-screen 0 1440x1000x24' python scripts/verify_host_gui.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: real-host-plugin-evidence
+          path: |
+            host-output/host-evidence/
+            nightly-SHA256SUMS
+
   package:
-    needs: [test, smoke]
+    needs: [test, smoke, host_gui]
     runs-on: ubuntu-latest
     permissions:
       contents: write

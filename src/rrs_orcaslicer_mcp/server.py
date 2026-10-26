@@ -25,6 +25,7 @@ from .batches import Batches
 from .desktop import Desktop
 from .engine import Engine
 from .storage import Files, atomic_json, digest
+from .host_bridge.client import HostClient
 
 
 def create_server() -> FastMCP:
@@ -38,6 +39,7 @@ def create_server() -> FastMCP:
         .resolve()
     )
     desktop = Desktop()
+    host_client = HostClient()
     engine = None
     batch_store = None
 
@@ -98,7 +100,111 @@ def create_server() -> FastMCP:
             .read_text(encoding="utf-8")
         )
         report["installed_cli"] = await backend().capabilities()
+        report["live_host"] = host_client.status()
         return report
+
+    @mcp.tool()
+    def host_bridge_status() -> dict[str, Any]:
+        """Inspect the running official-host plugin, session ID and advertised operations."""
+        return host_client.status()
+
+    @mcp.tool()
+    def host_plugin_export(destination: str) -> dict[str, Any]:
+        """Write the standalone official-host plugin to a new file for local installation."""
+        from importlib.resources import files as resources
+
+        target = files.path(destination)
+        if target.exists() or target.suffix != ".py":
+            raise ValueError("Choose a new .py destination")
+        target.parent.mkdir(parents=True, exist_ok=True)
+        with target.open("xb") as stream:
+            stream.write(
+                resources("rrs_orcaslicer_mcp")
+                .joinpath("data/rrs_orcaslicer_bridge.py")
+                .read_bytes()
+            )
+        return {
+            "path": str(target),
+            "sha256": digest(target),
+            "next": "Install local plugin in a compatible Orca nightly, then Plugins > Run. Set ORCA_MCP_BRIDGE to the path shown by its panel.",
+        }
+
+    @mcp.tool()
+    async def host_snapshot() -> dict[str, Any]:
+        """Read live app version, dirty states, selected presets and scene object count."""
+        return await host_client.call("host.snapshot", {})
+
+    @mcp.tool()
+    async def host_model_read(offset: int = 0, limit: int = 20) -> dict[str, Any]:
+        """Read live objects, IDs, parts/instance counts and existing painting flags."""
+        return await host_client.call("model.read", {"offset": offset, "limit": limit})
+
+    @mcp.tool()
+    async def host_presets_list(
+        kind: str, query: str = "", offset: int = 0, limit: int = 100
+    ) -> dict[str, Any]:
+        """List the running host's loaded process, printer or filament presets."""
+        return await host_client.call(
+            "presets.list", {"kind": kind, "query": query, "offset": offset, "limit": limit}
+        )
+
+    @mcp.tool()
+    async def host_preset_read(
+        kind: str,
+        name: str | None = None,
+        keys: list[str] | None = None,
+        offset: int = 0,
+        limit: int = 100,
+    ) -> dict[str, Any]:
+        """Read serialized live preset values, including unsaved edits; redact secret keys."""
+        return await host_client.call(
+            "preset.read",
+            {"kind": kind, "name": name, "keys": keys, "offset": offset, "limit": limit},
+        )
+
+    @mcp.tool()
+    async def host_preset_update(
+        kind: str,
+        preset_name: str,
+        changes: dict,
+        session_id: str,
+        request_id: str,
+        slot: int | None = None,
+        timeout_seconds: int = 60,
+    ) -> dict[str, Any]:
+        """Stage/commit live settings through the official host transaction API.
+
+        Requires the current session ID and an explicit UUID hex request ID. Changes
+        stay unsaved. Native selection/unsaved-edit dialogs are never suppressed.
+        A timeout is indeterminate: query the receipt instead of repeating the edit.
+        """
+        return await host_client.call(
+            "preset.update",
+            {"kind": kind, "preset_name": preset_name, "changes": changes, "slot": slot},
+            timeout_seconds,
+            session_id,
+            request_id,
+        )
+
+    @mcp.tool()
+    async def host_project_export(
+        destination: str, session_id: str, request_id: str, timeout_seconds: int = 60
+    ) -> dict[str, Any]:
+        """Export the live project with unsaved settings as a new 3MF copy.
+
+        Destination must be in ORCA_MCP_ROOTS and the plugin's export_roots. Does not
+        change the project's saved filename/state. Existing destinations are rejected.
+        """
+        path = files.path(destination)
+        # A repeated successful request must remain eligible for its cached receipt.
+        return await host_client.call(
+            "project.export", {"destination": str(path)}, timeout_seconds, session_id, request_id
+        )
+
+    @mcp.tool()
+    def host_request_status(session_id: str, request_id: str) -> dict[str, Any]:
+        """Read an execution receipt, including after a client timeout or host restart."""
+        return host_client.result(session_id, request_id)
 
     @mcp.tool()
     def settings_read(path: str) -> dict[str, Any]:
