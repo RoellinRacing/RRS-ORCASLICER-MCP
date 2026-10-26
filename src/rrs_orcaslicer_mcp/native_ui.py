@@ -174,8 +174,12 @@ class NativeControls:
             raise ValueError(
                 f"Expected native dialog {expected_title!r} is not active; observed {title!r}"
             )
+        left, top, right, bottom = self.bounds()
+        footer = (left, max(top, bottom - 75), right, bottom)
         try:
-            self.click(phrase)
+            # Preset explanations also contain "transfer". A button selector
+            # must only search the dialog's footer, never its body text.
+            self.click(phrase, footer)
             return
         except ValueError:
             pass
@@ -278,7 +282,7 @@ class NativeControls:
                     and abs(w["y"] + w["h"] / 2 - mid) <= 10
                     and re.fullmatch(
                         r"[-+]?\d+(?:[.,]\d+)?(?:%|mm|°C?|℃|Hz|mm/s|mm[³3]/s)?",
-                        w["text"],
+                        w["text"].strip("()[]|"),
                         re.IGNORECASE,
                     )
                 ],
@@ -293,7 +297,9 @@ class NativeControls:
         if len(rows) != 1:
             raise ValueError(f"Numeric row next to {label!r} missing or ambiguous")
         box = rows[0][index]
-        observed = float(re.match(r"[-+]?\d+(?:[.,]\d+)?", box["text"])[0].replace(",", "."))
+        observed = float(
+            re.match(r"[-+]?\d+(?:[.,]\d+)?", box["text"].strip("()[]|"))[0].replace(",", ".")
+        )
         return box, observed
 
     def numeric(

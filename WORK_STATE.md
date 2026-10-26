@@ -153,3 +153,14 @@ The combined successful native report is copied into release packages and prepen
 a current package checkpoint so historical 0.4.0 notes are not mistaken for status.
 Next: confirm native project replacement/Transfer and all nine generator families,
 then full combined acceptance, immutable release and published-asset verification.
+
+Repeat 1078957 correctly reached both Save and edited-preset dialogs. Transfer
+matched the explanatory body rather than the primary button, so no model changed;
+button locators now always constrain the footer. A repeat text run hit OCR of an
+input border as "(1.00"; numeric parsing strips only the known border/caret marks,
+with native metadata/pose verification still required. Frozen actual Transfer and
+Depth screenshots now replay correctly without input (five-selector proof).
+The earlier successful three-mode native text report is condensed in
+native-text-0.5.0.json, alongside the 12-operation native-transforms proof.
+Next: rerun native generators and the combined suite; release remains 0.4.0 until
+all 0.5.0 acceptance gates pass.

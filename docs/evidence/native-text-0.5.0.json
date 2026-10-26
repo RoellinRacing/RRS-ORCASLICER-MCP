@@ -1,0 +1,577 @@
+{
+  "status": "succeeded",
+  "scope": "Actual native editable Join/Cut/Modifier text and native Undo; excludes calibration acceptance",
+  "source_commit": "12be2f3a589d1a5f2b79c20b4114083177cd1998",
+  "workflow": "https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/actions/runs/40349995892",
+  "artifact_id": 12663777026,
+  "raw_report_sha256": "e0d5250a1ac76c6d34a8b79c14597310b07fba348cb0f636d3fcefd45328248e",
+  "app": {
+    "app_config_version": "2.5.0",
+    "build": "a0e51b40",
+    "is_bambu_signed_in": false,
+    "is_signed_in": false,
+    "language": "en_US",
+    "mode": "editor",
+    "network_plugin_error": "",
+    "network_plugin_version": "",
+    "stealth_mode": true,
+    "version": "2.5.0-dev"
+  },
+  "operations": [
+    {
+      "tool": "native_text",
+      "arguments": {
+        "text": "RRS",
+        "height_mm": 8,
+        "depth_mm": 1.2,
+        "mode": "join",
+        "backup": "/home/runner/work/RRS-ORCASLICER-MCP/RRS-ORCASLICER-MCP/host-output/isolated-host-data/orca_plugins/plugin_data/rrs_orcaslicer_bridge/rrs-mcp-bridge/exports/native/before-text-join.3mf",
+        "destination": "/home/runner/work/RRS-ORCASLICER-MCP/RRS-ORCASLICER-MCP/host-output/isolated-host-data/orca_plugins/plugin_data/rrs_orcaslicer_bridge/rrs-mcp-bridge/exports/native/editable-text-join.3mf",
+        "expected_revision": "7deb78590ead693f5bd6f78e2cc70494fc62a239eaded3d691ba4c749f5c717b",
+        "session_id": "c14e1b2286fa4c9b819e3e608952a783",
+        "request_id": "dcba8e5eae1a4c56a7687e98a61a0799"
+      },
+      "status": "succeeded",
+      "before_revision": "7deb78590ead693f5bd6f78e2cc70494fc62a239eaded3d691ba4c749f5c717b",
+      "after_revision": "6fb819d9837393023e528b3431d3afdd618784bc4088fcc327ec8bfaf0481dc7",
+      "completed_steps": null,
+      "native_metadata": {
+        "editable_texts": [
+          {
+            "text": {
+              "text": "RRS",
+              "style_name": "NORMAL",
+              "font_descriptor": "Sans 10",
+              "font_descriptor_type": "wxFontDescriptor_Linux",
+              "line_height": "8",
+              "horizontal": "center",
+              "vertical": "middle",
+              "family": "swiss",
+              "face_name": "Sans"
+            },
+            "shapes": [
+              {
+                "scale": "3.9062500000000001e-06",
+                "depth": "1.2",
+                "transform": "1 0 0 0 1 0 0 0 1 0 0.43684768676757812 0.58499997155740857"
+              }
+            ],
+            "part": {
+              "id": "2",
+              "subtype": "normal_part"
+            }
+          }
+        ],
+        "object_count": 1,
+        "calibration_settings": {
+          "activate_chamber_temp_control": [
+            "0"
+          ],
+          "bbl_calib_mark_logo": "1",
+          "bed_temperature_formula": "by_first_filament",
+          "calib_flowrate_topinfill_special_order": "0",
+          "chamber_minimal_temperature": [
+            "0"
+          ],
+          "chamber_temperature": [
+            "0"
+          ],
+          "cool_plate_temp": [
+            "35"
+          ],
+          "cool_plate_temp_initial_layer": [
+            "35"
+          ],
+          "eng_plate_temp": [
+            "0"
+          ],
+          "eng_plate_temp_initial_layer": [
+            "0"
+          ],
+          "filament_dev_ams_drying_heat_distortion_temperature": [
+            "0"
+          ],
+          "filament_dev_ams_drying_temperature": [
+            "0"
+          ],
+          "filament_dev_chamber_drying_bed_temperature": [
+            "0"
+          ],
+          "filament_dev_drying_cooling_temperature": [
+            "0"
+          ],
+          "filament_dev_drying_softening_temperature": [
+            "0"
+          ],
+          "filament_flush_temp": [
+            "0"
+          ],
+          "filament_flush_temp_fast": [
+            "0"
+          ],
+          "filament_pre_cooling_temperature": [
+            "0"
+          ],
+          "filament_pre_cooling_temperature_nc": [
+            "0"
+          ],
+          "filament_preheat_temperature_delta": [
+            "0"
+          ],
+          "filament_tower_interface_print_temp": [
+            "-1"
+          ],
+          "hot_plate_temp": [
+            "60"
+          ],
+          "hot_plate_temp_initial_layer": [
+            "60"
+          ],
+          "idle_temperature": [
+            "0"
+          ],
+          "nozzle_temperature": [
+            "220"
+          ],
+          "nozzle_temperature_initial_layer": [
+            "220"
+          ],
+          "nozzle_temperature_range_high": [
+            "240"
+          ],
+          "nozzle_temperature_range_low": [
+            "190"
+          ],
+          "solid_infill_rotate_template": "",
+          "sparse_infill_rotate_template": "",
+          "standby_temperature_delta": "-5",
+          "supertack_plate_temp": [
+            "45"
+          ],
+          "supertack_plate_temp_initial_layer": [
+            "45"
+          ],
+          "support_chamber_temp_control": "0",
+          "temperature_vitrification": [
+            "45"
+          ],
+          "template_custom_gcode": "",
+          "textured_cool_plate_temp": [
+            "40"
+          ],
+          "textured_cool_plate_temp_initial_layer": [
+            "40"
+          ],
+          "textured_plate_temp": [
+            "65"
+          ],
+          "textured_plate_temp_initial_layer": [
+            "65"
+          ],
+          "wait_for_temp_on_wipe_tower": "0"
+        }
+      },
+      "export_sha256": "b6674d2dc72e8b0e29e636bb01512b325c162a19451c9a3d29a956f4bbb17ef7",
+      "native_volume_types": [
+        "ModelVolumeType.ModelPart",
+        "ModelVolumeType.ModelPart"
+      ]
+    },
+    {
+      "tool": "native_history",
+      "arguments": {
+        "direction": "undo",
+        "expected_revision": "6fb819d9837393023e528b3431d3afdd618784bc4088fcc327ec8bfaf0481dc7",
+        "session_id": "c14e1b2286fa4c9b819e3e608952a783",
+        "request_id": "8ef71553dc83413a82528b30efda69c3"
+      },
+      "status": "succeeded",
+      "before_revision": "6fb819d9837393023e528b3431d3afdd618784bc4088fcc327ec8bfaf0481dc7",
+      "after_revision": "75529eee5903d84096dfea3dd43e7a183d220140a75b9241bb1f53a9d94c4f5f",
+      "completed_steps": 1
+    },
+    {
+      "tool": "native_history",
+      "arguments": {
+        "direction": "undo",
+        "expected_revision": "75529eee5903d84096dfea3dd43e7a183d220140a75b9241bb1f53a9d94c4f5f",
+        "session_id": "c14e1b2286fa4c9b819e3e608952a783",
+        "request_id": "fb7cececb1e04b93bd835c8a5702e615"
+      },
+      "status": "succeeded",
+      "before_revision": "75529eee5903d84096dfea3dd43e7a183d220140a75b9241bb1f53a9d94c4f5f",
+      "after_revision": "7deb78590ead693f5bd6f78e2cc70494fc62a239eaded3d691ba4c749f5c717b",
+      "completed_steps": 1
+    },
+    {
+      "tool": "native_text",
+      "arguments": {
+        "text": "RRS",
+        "height_mm": 8,
+        "depth_mm": 1.2,
+        "mode": "cut",
+        "backup": "/home/runner/work/RRS-ORCASLICER-MCP/RRS-ORCASLICER-MCP/host-output/isolated-host-data/orca_plugins/plugin_data/rrs_orcaslicer_bridge/rrs-mcp-bridge/exports/native/before-text-cut.3mf",
+        "destination": "/home/runner/work/RRS-ORCASLICER-MCP/RRS-ORCASLICER-MCP/host-output/isolated-host-data/orca_plugins/plugin_data/rrs_orcaslicer_bridge/rrs-mcp-bridge/exports/native/editable-text-cut.3mf",
+        "expected_revision": "7deb78590ead693f5bd6f78e2cc70494fc62a239eaded3d691ba4c749f5c717b",
+        "session_id": "c14e1b2286fa4c9b819e3e608952a783",
+        "request_id": "a990e3d919694a88b344cfe140d4b01d"
+      },
+      "status": "succeeded",
+      "before_revision": "7deb78590ead693f5bd6f78e2cc70494fc62a239eaded3d691ba4c749f5c717b",
+      "after_revision": "7bd21a3a15a06023b504dd2b5013b5fbc993a0a5bd77f0063321c433a26c9787",
+      "completed_steps": null,
+      "native_metadata": {
+        "editable_texts": [
+          {
+            "text": {
+              "text": "RRS",
+              "style_name": "NORMAL",
+              "font_descriptor": "Sans 10",
+              "font_descriptor_type": "wxFontDescriptor_Linux",
+              "line_height": "8",
+              "horizontal": "center",
+              "vertical": "middle",
+              "family": "swiss",
+              "face_name": "Sans"
+            },
+            "shapes": [
+              {
+                "scale": "3.9062500000000001e-06",
+                "depth": "1.2",
+                "transform": "1 0 0 0 1 0 0 0 1 0 0.43684768676757812 -0.58499994268640876"
+              }
+            ],
+            "part": {
+              "id": "2",
+              "subtype": "negative_part"
+            }
+          }
+        ],
+        "object_count": 1,
+        "calibration_settings": {
+          "activate_chamber_temp_control": [
+            "0"
+          ],
+          "bbl_calib_mark_logo": "1",
+          "bed_temperature_formula": "by_first_filament",
+          "calib_flowrate_topinfill_special_order": "0",
+          "chamber_minimal_temperature": [
+            "0"
+          ],
+          "chamber_temperature": [
+            "0"
+          ],
+          "cool_plate_temp": [
+            "35"
+          ],
+          "cool_plate_temp_initial_layer": [
+            "35"
+          ],
+          "eng_plate_temp": [
+            "0"
+          ],
+          "eng_plate_temp_initial_layer": [
+            "0"
+          ],
+          "filament_dev_ams_drying_heat_distortion_temperature": [
+            "0"
+          ],
+          "filament_dev_ams_drying_temperature": [
+            "0"
+          ],
+          "filament_dev_chamber_drying_bed_temperature": [
+            "0"
+          ],
+          "filament_dev_drying_cooling_temperature": [
+            "0"
+          ],
+          "filament_dev_drying_softening_temperature": [
+            "0"
+          ],
+          "filament_flush_temp": [
+            "0"
+          ],
+          "filament_flush_temp_fast": [
+            "0"
+          ],
+          "filament_pre_cooling_temperature": [
+            "0"
+          ],
+          "filament_pre_cooling_temperature_nc": [
+            "0"
+          ],
+          "filament_preheat_temperature_delta": [
+            "0"
+          ],
+          "filament_tower_interface_print_temp": [
+            "-1"
+          ],
+          "hot_plate_temp": [
+            "60"
+          ],
+          "hot_plate_temp_initial_layer": [
+            "60"
+          ],
+          "idle_temperature": [
+            "0"
+          ],
+          "nozzle_temperature": [
+            "220"
+          ],
+          "nozzle_temperature_initial_layer": [
+            "220"
+          ],
+          "nozzle_temperature_range_high": [
+            "240"
+          ],
+          "nozzle_temperature_range_low": [
+            "190"
+          ],
+          "solid_infill_rotate_template": "",
+          "sparse_infill_rotate_template": "",
+          "standby_temperature_delta": "-5",
+          "supertack_plate_temp": [
+            "45"
+          ],
+          "supertack_plate_temp_initial_layer": [
+            "45"
+          ],
+          "support_chamber_temp_control": "0",
+          "temperature_vitrification": [
+            "45"
+          ],
+          "template_custom_gcode": "",
+          "textured_cool_plate_temp": [
+            "40"
+          ],
+          "textured_cool_plate_temp_initial_layer": [
+            "40"
+          ],
+          "textured_plate_temp": [
+            "65"
+          ],
+          "textured_plate_temp_initial_layer": [
+            "65"
+          ],
+          "wait_for_temp_on_wipe_tower": "0"
+        }
+      },
+      "export_sha256": "9970e71df3610cb8b11c44caa02ffd90297d374e9335a3c7ac0f948e26988ed9",
+      "native_volume_types": [
+        "ModelVolumeType.ModelPart",
+        "ModelVolumeType.NegativeVolume"
+      ]
+    },
+    {
+      "tool": "native_history",
+      "arguments": {
+        "direction": "undo",
+        "expected_revision": "7bd21a3a15a06023b504dd2b5013b5fbc993a0a5bd77f0063321c433a26c9787",
+        "session_id": "c14e1b2286fa4c9b819e3e608952a783",
+        "request_id": "af397c614647413e8e8b81a9825ef69a"
+      },
+      "status": "succeeded",
+      "before_revision": "7bd21a3a15a06023b504dd2b5013b5fbc993a0a5bd77f0063321c433a26c9787",
+      "after_revision": "2627214060c9edc3e77d886bffd36da370ac875185aecb38f084966c31346b17",
+      "completed_steps": 1
+    },
+    {
+      "tool": "native_history",
+      "arguments": {
+        "direction": "undo",
+        "expected_revision": "2627214060c9edc3e77d886bffd36da370ac875185aecb38f084966c31346b17",
+        "session_id": "c14e1b2286fa4c9b819e3e608952a783",
+        "request_id": "fc754b130ec44e44b5b627a10a9928c6"
+      },
+      "status": "succeeded",
+      "before_revision": "2627214060c9edc3e77d886bffd36da370ac875185aecb38f084966c31346b17",
+      "after_revision": "7deb78590ead693f5bd6f78e2cc70494fc62a239eaded3d691ba4c749f5c717b",
+      "completed_steps": 1
+    },
+    {
+      "tool": "native_text",
+      "arguments": {
+        "text": "RRS",
+        "height_mm": 8,
+        "depth_mm": 1.2,
+        "mode": "modifier",
+        "backup": "/home/runner/work/RRS-ORCASLICER-MCP/RRS-ORCASLICER-MCP/host-output/isolated-host-data/orca_plugins/plugin_data/rrs_orcaslicer_bridge/rrs-mcp-bridge/exports/native/before-text-modifier.3mf",
+        "destination": "/home/runner/work/RRS-ORCASLICER-MCP/RRS-ORCASLICER-MCP/host-output/isolated-host-data/orca_plugins/plugin_data/rrs_orcaslicer_bridge/rrs-mcp-bridge/exports/native/editable-text-modifier.3mf",
+        "expected_revision": "7deb78590ead693f5bd6f78e2cc70494fc62a239eaded3d691ba4c749f5c717b",
+        "session_id": "c14e1b2286fa4c9b819e3e608952a783",
+        "request_id": "2f51aa8323c64328b47574957661affe"
+      },
+      "status": "succeeded",
+      "before_revision": "7deb78590ead693f5bd6f78e2cc70494fc62a239eaded3d691ba4c749f5c717b",
+      "after_revision": "9f3397f651508eaaf1a6200427324d2018899a7467b68c577ba1dc4f6b5542d1",
+      "completed_steps": null,
+      "native_metadata": {
+        "editable_texts": [
+          {
+            "text": {
+              "text": "RRS",
+              "style_name": "NORMAL",
+              "font_descriptor": "Sans 10",
+              "font_descriptor_type": "wxFontDescriptor_Linux",
+              "line_height": "8",
+              "horizontal": "center",
+              "vertical": "middle",
+              "family": "swiss",
+              "face_name": "Sans"
+            },
+            "shapes": [
+              {
+                "scale": "3.9062500000000001e-06",
+                "depth": "1.2",
+                "transform": "1 0 0 0 1 0 0 0 1 0 0.43684768676757812 -0.58499994268640876"
+              }
+            ],
+            "part": {
+              "id": "2",
+              "subtype": "modifier_part"
+            }
+          }
+        ],
+        "object_count": 1,
+        "calibration_settings": {
+          "activate_chamber_temp_control": [
+            "0"
+          ],
+          "bbl_calib_mark_logo": "1",
+          "bed_temperature_formula": "by_first_filament",
+          "calib_flowrate_topinfill_special_order": "0",
+          "chamber_minimal_temperature": [
+            "0"
+          ],
+          "chamber_temperature": [
+            "0"
+          ],
+          "cool_plate_temp": [
+            "35"
+          ],
+          "cool_plate_temp_initial_layer": [
+            "35"
+          ],
+          "eng_plate_temp": [
+            "0"
+          ],
+          "eng_plate_temp_initial_layer": [
+            "0"
+          ],
+          "filament_dev_ams_drying_heat_distortion_temperature": [
+            "0"
+          ],
+          "filament_dev_ams_drying_temperature": [
+            "0"
+          ],
+          "filament_dev_chamber_drying_bed_temperature": [
+            "0"
+          ],
+          "filament_dev_drying_cooling_temperature": [
+            "0"
+          ],
+          "filament_dev_drying_softening_temperature": [
+            "0"
+          ],
+          "filament_flush_temp": [
+            "0"
+          ],
+          "filament_flush_temp_fast": [
+            "0"
+          ],
+          "filament_pre_cooling_temperature": [
+            "0"
+          ],
+          "filament_pre_cooling_temperature_nc": [
+            "0"
+          ],
+          "filament_preheat_temperature_delta": [
+            "0"
+          ],
+          "filament_tower_interface_print_temp": [
+            "-1"
+          ],
+          "hot_plate_temp": [
+            "60"
+          ],
+          "hot_plate_temp_initial_layer": [
+            "60"
+          ],
+          "idle_temperature": [
+            "0"
+          ],
+          "nozzle_temperature": [
+            "220"
+          ],
+          "nozzle_temperature_initial_layer": [
+            "220"
+          ],
+          "nozzle_temperature_range_high": [
+            "240"
+          ],
+          "nozzle_temperature_range_low": [
+            "190"
+          ],
+          "solid_infill_rotate_template": "",
+          "sparse_infill_rotate_template": "",
+          "standby_temperature_delta": "-5",
+          "supertack_plate_temp": [
+            "45"
+          ],
+          "supertack_plate_temp_initial_layer": [
+            "45"
+          ],
+          "support_chamber_temp_control": "0",
+          "temperature_vitrification": [
+            "45"
+          ],
+          "template_custom_gcode": "",
+          "textured_cool_plate_temp": [
+            "40"
+          ],
+          "textured_cool_plate_temp_initial_layer": [
+            "40"
+          ],
+          "textured_plate_temp": [
+            "65"
+          ],
+          "textured_plate_temp_initial_layer": [
+            "65"
+          ],
+          "wait_for_temp_on_wipe_tower": "0"
+        }
+      },
+      "export_sha256": "2397e3a6fd09b727d950f23a1eccf137c2e69486cf2e8e6ac37a96949718b4d6",
+      "native_volume_types": [
+        "ModelVolumeType.ModelPart",
+        "ModelVolumeType.ParameterModifier"
+      ]
+    },
+    {
+      "tool": "native_history",
+      "arguments": {
+        "direction": "undo",
+        "expected_revision": "9f3397f651508eaaf1a6200427324d2018899a7467b68c577ba1dc4f6b5542d1",
+        "session_id": "c14e1b2286fa4c9b819e3e608952a783",
+        "request_id": "fc169c881f3c4cf899f265b5dc3a1530"
+      },
+      "status": "succeeded",
+      "before_revision": "9f3397f651508eaaf1a6200427324d2018899a7467b68c577ba1dc4f6b5542d1",
+      "after_revision": "9702cda6655825ff070e5f323056895043327f57d4d34f8c5c32046983966275",
+      "completed_steps": 1
+    },
+    {
+      "tool": "native_history",
+      "arguments": {
+        "direction": "undo",
+        "expected_revision": "9702cda6655825ff070e5f323056895043327f57d4d34f8c5c32046983966275",
+        "session_id": "c14e1b2286fa4c9b819e3e608952a783",
+        "request_id": "4ca5f2c77f4347258a8c2834f72b4fd1"
+      },
+      "status": "succeeded",
+      "before_revision": "9702cda6655825ff070e5f323056895043327f57d4d34f8c5c32046983966275",
+      "after_revision": "7deb78590ead693f5bd6f78e2cc70494fc62a239eaded3d691ba4c749f5c717b",
+      "completed_steps": 1
+    }
+  ]
+}

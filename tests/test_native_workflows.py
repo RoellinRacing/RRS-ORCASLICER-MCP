@@ -208,7 +208,17 @@ def test_bridge_window_search_intersects_title_and_pid(tmp_path, monkeypatch):
 
 @pytest.mark.parametrize(
     "visible,expected",
-    [("220°C", 220), ("220℃", 220), ("30Hz", 30), ("5mm3/s", 5), ("5mm³/s", 5), ("1.2mm", 1.2)],
+    [
+        ("220°C", 220),
+        ("220℃", 220),
+        ("30Hz", 30),
+        ("5mm3/s", 5),
+        ("5mm³/s", 5),
+        ("1.2mm", 1.2),
+        ("(1.00", 1),
+        ("90.00|", 90),
+        ("1.20]", 1.2),
+    ],
 )
 def test_native_numeric_units_do_not_change_value(tmp_path, visible, expected):
     from rrs_orcaslicer_mcp.native_ui import tokens
@@ -278,3 +288,27 @@ def test_native_generator_confirmation_rejects_unexpected_dialog(tmp_path):
     with pytest.raises(ValueError, match="not active"):
         ui.dialog_button("OK", "Temperature calibration")
     assert actions == []
+
+
+def test_native_button_selector_ignores_matching_body_text(tmp_path):
+    from rrs_orcaslicer_mcp.native_ui import tokens
+
+    def word(y):
+        return {
+            "text": "Transfer",
+            "tokens": tokens("Transfer"),
+            "x": 200,
+            "y": y,
+            "w": 60,
+            "h": 12,
+        }
+
+    clicked = []
+    ui = NativeControls(None, tmp_path)
+    ui.window_title = lambda: "Creating a new project: unsaved changes"
+    ui.bounds = lambda: (0, 0, 600, 500)
+    ui.main_bounds = (0, 0, 1200, 800)
+    ui.words = lambda region=None: [word(100), word(455)]
+    ui.point_click = lambda box: clicked.append(box)
+    ui.dialog_button("Transfer", "Creating a new project: unsaved changes")
+    assert len(clicked) == 1 and clicked[0]["y"] == 455

@@ -1,7 +1,7 @@
 {
   "status": "succeeded",
   "scope": "Read-only replay of saved actual native screenshots; no input or native edit occurred",
-  "driver_sha256": "fb11e03d788093aae88fa9e77836bff7337902acbb6870d07e6c951dfe95f652",
+  "driver_sha256": "9b973fa9dea65b2e44fd6737a30de3916ed010e97f9aa15ba2701a037d2af2a3",
   "observations": [
     {
       "selector": "button",
@@ -57,6 +57,40 @@
         }
       ],
       "source_image_sha256": "86695ad33aeb26202a488149f3ea180f1fac99e795524d06bdbbc74d29f04703"
+    },
+    {
+      "selector": "transfer",
+      "actions_replaced_by_recording": [
+        {
+          "observed_box": {
+            "x": 646,
+            "y": 734,
+            "w": 100,
+            "h": 32
+          }
+        }
+      ],
+      "source_image_sha256": "0e9e500de83712d48dad1e272dfc4bb7668d9bbd41a1418472c74672791883f9"
+    },
+    {
+      "selector": "depth_border",
+      "actions_replaced_by_recording": [
+        {
+          "observed_box": {
+            "text": "(1.00",
+            "tokens": [
+              "1",
+              "00"
+            ],
+            "x": 860.0,
+            "y": 410.0,
+            "w": 63.5,
+            "h": 24.0
+          },
+          "observed_numeric": 1.0
+        }
+      ],
+      "source_image_sha256": "b76bd67ba9fbdb15b0c03e0a9dd6f06b25277cdf480223f97c27481fe6aac14b"
     }
   ]
 }
