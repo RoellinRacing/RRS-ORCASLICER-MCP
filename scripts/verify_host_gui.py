@@ -166,7 +166,7 @@ def open_bridge(process):
         (x, y)
         for y in range(image.height)
         for x in range(image.width)
-        if all(abs(a - b) <= 5 for a, b in zip(image.getpixel((x, y)), (55, 200, 113)))
+        if all(abs(a - b) <= 5 for a, b in zip(image.getpixel((x, y)), (55, 200, 113), strict=True))
     ]
     if len(pixels) < 8:
         raise RuntimeError("The official Script Run icon was not visible")
