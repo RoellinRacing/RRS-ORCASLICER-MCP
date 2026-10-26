@@ -142,3 +142,8 @@ Eine vorhandene Version wird übernommen; fehlt sie im Herstellerprofil, muss de
 Aufrufer `profile_version` angeben. Der Server erfindet keine Hostversion. Ungültige
 Metadaten erzeugen keine Datei. Dies behebt einen im echten GUI-Test gefundenen
 Unterschied zwischen akzeptierten CLI-Einstellungen und importierbaren Profilen.
+
+Datei-Recovery führt keine native Mutation erneut aus. Kurz blockierte atomare
+Dateiwechsel unter Windows werden begrenzt wiederholt. Scheitert das Speichern der
+Erfolgsquittung nach einer angewendeten Änderung, bleibt das Ergebnis unklar und
+das gestartete Journal erhalten; es wird keine falsche Fehlerquittung erzeugt.

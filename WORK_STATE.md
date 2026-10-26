@@ -115,3 +115,10 @@ an icon-only control, and OCR misreads the custom File title. Use the active tes
 window's observed More position, search by the unique capability name (official
 search auto-expands), then require one small Run-color region before clicking.
 These coordinates/colors are disposable CI-driver details, not product API logic.
+
+Windows 3.13 CI exposed transient NTFS replacement denial while the client reads
+a journal. Added bounded retries for only Win32 sharing/access errors; native
+operations are never retried. Review also separated native failures from receipt
+persistence: an applied commit with a failed final write keeps the started journal
+and indeterminate outcome. Two regression tests added; 42 local tests pass.
+Generated standalone plugin updated from reviewed modules.

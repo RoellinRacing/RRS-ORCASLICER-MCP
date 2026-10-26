@@ -197,10 +197,13 @@ class HostService:
                 if worker
                 else self.read_or_export(request["operation"], request["params"])
             )
-            self.receipt(request, "succeeded", result=data)
         except Exception as exc:
-            # Preserve a receipt even when a host API or native validation fails.
+            # Native execution failed; persistence failures remain indeterminate.
             self.receipt(request, "failed", error=str(exc), error_type=type(exc).__name__)
+        else:
+            # Do not relabel an applied native effect as failed if saving its
+            # success receipt fails. The durable started journal remains honest.
+            self.receipt(request, "succeeded", result=data)
 
     def collection(self, kind: str):
         attribute = {"process": "prints", "printer": "printers", "filament": "filaments"}.get(kind)

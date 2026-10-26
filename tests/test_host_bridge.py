@@ -340,3 +340,46 @@ def test_standalone_plugin_registers_without_external_dependencies(monkeypatch):
     values = runpy.run_path(str(path))
     values["RRSBridgePackage"]().register_capabilities()
     assert len(registered) == 1 and registered[0]().get_name() == "RRS MCP local bridge"
+
+
+def test_windows_transient_replace_retries_only_persistence(tmp_path, monkeypatch):
+    from rrs_orcaslicer_mcp.host_bridge import protocol
+
+    original = protocol.os.replace
+    attempts = []
+
+    def busy_once(source, target):
+        attempts.append(1)
+        if len(attempts) == 1:
+            error = PermissionError("Concurrent Windows reader")
+            error.winerror = 5
+            raise error
+        return original(source, target)
+
+    monkeypatch.setattr(protocol.os, "replace", busy_once)
+    protocol.bridge_write(tmp_path / "receipt.json", {"status": "succeeded"})
+    assert protocol.bridge_read(tmp_path / "receipt.json") == {"status": "succeeded"}
+    assert len(attempts) == 2
+
+
+def test_receipt_failure_after_commit_keeps_outcome_indeterminate(host, monkeypatch):
+    service, _, values, stats = host
+    request = {"request_id": uuid.uuid4().hex, "params": params(), "fingerprint": "test"}
+    original = service.receipt
+
+    def unavailable(request, status, **fields):
+        if status == "succeeded":
+            raise OSError("Disk unavailable after native effect")
+        original(request, status, **fields)
+
+    monkeypatch.setattr(service, "receipt", unavailable)
+    # The fixture requires staged changes to run on its worker thread.
+    import concurrent.futures
+
+    with concurrent.futures.ThreadPoolExecutor() as worker:
+        with pytest.raises(OSError, match="Disk unavailable"):
+            worker.submit(service.execute, request, True).result()
+    assert stats["commits"] == 1 and values["wall_loops"] == "4"
+    journal = bridge_read(service.folder / "journal" / f"{request['request_id']}.json")
+    assert journal["status"] == "started"
+    assert not (service.folder / "responses" / f"{request['request_id']}.json").exists()

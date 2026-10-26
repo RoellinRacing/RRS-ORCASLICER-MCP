@@ -30,6 +30,9 @@ automatically by this project.
   mismatches do not get silently converted to success.
 - Mailbox processing is bounded per GUI tick. Bad/processed files cannot keep later
   valid requests stuck behind the first page of the directory.
+- Transient Windows sharing locks retry only atomic file replacement. A failed
+  final receipt write after a native effect retains its indeterminate started
+  journal; it never relabels an applied commit as a native failure.
 - A timeout is indeterminate. The journal is written before a native call and a
   missing final receipt never authorizes an automatic repeat under a new ID.
 - The generated plugin is checked against its source modules. It imports only the

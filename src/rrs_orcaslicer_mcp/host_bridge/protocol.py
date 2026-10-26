@@ -5,6 +5,7 @@ import json
 import os
 import re
 import tempfile
+from time import sleep as bridge_sleep
 from pathlib import Path
 
 BRIDGE_PROTOCOL = 1
@@ -46,7 +47,16 @@ def bridge_write(path: Path, value: dict, limit: int = MAX_RESPONSE_BYTES) -> No
             stream.write(raw)
             stream.flush()
             os.fsync(stream.fileno())
-        os.replace(temporary, path)
+        # NTFS can deny replacement briefly while a concurrent reader or scanner
+        # holds the destination. Retry persistence only, never the native action.
+        for attempt in range(10):
+            try:
+                os.replace(temporary, path)
+                break
+            except PermissionError as exc:
+                if getattr(exc, "winerror", None) not in (5, 32, 33) or attempt == 9:
+                    raise
+                bridge_sleep(0.01 * (attempt + 1))
     finally:
         Path(temporary).unlink(missing_ok=True)
 

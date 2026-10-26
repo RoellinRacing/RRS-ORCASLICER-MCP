@@ -104,9 +104,10 @@ SHA256SUMS sowie auf Archivintegrität geprüft.
 
 ## Prüfungen für 0.3.0
 
-40 Tests bestanden lokal und mit separat installiertem Wheel, einschliesslich
+42 Tests bestanden lokal und mit separat installiertem Wheel, einschliesslich
 Protokollidentitäten, Wiederholungsschutz, Timeout-Recovery, GUI-/Worker-Zuordnung,
-Filamentslots, Exportpfaden und nativen Benutzerprofil-Metadaten.
+Filamentslots, Exportpfaden, nativen Benutzerprofil-Metadaten, Windows-Dateisperren
+und dem Quittungsausfall nach einer angewendeten Änderung.
 [Wheel-Prüfung](evidence/wheel-tests-0.3.0.txt).
 
 Die Releasepipeline verlangt zusätzlich einen erfolgreichen Lauf des unveränderten
