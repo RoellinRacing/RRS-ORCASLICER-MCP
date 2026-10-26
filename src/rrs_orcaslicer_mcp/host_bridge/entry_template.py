@@ -14,6 +14,7 @@ Source, architecture and tests: https://github.com/RoellinRacing/RRS-ORCASLICER-
 AGPL-3.0-or-later. No network listener, arbitrary eval or printer-control endpoint.
 Start with Plugins -> Run. Closing its panel stops new requests.
 """
+# SPDX-License-Identifier: AGPL-3.0-or-later
 
 import asyncio
 import html
@@ -76,11 +77,15 @@ class RRSHostBridge(orca.script.ScriptPluginCapabilityBase):
                 await asyncio.sleep(0.1)
             return orca.ExecutionResult.success("RRS MCP bridge stopped")
         finally:
-            if self.service is not None:
-                self.service.close()
-            if self.window is not None and self.window.is_open():
-                self.window.close()
-            self.running = False
+            try:
+                if self.service is not None:
+                    self.service.close()
+            finally:
+                try:
+                    if self.window is not None and self.window.is_open():
+                        self.window.close()
+                finally:
+                    self.running = False
 
     def on_cancelled(self):
         self.stopping = True

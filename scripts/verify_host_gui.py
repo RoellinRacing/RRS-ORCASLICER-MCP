@@ -193,6 +193,22 @@ async def verify(client):
     assert invalid["status"] == "failed", invalid
     still = await call("preset.read", {"kind": "process", "keys": ["wall_loops"]})
     assert still["result"]["values"]["wall_loops"] == changed
+    category_checks = {}
+    for category, key, value, slot in (
+        ("printer", "machine_max_speed_z", "13", None),
+        ("filament", "filament_flow_ratio", "0.98", 1),
+    ):
+        active = await call("preset.read", {"kind": category, "keys": [key]})
+        change = {
+            "kind": category,
+            "preset_name": active["result"]["name"],
+            "changes": {key: value},
+            "slot": slot,
+        }
+        outcome = await call("preset.update", change, mutation=True)
+        checked = await call("preset.read", {"kind": category, "keys": [key]})
+        assert checked["result"]["values"][key] == value, checked
+        category_checks[category] = {"setting": key, "value": value, "result": outcome["result"]}
     destination = client.directory / "exports/live-project.3mf"
     exported = await call("project.export", {"destination": str(destination)}, mutation=True)
     assert destination.is_file() and destination.stat().st_size > 1000
@@ -242,6 +258,7 @@ async def verify(client):
         "real_embedded_host": True,
         "stdio_mcp_verified": True,
         "mcp_updated_wall_loops": "6",
+        "additional_preset_categories": category_checks,
         "app": snapshot["result"]["app"],
         "object_count": model["result"]["total"],
         "preset_name": name,

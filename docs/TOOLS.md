@@ -84,3 +84,16 @@ Verbindungsabbruch. Ein bewusst neuer Versuch nach einem fehlgeschlagenen oder
 abgebrochenen Job braucht einen neuen Schlüssel. Der Status eines abgeschlossenen
 Jobs ist kein Nachweis dafür, dass jemand seine Ausgabedatei nicht später gelöscht
 hat; die Dateien können über `workspace_list` und `gcode_analyze` überprüft werden.
+
+## Offizielle Host-Brücke (0.3.0)
+
+Die zusätzlichen neun Werkzeuge sind in [HOST_BRIDGE.md](HOST_BRIDGE.md) beschrieben:
+`host_bridge_status`, `host_plugin_export`, `host_snapshot`, `host_model_read`,
+`host_presets_list`, `host_preset_read`, `host_preset_update`, `host_project_export`
+und `host_request_status`.
+
+Vor Mutationen `host_bridge_status` lesen. Mit der zurückgegebenen `session_id`
+und einer eigenen UUID-Hex-ID (`request_id`, 32 kleine Hex-Zeichen) beauftragen.
+Bei `outcome_unknown` dieselben IDs über `host_request_status` prüfen; keinen
+neuen Änderungsauftrag als vermeintlich sicheren Retry erfinden. Erfolg liegt
+nur bei `status: succeeded` vor. Native Dialoge können eine lokale Antwort benötigen.

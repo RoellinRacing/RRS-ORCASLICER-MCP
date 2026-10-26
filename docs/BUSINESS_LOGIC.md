@@ -106,3 +106,31 @@ und ist kein Sicherheitsurteil über einen realen Druck.
 Die Coverage-Ausgabe unterscheidet Funktionsfamilien statt eine erfundene
 Vollständigkeitsquote auszugeben. Offizielle experimentelle Host-APIs gelten erst
 nach echter Integration und Tests als unterstützt; ihre Existenz allein genügt nicht.
+
+## Offizielle Host-Brücke
+
+Die externe MCP-Anwendung bleibt eigenständig; ein optionales offizielles Script-
+Plugin verbindet sie mit dem laufenden Orca. Das ist nötig, weil Dateibearbeitung
+keine ungespeicherten Live-Presets oder In-Memory-Modelle erfasst und neue Orca-Builds
+Systemprofile intern anders speichern können. Die Brücke nutzt die offiziellen
+APIs, statt deren Cacheformat oder private C++-Details nachzubauen.
+
+Modell-/Presetabfragen und Projektkopien laufen in GUI-Callbacks. Mutationen
+laufen auf dem Script-Worker über `begin_update`/`set`/`commit`. Dadurch bleiben
+Orcas Validierung und normale Dialoge zuständig. Ein Commit speichert das Preset
+nicht automatisch. Filamentslots können dasselbe Preset teilen; das wird im
+Ergebnis sichtbar gemacht. Native Handles werden nicht über Threads oder Requests
+hinweg gespeichert.
+
+Der lokale Dateitransport öffnet keinen Port und benötigt keine zusätzlichen
+Python-Pakete im eingebetteten Interpreter. Er beschränkt sich auf benannte
+Operationen. Sitzungs- und Request-ID, Token, Fingerprint, Ablaufzeit und dauerhafte
+Quittungen verhindern unbeabsichtigte Wiederholung. Nach einem Timeout gilt der
+Ausgang als unklar, bis Quittung oder Anwendung geprüft wurden. Ein Absturz zwischen
+nativem Effekt und Quittung bleibt technisch unentscheidbar; dafür gibt es keine
+falsche Exactly-once-Garantie. Gestartete native Dialogentscheidungen werden nicht
+von einem Client-Timeout rückgängig gemacht.
+
+Details, Betrieb, Wiederaufnahme und Threadregeln stehen in HOST_BRIDGE.md;
+MAINTAINER_REVIEW.md beschreibt die geprüften Codegrenzen und verbleibenden Risiken
+für die spätere sachliche Vorstellung beim OrcaSlicer-Team.

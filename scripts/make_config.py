@@ -13,6 +13,9 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--binary")
 parser.add_argument("--root", action="append", default=[])
 parser.add_argument("--desktop", action="store_true")
+parser.add_argument(
+    "--bridge-dir", type=Path, help="Private bridge path displayed by the official-host plugin"
+)
 parser.add_argument("--output", type=Path, default=Path("mcp-config.json"))
 args = parser.parse_args()
 binary = args.binary or find_binary()
@@ -47,6 +50,14 @@ config = {
         }
     }
 }
+if args.bridge_dir:
+    bridge_dir = args.bridge_dir.expanduser().resolve()
+    config["mcpServers"]["rrs-orcaslicer"]["env"]["ORCA_MCP_BRIDGE"] = str(bridge_dir)
+    if bridge_dir not in roots:
+        roots.append(bridge_dir)
+        config["mcpServers"]["rrs-orcaslicer"]["env"]["ORCA_MCP_ROOTS"] = os.pathsep.join(
+            map(str, roots)
+        )
 atomic_json(args.output.resolve(), config)
 print(f"Saved {args.output.resolve()}")
 print(json.dumps(config, ensure_ascii=True, indent=2))

@@ -69,3 +69,11 @@ No reverse engineering or modification of the host's cache format is needed.
 Additional review fixes: invalid mailbox entries cannot starve valid requests;
 request expiry must be finite/bounded; symlink checks precede directory creation;
 MCP project-export retries can retrieve existing receipts. Local tests extended.
+
+Review/packaging checkpoint: 39 tests pass. Added filament slot/shared-preset tests,
+standalone artifact consistency checks and maintainer-facing protocol/business notes.
+Host test now also exercises the public stdio MCP wrappers and all preset categories.
+Native run 40283792526 reached GUI startup, but its screenshot helper did not detect
+Xvfb as X11. Set XDG_SESSION_TYPE=x11 in the disposable test job. This is a test-
+fixture issue, not evidence of a passing embedded-host integration.
+Version 0.3.0 prepared; package release remains gated on the native host job.

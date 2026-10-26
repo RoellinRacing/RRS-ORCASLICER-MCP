@@ -1,6 +1,7 @@
 import asyncio
 import json
 import runpy
+from importlib.resources import files
 import sys
 import threading
 import time
@@ -74,6 +75,20 @@ def host(tmp_path):
             on_gui(None)
             Path(path).write_bytes(b"test project")
 
+    def begin_filament(slot, name):
+        assert slot == 1
+        transaction = begin_update(name)
+        commit = transaction.commit
+
+        def shared_commit():
+            outcome = commit()
+            outcome.category = "filament"
+            outcome.shared_slots = [1, 2]
+            return outcome
+
+        transaction.commit = shared_commit
+        return transaction
+
     editor = types.SimpleNamespace(begin_update=begin_update)
     bundle = types.SimpleNamespace(prints=collection, printers=collection, filaments=collection)
     module = types.SimpleNamespace(
@@ -81,7 +96,11 @@ def host(tmp_path):
             Plater=Plater,
             plater=lambda: Plater(),
             preset_bundle=lambda: on_gui(bundle),
-            preset=types.SimpleNamespace(process=editor, printer=editor, filament=editor),
+            preset=types.SimpleNamespace(
+                process=editor,
+                printer=editor,
+                filament=types.SimpleNamespace(begin_update=begin_filament),
+            ),
         )
     )
     service = HostService(module, tmp_path / "bridge", [tmp_path / "exports"])
@@ -162,6 +181,34 @@ async def test_mutations_require_session_and_explicit_request_identity(host):
             "preset.update", {}, session_id=uuid.uuid4().hex, request_id=uuid.uuid4().hex
         )
     assert not (service.folder / "requests").exists()
+
+
+async def test_filament_transaction_reports_shared_slots(host):
+    service, client, _, _ = host
+    reply = await exchange(
+        service,
+        client,
+        "preset.update",
+        {**params(), "kind": "filament", "slot": 1},
+        session_id=service.session_id,
+        request_id=uuid.uuid4().hex,
+    )
+    assert reply["status"] == "succeeded"
+    assert reply["result"]["category"] == "filament"
+    assert reply["result"]["shared_slots"] == [1, 2]
+
+
+async def test_filament_transaction_requires_a_slot(host):
+    service, client, _, stats = host
+    reply = await exchange(
+        service,
+        client,
+        "preset.update",
+        {**params(), "kind": "filament"},
+        session_id=service.session_id,
+        request_id=uuid.uuid4().hex,
+    )
+    assert reply["status"] == "failed" and stats["commits"] == 0
 
 
 async def test_export_is_bounded_and_never_overwrites(host, tmp_path):
@@ -289,7 +336,7 @@ def test_standalone_plugin_registers_without_external_dependencies(monkeypatch):
     module.plugin = lambda cls: cls
     module.register_capability = registered.append
     monkeypatch.setitem(sys.modules, "orca", module)
-    path = Path(__file__).parents[1] / "src/rrs_orcaslicer_mcp/data/rrs_orcaslicer_bridge.py"
+    path = files("rrs_orcaslicer_mcp").joinpath("data/rrs_orcaslicer_bridge.py")
     values = runpy.run_path(str(path))
     values["RRSBridgePackage"]().register_capabilities()
     assert len(registered) == 1 and registered[0]().get_name() == "RRS MCP local bridge"

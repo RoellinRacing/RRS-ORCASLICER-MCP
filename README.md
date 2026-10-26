@@ -5,6 +5,25 @@ der Server läuft daneben auf demselben Computer. Windows, macOS und Linux werde
 auf Python-Ebene unterstützt. Der echte Slicing-Nachweis dieser Veröffentlichung
 wurde mit der offiziellen **Linux-Version 2.4.2** durchgeführt.
 
+## Neu in 0.3.0: offizielles Host-Plugin
+
+39 MCP-Werkzeuge. Das optionale `rrs_orcaslicer_bridge.py` verbindet den externen
+Server über Orcas offizielles Python-Plugin-System mit der laufenden Anwendung:
+Live-Presets lesen/ändern, Modellinformationen lesen und ungespeicherte Projekte
+als neue 3MF-Kopie exportieren. Presetänderungen gehen durch Orcas native
+Transaktionen und bleiben bis zum normalen Speichern ungespeichert.
+
+Das Plugin wird separat installiert und über **Plugins > Run** gestartet. Der
+Server bleibt eigenständig; ältere Orca-Versionen können die bisherigen CLI-/Datei-
+Werkzeuge weiter verwenden. Das eingebettete Plugin braucht eine kompatible
+2.5-Entwicklungsversion. Die Anzeige `host_bridge_status` meldet die verfügbare API.
+Eine vollständige Steuerung von Bemalung, Kalibrierung oder Geräten wird dadurch
+nicht behauptet.
+
+[Installation und Protokoll](docs/HOST_BRIDGE.md) ·
+[Code-/Businesslogik-Prüfung für Maintainer](docs/MAINTAINER_REVIEW.md) ·
+[Funktionsabdeckung](docs/FEATURE_COVERAGE.md)
+
 ## Neu in 0.2.0
 
 30 MCP-Werkzeuge: direkte Objekt-/Teil-/Platteneinstellungen, Profilvergleich und
