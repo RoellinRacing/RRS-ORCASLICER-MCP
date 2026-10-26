@@ -1,0 +1,636 @@
+{
+  "source_commit": "2dc67584fd042c2d0c811dadc4a7abbf4ab30dff",
+  "run": 40368784963,
+  "status": "independent_sections_succeeded",
+  "combined_acceptance": "pending",
+  "sections": [
+    {
+      "name": "real-host-plugin-evidence-flow_ratio",
+      "artifact_id": 12672845150,
+      "status": "succeeded",
+      "operations": 1,
+      "receipt_sha256": "204fa51de3f4c85390bb084d0191fe7dc9b147f379e22a3c7a3a12695838d60a",
+      "app": {
+        "app_config_version": "2.5.0",
+        "build": "0b4e7e9e",
+        "is_bambu_signed_in": false,
+        "is_signed_in": false,
+        "language": "en_US",
+        "mode": "editor",
+        "network_plugin_error": "",
+        "network_plugin_version": "",
+        "stealth_mode": true,
+        "version": "2.5.0-dev"
+      },
+      "text_modes": [],
+      "native_generators": [
+        "flow_ratio"
+      ],
+      "operation_results": [
+        {
+          "tool": "native_calibration",
+          "status": "succeeded",
+          "phase": "verified_native_result",
+          "parameters": {
+            "kind": "flow_ratio",
+            "values": {
+              "test": "pass_1"
+            },
+            "replace_scene": true
+          },
+          "native_parameter_readback": {},
+          "object_count": 9
+        }
+      ]
+    },
+    {
+      "name": "real-host-plugin-evidence-text",
+      "artifact_id": 12672645623,
+      "status": "succeeded",
+      "operations": 9,
+      "receipt_sha256": "1c443cd1942baaf88c59c9be09b5b63c5abade9cc15abb7c3d0dc6a7106bd8cb",
+      "app": {
+        "app_config_version": "2.5.0",
+        "build": "0b4e7e9e",
+        "is_bambu_signed_in": false,
+        "is_signed_in": false,
+        "language": "en_US",
+        "mode": "editor",
+        "network_plugin_error": "",
+        "network_plugin_version": "",
+        "stealth_mode": true,
+        "version": "2.5.0-dev"
+      },
+      "text_modes": [
+        "join",
+        "cut",
+        "modifier"
+      ],
+      "native_generators": [],
+      "operation_results": [
+        {
+          "tool": "native_text",
+          "status": "succeeded",
+          "phase": "verified_native_result",
+          "parameters": {
+            "text": "RRS",
+            "height_mm": 8,
+            "depth_mm": 1.2,
+            "mode": "join"
+          },
+          "native_parameter_readback": null,
+          "object_count": 1
+        },
+        {
+          "tool": "native_history",
+          "status": "succeeded",
+          "phase": "verified_native_result",
+          "parameters": {
+            "direction": "undo",
+            "steps": 1
+          },
+          "native_parameter_readback": null,
+          "object_count": null
+        },
+        {
+          "tool": "native_history",
+          "status": "succeeded",
+          "phase": "verified_native_result",
+          "parameters": {
+            "direction": "undo",
+            "steps": 1
+          },
+          "native_parameter_readback": null,
+          "object_count": null
+        },
+        {
+          "tool": "native_text",
+          "status": "succeeded",
+          "phase": "verified_native_result",
+          "parameters": {
+            "text": "RRS",
+            "height_mm": 8,
+            "depth_mm": 1.2,
+            "mode": "cut"
+          },
+          "native_parameter_readback": null,
+          "object_count": 1
+        },
+        {
+          "tool": "native_history",
+          "status": "succeeded",
+          "phase": "verified_native_result",
+          "parameters": {
+            "direction": "undo",
+            "steps": 1
+          },
+          "native_parameter_readback": null,
+          "object_count": null
+        },
+        {
+          "tool": "native_history",
+          "status": "succeeded",
+          "phase": "verified_native_result",
+          "parameters": {
+            "direction": "undo",
+            "steps": 1
+          },
+          "native_parameter_readback": null,
+          "object_count": null
+        },
+        {
+          "tool": "native_text",
+          "status": "succeeded",
+          "phase": "verified_native_result",
+          "parameters": {
+            "text": "RRS",
+            "height_mm": 8,
+            "depth_mm": 1.2,
+            "mode": "modifier"
+          },
+          "native_parameter_readback": null,
+          "object_count": 1
+        },
+        {
+          "tool": "native_history",
+          "status": "succeeded",
+          "phase": "verified_native_result",
+          "parameters": {
+            "direction": "undo",
+            "steps": 1
+          },
+          "native_parameter_readback": null,
+          "object_count": null
+        },
+        {
+          "tool": "native_history",
+          "status": "succeeded",
+          "phase": "verified_native_result",
+          "parameters": {
+            "direction": "undo",
+            "steps": 1
+          },
+          "native_parameter_readback": null,
+          "object_count": null
+        }
+      ]
+    },
+    {
+      "name": "real-host-plugin-evidence-cornering",
+      "artifact_id": 12672510580,
+      "status": "succeeded",
+      "operations": 1,
+      "receipt_sha256": "2b3ec7d1623af71a079121d2096fc924a07ae6a5b53a4bf0c7e4a437f9429aba",
+      "app": {
+        "app_config_version": "2.5.0",
+        "build": "0b4e7e9e",
+        "is_bambu_signed_in": false,
+        "is_signed_in": false,
+        "language": "en_US",
+        "mode": "editor",
+        "network_plugin_error": "",
+        "network_plugin_version": "",
+        "stealth_mode": true,
+        "version": "2.5.0-dev"
+      },
+      "text_modes": [],
+      "native_generators": [
+        "cornering"
+      ],
+      "operation_results": [
+        {
+          "tool": "native_calibration",
+          "status": "succeeded",
+          "phase": "verified_native_result",
+          "parameters": {
+            "kind": "cornering",
+            "values": {
+              "start": 1,
+              "end": 5
+            },
+            "replace_scene": true
+          },
+          "native_parameter_readback": {
+            "start": {
+              "before": 1,
+              "requested": 1,
+              "observed": 1
+            },
+            "end": {
+              "before": 15,
+              "requested": 5,
+              "observed": 5
+            }
+          },
+          "object_count": 1
+        }
+      ]
+    },
+    {
+      "name": "real-host-plugin-evidence-pressure_advance",
+      "artifact_id": 12672440380,
+      "status": "succeeded",
+      "operations": 1,
+      "receipt_sha256": "85889395a1179d781737d21c8f4ba438e8168b99f8f9d07df4d4d61a9b1fab42",
+      "app": {
+        "app_config_version": "2.5.0",
+        "build": "0b4e7e9e",
+        "is_bambu_signed_in": false,
+        "is_signed_in": false,
+        "language": "en_US",
+        "mode": "editor",
+        "network_plugin_error": "",
+        "network_plugin_version": "",
+        "stealth_mode": true,
+        "version": "2.5.0-dev"
+      },
+      "text_modes": [],
+      "native_generators": [
+        "pressure_advance"
+      ],
+      "operation_results": [
+        {
+          "tool": "native_calibration",
+          "status": "succeeded",
+          "phase": "verified_native_result",
+          "parameters": {
+            "kind": "pressure_advance",
+            "values": {
+              "start": 0,
+              "end": 0.02,
+              "step": 0.005,
+              "method": "tower"
+            },
+            "replace_scene": true
+          },
+          "native_parameter_readback": {
+            "start": {
+              "before": 0,
+              "requested": 0,
+              "observed": 0
+            },
+            "end": {
+              "before": 0.1,
+              "requested": 0.02,
+              "observed": 0.02
+            },
+            "step": {
+              "before": 0.002,
+              "requested": 0.005,
+              "observed": 0.005
+            }
+          },
+          "object_count": 1
+        }
+      ]
+    },
+    {
+      "name": "real-host-plugin-evidence-input_shaping_damping",
+      "artifact_id": 12671832028,
+      "status": "succeeded",
+      "operations": 1,
+      "receipt_sha256": "ee810d3a61a2fb069de053009cadb7e838863b20a740095c3fc5d49b29bb6d5e",
+      "app": {
+        "app_config_version": "2.5.0",
+        "build": "0b4e7e9e",
+        "is_bambu_signed_in": false,
+        "is_signed_in": false,
+        "language": "en_US",
+        "mode": "editor",
+        "network_plugin_error": "",
+        "network_plugin_version": "",
+        "stealth_mode": true,
+        "version": "2.5.0-dev"
+      },
+      "text_modes": [],
+      "native_generators": [
+        "input_shaping_damping"
+      ],
+      "operation_results": [
+        {
+          "tool": "native_calibration",
+          "status": "succeeded",
+          "phase": "verified_native_result",
+          "parameters": {
+            "kind": "input_shaping_damping",
+            "values": {
+              "freq_x": 30,
+              "freq_y": 30,
+              "start": 0,
+              "end": 0.2
+            },
+            "replace_scene": true
+          },
+          "native_parameter_readback": {
+            "freq_x": {
+              "before": 30,
+              "requested": 30,
+              "observed": 30
+            },
+            "freq_y": {
+              "before": 30,
+              "requested": 30,
+              "observed": 30
+            },
+            "start": {
+              "before": 0,
+              "requested": 0,
+              "observed": 0
+            },
+            "end": {
+              "before": 0.4,
+              "requested": 0.2,
+              "observed": 0.2
+            }
+          },
+          "object_count": 1
+        }
+      ]
+    },
+    {
+      "name": "real-host-plugin-evidence-retraction",
+      "artifact_id": 12671642049,
+      "status": "succeeded",
+      "operations": 1,
+      "receipt_sha256": "01b160955fed5238a02d34eba388e90338c857b0555ab6c487063aa6baa5b92c",
+      "app": {
+        "app_config_version": "2.5.0",
+        "build": "0b4e7e9e",
+        "is_bambu_signed_in": false,
+        "is_signed_in": false,
+        "language": "en_US",
+        "mode": "editor",
+        "network_plugin_error": "",
+        "network_plugin_version": "",
+        "stealth_mode": true,
+        "version": "2.5.0-dev"
+      },
+      "text_modes": [],
+      "native_generators": [
+        "retraction"
+      ],
+      "operation_results": [
+        {
+          "tool": "native_calibration",
+          "status": "succeeded",
+          "phase": "verified_native_result",
+          "parameters": {
+            "kind": "retraction",
+            "values": {
+              "start": 0,
+              "end": 1,
+              "step": 0.2
+            },
+            "replace_scene": true
+          },
+          "native_parameter_readback": {
+            "start": {
+              "before": 0,
+              "requested": 0,
+              "observed": 0
+            },
+            "end": {
+              "before": 2,
+              "requested": 1,
+              "observed": 1
+            },
+            "step": {
+              "before": 0.1,
+              "requested": 0.2,
+              "observed": 0.2
+            }
+          },
+          "object_count": 1
+        }
+      ]
+    },
+    {
+      "name": "real-host-plugin-evidence-vfa",
+      "artifact_id": 12671628310,
+      "status": "succeeded",
+      "operations": 1,
+      "receipt_sha256": "509db09fcd9a65e9af9d4d9e35c8508170cc5d96e2b540a40463992905814dc0",
+      "app": {
+        "app_config_version": "2.5.0",
+        "build": "0b4e7e9e",
+        "is_bambu_signed_in": false,
+        "is_signed_in": false,
+        "language": "en_US",
+        "mode": "editor",
+        "network_plugin_error": "",
+        "network_plugin_version": "",
+        "stealth_mode": true,
+        "version": "2.5.0-dev"
+      },
+      "text_modes": [],
+      "native_generators": [
+        "vfa"
+      ],
+      "operation_results": [
+        {
+          "tool": "native_calibration",
+          "status": "succeeded",
+          "phase": "verified_native_result",
+          "parameters": {
+            "kind": "vfa",
+            "values": {
+              "start": 40,
+              "end": 60,
+              "step": 10
+            },
+            "replace_scene": true
+          },
+          "native_parameter_readback": {
+            "start": {
+              "before": 40,
+              "requested": 40,
+              "observed": 40
+            },
+            "end": {
+              "before": 200,
+              "requested": 60,
+              "observed": 60
+            },
+            "step": {
+              "before": 10,
+              "requested": 10,
+              "observed": 10
+            }
+          },
+          "object_count": 1
+        }
+      ]
+    },
+    {
+      "name": "real-host-plugin-evidence-input_shaping_frequency",
+      "artifact_id": 12671502561,
+      "status": "succeeded",
+      "operations": 1,
+      "receipt_sha256": "cdb63d27830883009773521d832479e4792c11430dfef4de68a331e09fc9bc2d",
+      "app": {
+        "app_config_version": "2.5.0",
+        "build": "0b4e7e9e",
+        "is_bambu_signed_in": false,
+        "is_signed_in": false,
+        "language": "en_US",
+        "mode": "editor",
+        "network_plugin_error": "",
+        "network_plugin_version": "",
+        "stealth_mode": true,
+        "version": "2.5.0-dev"
+      },
+      "text_modes": [],
+      "native_generators": [
+        "input_shaping_frequency"
+      ],
+      "operation_results": [
+        {
+          "tool": "native_calibration",
+          "status": "succeeded",
+          "phase": "verified_native_result",
+          "parameters": {
+            "kind": "input_shaping_frequency",
+            "values": {
+              "x_start": 15,
+              "x_end": 25,
+              "y_start": 15,
+              "y_end": 25
+            },
+            "replace_scene": true
+          },
+          "native_parameter_readback": {
+            "x_start": {
+              "before": 15,
+              "requested": 15,
+              "observed": 15
+            },
+            "x_end": {
+              "before": 110,
+              "requested": 25,
+              "observed": 25
+            },
+            "y_start": {
+              "before": 15,
+              "requested": 15,
+              "observed": 15
+            },
+            "y_end": {
+              "before": 110,
+              "requested": 25,
+              "observed": 25
+            }
+          },
+          "object_count": 1
+        }
+      ]
+    },
+    {
+      "name": "real-host-plugin-evidence-max_volumetric_speed",
+      "artifact_id": 12671213038,
+      "status": "succeeded",
+      "operations": 1,
+      "receipt_sha256": "11544df9ff92b00c24bdca8a6de86bbe5eb35a9b34ba4d873fe962c4b2dfb135",
+      "app": {
+        "app_config_version": "2.5.0",
+        "build": "0b4e7e9e",
+        "is_bambu_signed_in": false,
+        "is_signed_in": false,
+        "language": "en_US",
+        "mode": "editor",
+        "network_plugin_error": "",
+        "network_plugin_version": "",
+        "stealth_mode": true,
+        "version": "2.5.0-dev"
+      },
+      "text_modes": [],
+      "native_generators": [
+        "max_volumetric_speed"
+      ],
+      "operation_results": [
+        {
+          "tool": "native_calibration",
+          "status": "succeeded",
+          "phase": "verified_native_result",
+          "parameters": {
+            "kind": "max_volumetric_speed",
+            "values": {
+              "start": 5,
+              "end": 7,
+              "step": 0.5
+            },
+            "replace_scene": true
+          },
+          "native_parameter_readback": {
+            "start": {
+              "before": 5,
+              "requested": 5,
+              "observed": 5
+            },
+            "end": {
+              "before": 20,
+              "requested": 7,
+              "observed": 7
+            },
+            "step": {
+              "before": 0.5,
+              "requested": 0.5,
+              "observed": 0.5
+            }
+          },
+          "object_count": 1
+        }
+      ]
+    },
+    {
+      "name": "real-host-plugin-evidence-temperature",
+      "artifact_id": 12670893530,
+      "status": "succeeded",
+      "operations": 1,
+      "receipt_sha256": "631cf982444e24bbb458bc812e4856f8d6d948735b58386fdc0c9167b5f62949",
+      "app": {
+        "app_config_version": "2.5.0",
+        "build": "0b4e7e9e",
+        "is_bambu_signed_in": false,
+        "is_signed_in": false,
+        "language": "en_US",
+        "mode": "editor",
+        "network_plugin_error": "",
+        "network_plugin_version": "",
+        "stealth_mode": true,
+        "version": "2.5.0-dev"
+      },
+      "text_modes": [],
+      "native_generators": [
+        "temperature"
+      ],
+      "operation_results": [
+        {
+          "tool": "native_calibration",
+          "status": "succeeded",
+          "phase": "verified_native_result",
+          "parameters": {
+            "kind": "temperature",
+            "values": {
+              "start": 220,
+              "end": 210
+            },
+            "replace_scene": true
+          },
+          "native_parameter_readback": {
+            "start": {
+              "before": 230,
+              "requested": 220,
+              "observed": 220
+            },
+            "end": {
+              "before": 190,
+              "requested": 210,
+              "observed": 210
+            }
+          },
+          "object_count": 1
+        }
+      ]
+    }
+  ]
+}
