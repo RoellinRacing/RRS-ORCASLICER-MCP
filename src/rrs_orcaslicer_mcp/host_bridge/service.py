@@ -5,6 +5,7 @@ import hmac
 import secrets
 import time
 import uuid
+import math
 from pathlib import Path
 
 from .protocol import (
@@ -134,6 +135,7 @@ class HostService:
                 break
             ident = path.stem
             try:
+                self.seen.add(path.name)  # Immutable documents, including malformed ones.
                 bridge_id(ident)
                 if (self.folder / "journal" / path.name).exists():
                     self.seen.add(path.name)
@@ -153,7 +155,13 @@ class HostService:
                 ) != bridge_fingerprint(request.get("operation"), request["params"]):
                     self.receipt(request, "rejected", error="Invalid request fingerprint")
                     continue
-                if request.get("expires", 0) < time.time():
+                expires = request.get("expires")
+                if (
+                    type(expires) not in (int, float)
+                    or not math.isfinite(expires)
+                    or expires < time.time()
+                    or expires > time.time() + 300
+                ):
                     self.receipt(request, "rejected", error="Request expired before execution")
                     continue
                 if request["operation"] not in self.capabilities:

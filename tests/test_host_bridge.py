@@ -228,6 +228,16 @@ def test_requests_beyond_first_64_are_processed_without_repeating(host):
     )
 
 
+def test_unauthenticated_documents_do_not_starve_valid_requests(host):
+    service, client, _, _ = host
+    for _ in range(12):
+        write_request(service, "bridge.ping", {}, token="invalid")
+    valid = write_request(service, "bridge.ping", {})
+    for _ in range(4):
+        service.poll_ui()
+    assert client.result(service.session_id, valid)["status"] == "succeeded"
+
+
 async def test_timeout_is_indeterminate_and_receipt_is_recoverable(host):
     service, client, _, stats = host
     stats["delay"] = 1.2

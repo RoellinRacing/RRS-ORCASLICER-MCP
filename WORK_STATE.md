@@ -60,3 +60,12 @@ builds and passes source consistency/lint checks. 36 tests pass, including threa
 separation, redaction, timeout receipts, duplicate prevention, limits and export roots.
 Real-host verification script and isolated GitHub Actions job saved before execution.
 Next: inspect real GUI result; fix any observed host/API mismatch before release.
+
+Native CI 40283327912: all six 36-test matrix jobs and stable engine checks passed.
+Host fixture failed before GUI startup: nightly moved system profiles from loose
+JSON to .opc caches. Adjusted fixture to reuse the successfully generated stable
+3MF/profiles artifact, which also tests loading an existing 2.4.2 project in nightly.
+No reverse engineering or modification of the host's cache format is needed.
+Additional review fixes: invalid mailbox entries cannot starve valid requests;
+request expiry must be finite/bounded; symlink checks precede directory creation;
+MCP project-export retries can retrieve existing receipts. Local tests extended.

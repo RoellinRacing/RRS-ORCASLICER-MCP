@@ -37,9 +37,9 @@ def bridge_write(path: Path, value: dict, limit: int = MAX_RESPONSE_BYTES) -> No
     raw = (json.dumps(value, ensure_ascii=False, sort_keys=True, allow_nan=False) + "\n").encode()
     if len(raw) > limit:
         raise ValueError("Bridge response exceeds its size limit; request a smaller page")
-    path.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
     if path.is_symlink() or any(p.is_symlink() for p in path.parents):
         raise ValueError("Linked bridge document rejected")
+    path.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
     fd, temporary = tempfile.mkstemp(prefix=".rrs-", dir=path.parent)
     try:
         with os.fdopen(fd, "wb") as stream:

@@ -12,10 +12,13 @@ import signal
 import subprocess
 import time
 import uuid
+import sys
 from pathlib import Path
 
 from rrs_orcaslicer_mcp.host_bridge.client import HostClient
 from rrs_orcaslicer_mcp.storage import atomic_json, digest
+from mcp import ClientSession, StdioServerParameters
+from mcp.client.stdio import stdio_client
 
 
 root = Path(os.environ["ORCA_TEST_OUTPUT"]).resolve()
@@ -193,9 +196,52 @@ async def verify(client):
     destination = client.directory / "exports/live-project.3mf"
     exported = await call("project.export", {"destination": str(destination)}, mutation=True)
     assert destination.is_file() and destination.stat().st_size > 1000
+    # Verify the public MCP entry points as well as the embedded protocol.
+    env = {
+        **os.environ,
+        "ORCA_MCP_BRIDGE": str(client.directory),
+        "ORCA_MCP_ROOTS": str(client.directory),
+        "ORCA_MCP_STATE": str(root / "host-mcp-state"),
+    }
+    async with stdio_client(
+        StdioServerParameters(
+            command=sys.executable, args=["-m", "rrs_orcaslicer_mcp.server"], env=env
+        )
+    ) as (read, write):
+        async with ClientSession(read, write) as mcp:
+            await mcp.initialize()
+            status = await mcp.call_tool("host_bridge_status", {})
+            assert not status.isError and status.structuredContent["online"]
+            result = await mcp.call_tool(
+                "host_preset_update",
+                {
+                    "kind": "process",
+                    "preset_name": name,
+                    "changes": {"wall_loops": "6"},
+                    "session_id": session,
+                    "request_id": uuid.uuid4().hex,
+                },
+            )
+            assert not result.isError and result.structuredContent["status"] == "succeeded", result
+            readback = await mcp.call_tool(
+                "host_preset_read", {"kind": "process", "keys": ["wall_loops"]}
+            )
+            assert readback.structuredContent["result"]["values"]["wall_loops"] == "6"
+            # A repeat must return the receipt even though the original output exists.
+            repeated_export = await mcp.call_tool(
+                "host_project_export",
+                {
+                    "destination": str(destination),
+                    "session_id": session,
+                    "request_id": exported["request_id"],
+                },
+            )
+            assert not repeated_export.isError and repeated_export.structuredContent == exported
     report = {
         "status": "succeeded",
         "real_embedded_host": True,
+        "stdio_mcp_verified": True,
+        "mcp_updated_wall_loops": "6",
         "app": snapshot["result"]["app"],
         "object_count": model["result"]["total"],
         "preset_name": name,
