@@ -94,3 +94,12 @@ Inspection of its screenshot showed the modal Plugins manager was still open,
 blocking the mainframe Slice action. Test now closes only that modal manager,
 keeps the separate modeless bridge running, and saves selection/partial-report
 and before/after screenshots. No application bridge code changed for this test fix.
+
+GUI rerun ff782a8 hit an OCR startup flake: screenshot showed the correct Plugins
+menu, but Tesseract default page segmentation missed its visible text because of
+large Xvfb black margins. Test now uses sparse-text OCR, active-window cropping
+(with full-screen fallback), and explicit recorded MainFrame activation before
+Slice. The product/plugin code and completed semantic/58-test evidence are unchanged.
+The saved failed screenshot was independently cropped/upscaled and re-OCRed locally:
+Plugins was correctly detected. Matching now uses that validated 2x crop route and
+converts coordinates back to screen coordinates before clicking.

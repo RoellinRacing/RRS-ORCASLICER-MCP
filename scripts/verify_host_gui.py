@@ -29,6 +29,7 @@ data = root / "isolated-host-data"
 evidence.mkdir(parents=True, exist_ok=True)
 data.mkdir(parents=True, exist_ok=True)
 source_root = Path(__file__).resolve().parents[1]
+main_window = None
 
 
 def prepare():
@@ -105,7 +106,7 @@ def screenshot(label):
 
     image = pyautogui.screenshot()
     image.save(evidence / f"{label}.png")
-    text = pytesseract.image_to_string(image)
+    text = pytesseract.image_to_string(image, config="--psm 11")
     (evidence / f"{label}.txt").write_text(text, encoding="utf-8")
     print(label, text[:1500], flush=True)
     return image
@@ -115,24 +116,41 @@ def click_word(word, partial=False, dx=0):
     import pyautogui
     import pytesseract
 
-    words = pytesseract.image_to_data(pyautogui.screenshot(), output_type=pytesseract.Output.DICT)
-    for i, value in enumerate(words["text"]):
-        normalized = value.strip(" .,:!()[]").lower()
-        if normalized == word.lower() or (partial and normalized.startswith(word.lower())):
-            pyautogui.click(
-                words["left"][i] + words["width"][i] // 2 + dx,
-                words["top"][i] + words["height"][i] // 2,
-            )
-            return True
+    # Sparse text mode handles the large black Xvfb margins and overlapping
+    # windows; default page segmentation can miss a clearly visible menu item.
+    geometry = subprocess.check_output(
+        ["xdotool", "getactivewindow", "getwindowgeometry", "--shell"], text=True
+    )
+    bounds = dict(line.split("=", 1) for line in geometry.splitlines() if "=" in line)
+    image = pyautogui.screenshot()
+    left, top = max(0, int(bounds["X"])), max(0, int(bounds["Y"]))
+    right = min(image.width, int(bounds["X"]) + int(bounds["WIDTH"]))
+    bottom = min(image.height, int(bounds["Y"]) + int(bounds["HEIGHT"]))
+    for candidate, ox, oy in ((image.crop((left, top, right, bottom)), left, top), (image, 0, 0)):
+        words = pytesseract.image_to_data(
+            candidate.convert("RGB").resize((candidate.width * 2, candidate.height * 2)),
+            config="--psm 11",
+            output_type=pytesseract.Output.DICT,
+        )
+        for i, value in enumerate(words["text"]):
+            normalized = value.strip(" .,:!()[]").lower()
+            if normalized == word.lower() or (partial and normalized.startswith(word.lower())):
+                pyautogui.click(
+                    ox + (words["left"][i] + words["width"][i] / 2) / 2 + dx,
+                    oy + (words["top"][i] + words["height"][i] / 2) / 2,
+                )
+                return True
     return False
 
 
 def open_bridge(process):
+    global main_window
     import pyautogui
 
     time.sleep(12)
     if process.poll() is not None:
         raise RuntimeError("Orca exited during startup")
+    main_window = subprocess.check_output(["xdotool", "getactivewindow"], text=True).strip()
     screenshot("01-startup")
     # Standard File menu entry is present in the official Linux MainFrame source.
     pyautogui.hotkey("alt", "f")
@@ -191,6 +209,7 @@ def open_bridge(process):
                 subprocess.run(["xdotool", "windowactivate", "--sync", managers[0]], check=True)
                 pyautogui.hotkey("alt", "f4")
                 time.sleep(2)
+                subprocess.run(["xdotool", "windowactivate", "--sync", main_window], check=True)
                 screenshot("06-manager-closed")
                 if not candidate.status().get("online"):
                     raise RuntimeError("Closing manager stopped the modeless bridge")
@@ -346,6 +365,7 @@ async def verify(client):
     assert "RRS MCP slicing observer" in str(selected["result"]["values"])
     import pyautogui
 
+    subprocess.run(["xdotool", "windowactivate", "--sync", main_window], check=True)
     screenshot("07-before-slice")
     if not click_word("Slice", partial=True):
         # Ctrl+R is Orca's normal Slice Plate shortcut on Linux.
