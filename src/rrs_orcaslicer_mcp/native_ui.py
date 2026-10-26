@@ -11,7 +11,7 @@ import time
 from pathlib import Path
 
 from .desktop import Desktop
-from .storage import atomic_bytes
+from .storage import atomic_bytes, atomic_json
 
 
 def tokens(text):
@@ -221,12 +221,37 @@ class NativeControls:
         verify=False,
     ):
         box, old = self.read_numeric(label, region, index, columns, required_unit)
+        # Native gizmos fit their width on the next GL frame. Hover can trigger
+        # that frame, so re-locate after hover rather than clicking stale boxes.
+        for _ in range(3):
+            self.desktop._api().moveTo(
+                box["x"] + box["w"] / 2, box["y"] + box["h"] / 2, duration=0.15
+            )
+            time.sleep(0.4)
+            settled, current = self.read_numeric(label, region, index, columns, required_unit)
+            if not math.isclose(current, old, abs_tol=1e-9):
+                raise ValueError("Native field changed while acquiring its editor")
+            stable = abs(settled["x"] - box["x"]) < 2 and abs(settled["y"] - box["y"]) < 2
+            box = settled
+            if stable:
+                break
+        else:
+            raise ValueError("Native numeric editor layout did not settle")
         target = old + delta if delta is not None else value
         if type(target) not in (int, float) or not math.isfinite(target):
             raise ValueError("Native numeric value must be finite")
         self.point_click(box)
         evidence_name = re.sub(r"\W+", "_", label).strip("_") + f"_{index}"
         self.capture("numeric_" + evidence_name + "_focused")
+        atomic_json(
+            self.evidence / ("numeric_" + evidence_name + ".json"),
+            {
+                "box": box,
+                "cursor": list(self.desktop._api().position()),
+                "before": old,
+                "target": target,
+            },
+        )
         self.key("command" if sys.platform == "darwin" else "ctrl", "a")
         # Numeric fields accept ASCII directly; this avoids clipboard ownership
         # races between X11/wx and the native ImGui canvas.
