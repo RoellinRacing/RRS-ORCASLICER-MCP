@@ -100,3 +100,15 @@ Native pilot 8a7c479 passed MainFrame detection and reached window parking; no
 model action executed. xdotool combines multiple search criteria with OR by default,
 so PID+title returned more than the intended bridge window. Added explicit --all
 (AND) and a regression test for the exact PID/title intersection before any move.
+
+Continuation checkpoint b31cddf (2026-10-26): 66 local tests and all six
+OS/Python CI unit entries passed. Native preflight and bridge parking worked;
+the first move exposed a clipped mm label, then numeric input did not apply.
+Numeric controls now use direct ASCII input, Tab and visible readback before
+native pose verification. No successful native editing result is claimed yet.
+The next pilot caught Openbox placing MainFrame partly outside the Xvfb screen.
+The isolated fixture now sets a fully visible 1200x780 window at 100,80 and saves
+per-operation preflight screenshots. Source is saved in b31cddf; active acceptance
+run 40342059188. Stock project replacement dialogs are recognized with a completed
+native backup; edited presets are kept. Next: inspect actual operation receipts,
+fix any remaining native selector/commit behavior, then release only on full pass.

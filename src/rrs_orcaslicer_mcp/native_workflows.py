@@ -452,9 +452,12 @@ class NativeWorkflows:
                     phase("opening_native_calibration")
                     left, top, right = await asyncio.to_thread(ui.main)
                     await asyncio.to_thread(ui.click, "Calibration", (left, top, right, top + 36))
+                    # The menu is left of the viewport. Use the full MainFrame
+                    # region explicitly instead of the gizmo-only default crop.
+                    menu_region = (left, top, right, top + 650)
                     if kind.startswith("input_shaping_"):
-                        await asyncio.to_thread(ui.click, "Input Shaping")
-                    await asyncio.to_thread(ui.click, CALIBRATIONS[kind][0])
+                        await asyncio.to_thread(ui.click, "Input Shaping", menu_region)
+                    await asyncio.to_thread(ui.click, CALIBRATIONS[kind][0], menu_region)
                     await asyncio.sleep(0.5)
                     phase("setting_native_calibration_parameters")
                     if kind == "pressure_advance":

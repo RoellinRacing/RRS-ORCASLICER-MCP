@@ -145,10 +145,17 @@ class NativeControls:
     def label(self, phrase, region=None):
         return self.locate(self.words(region), phrase, region)
 
+    def point_click(self, box):
+        api = self.desktop._api()
+        # wx forwards a click according to the previous ImGui hover/capture
+        # frame. Let the GL canvas observe the pointer before pressing a button.
+        api.moveTo(box["x"] + box["w"] / 2, box["y"] + box["h"] / 2, duration=0.15)
+        time.sleep(0.35)
+        self.desktop._api().click()
+        time.sleep(0.35)
+
     def click(self, phrase, region=None):
-        box = self.label(phrase, region)
-        self.desktop._api().click(box["x"] + box["w"] / 2, box["y"] + box["h"] / 2)
-        time.sleep(0.3)
+        self.point_click(self.label(phrase, region))
 
     def key(self, *keys):
         self.desktop._api().hotkey(*keys)
@@ -209,7 +216,7 @@ class NativeControls:
         target = old + delta if delta is not None else value
         if type(target) not in (int, float) or not math.isfinite(target):
             raise ValueError("Native numeric value must be finite")
-        self.desktop._api().click(box["x"] + box["w"] / 2, box["y"] + box["h"] / 2)
+        self.point_click(box)
         self.key("command" if sys.platform == "darwin" else "ctrl", "a")
         # Numeric fields accept ASCII directly; this avoids clipboard ownership
         # races between X11/wx and the native ImGui canvas.
