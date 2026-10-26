@@ -282,3 +282,13 @@ that first line by starting semantic body OCR at reported Y, without another
 30-pixel title-bar crop. Both exact text anchors, exact title and a single footer
 No dispatch remain mandatory. The fixed-bounds replay proves the route without
 simulating a geometry change; the observation retry still handles actual movement.
+
+
+### Public release verification
+
+The reproducible audit is scripts/verify_release_bundle.py, documented in
+RELEASE_VALIDATION.md. Asset checksums/digests and packaged source identity bind
+the immutable release source; native receipts additionally bind the plugin/build,
+operation results and workflow. The installed public-wheel pytest/stdio stage is
+recorded separately, since file inspection alone cannot establish installed behavior.
+Later documentation/evidence commits retain the release source identity 1101d5f.

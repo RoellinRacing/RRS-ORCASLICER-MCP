@@ -82,3 +82,32 @@ not physical-device acceptance. Selected native printer state is still read-only
 The earlier limits refer to the original embedded-host adapter. Independent offline
 painting/geometry and provider actions now exist, while live scene undo/mutation,
 native calibration, cloud/AMS/MMU and complete GUI command coverage remain open.
+
+
+## 0.5.0 native workflow acceptance
+
+The separate server now has 61 tools. Typed live transforms, native history,
+editable text and calibration generation use observed stock-Orca controls with
+bridge readback. Every request binds the bridge session, scene revision and durable
+request ID. Backup/new export paths precede text/calibration work; repeated IDs
+return receipts without repeating input.
+
+The accepted Linux X11/English/light selector pack passed 30 operations together:
+three transforms with native Undo/Redo, Join/Cut/Modifier text, and nine generator
+families. Native 3MF text metadata, volume type, pose/history and nonempty geometry
+are checked. Max Flowrate's inherited spiral mode is declined for flat Flow Ratio
+coupons only after the exact info title, both explanation anchors and a unique
+footer target match. Client bounds are reacquired without another title-bar inset.
+Unknown/ambiguous dialogs retain an indeterminate receipt and screenshots.
+
+Source 1101d5f, CI 40373662076 and public v0.5.0 are immutable reference points.
+Six OS/Python jobs each passed 95 tests with two optional Pillow skips; all 97
+passed locally and with the separately installed public wheel. All 19 CI jobs
+passed; public assets match SHA256SUMS and GitHub digests. Full native evidence is
+bundled and saved under docs/evidence. Other GUI platforms/locales, multiple-object
+workflows and firmware-specific variants require additional acceptance.
+
+The host bridge keeps its public allowlist and GUI/worker ownership rules.
+Supported native document transactions, paint mutations, job lifecycle and
+provider APIs would reduce the desktop selector dependency; these are the
+concrete questions in UPSTREAM_CONTACT.md.

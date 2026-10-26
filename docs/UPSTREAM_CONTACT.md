@@ -11,11 +11,23 @@ selbst Kontakt aufnehmen; kein Beitrag, Issue oder PR wurde gesendet.
 We develop RRS-ORCASLICER-MCP, a separate local MCP server:
 https://github.com/RoellinRacing/RRS-ORCASLICER-MCP
 
-Version 0.4.0 exposes 54 tools. The optional dependency-free official Script plugin
+Version 0.5.0 exposes 61 tools. The optional dependency-free official Script plugin
 uses GUI callbacks for copied reads and a Script worker for begin_update/set/commit.
 It preserves native validation, unsaved-edit dialogs and dirty state. The external
 process uses a bounded local mailbox with session/request identities and durable
 receipts; uncertain native outcomes are never retried automatically.
+
+The 0.5.0 desktop workflows drive Orca's visible move/rotate/scale controls and
+native Undo/Redo, editable Join/Cut/Modifier text, and nine original calibration
+generator families. The official Linux nightly 2.5.0-dev build 0b4e7e9e completed
+30 native operations in one session, including the inherited spiral-mode transition
+from Max Flowrate to flat Flow Ratio coupons. English X11/light UI is the accepted
+selector pack; additional platforms/layouts/locales need operation-level acceptance.
+
+All 19 CI jobs passed. The public wheel passed 97 tests after separate installation,
+and all 61 tools were observed over actual stdio. Release source, binary/plugin
+checksums and exact receipts are saved with v0.5.0 and in docs/evidence. These visible
+desktop routes motivate the supported document/job APIs requested below.
 
 The expansion adds identity-bound live volume/instance diagnostics, selected-printer
 reads and an optional synchronous SlicingPipeline observer. The observer copies
@@ -25,8 +37,9 @@ borrowed native references or calls the GUI/filesystem from a slicing callback.
 Independent workflows cover revision-bound 3MF transforms and four-channel facet
 painting, including validated subdivision trees, optional measured STL topology
 operations, calibration coupon series and configured Moonraker/OctoPrint adapters.
-The last two are explicitly separate workflows, not claims of native calibration
-API coverage or Orca cloud/AMS control. Printer dispatch uses durable request IDs
+Coupon sweeps remain distinct from the original-generator desktop route.
+The HTTP provider adapters have their own contract tests; Orca cloud/AMS integration
+and physical-device acceptance remain separate work. Printer dispatch uses durable request IDs
 and separates upload from explicit physical job commands; no real printer was
 commanded during development.
 
