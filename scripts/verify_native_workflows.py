@@ -47,6 +47,13 @@ async def verify(client, root, evidence, main_window):
         async def operate(name, arguments):
             current = await scene()
             subprocess.run(["xdotool", "windowactivate", "--sync", main_window], check=True)
+            import time
+            import pyautogui
+
+            time.sleep(0.5)
+            pyautogui.screenshot().save(
+                evidence / f"native-preflight-{len(report['operations']):02}.png"
+            )
             args = {
                 **arguments,
                 "expected_revision": current["revision"],

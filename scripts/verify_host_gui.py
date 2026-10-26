@@ -151,6 +151,11 @@ def open_bridge(process):
     if process.poll() is not None:
         raise RuntimeError("Orca exited during startup")
     main_window = subprocess.check_output(["xdotool", "getactivewindow"], text=True).strip()
+    # Openbox may initially place a 1200px mainframe partly offscreen. Keep
+    # the disposable acceptance desktop deterministic and fully visible.
+    subprocess.run(["xdotool", "windowsize", main_window, "1200", "780"], check=True)
+    subprocess.run(["xdotool", "windowmove", main_window, "100", "80"], check=True)
+    time.sleep(1)
     screenshot("01-startup")
     # Standard File menu entry is present in the official Linux MainFrame source.
     pyautogui.hotkey("alt", "f")
