@@ -15,6 +15,8 @@ from mcp.server.fastmcp import FastMCP, Image
 from . import (
     __version__,
     catalog,
+    calibration,
+    meshes,
     profiles,
     projects,
     settings as profile_settings,
@@ -22,6 +24,7 @@ from . import (
     project_geometry,
     gcode,
 )
+from .printers import Printers
 from .batches import Batches
 from .desktop import Desktop
 from .engine import Engine
@@ -39,6 +42,7 @@ def create_server() -> FastMCP:
         .expanduser()
         .resolve()
     )
+    printers = Printers(state / "printer-requests")
     desktop = Desktop()
     host_client = HostClient()
     engine = None
@@ -103,6 +107,46 @@ def create_server() -> FastMCP:
         report["installed_cli"] = await backend().capabilities()
         report["live_host"] = host_client.status()
         return report
+
+    @mcp.tool()
+    def printer_capabilities() -> dict[str, Any]:
+        """List explicit configured Moonraker/OctoPrint hosts. Configure ORCA_MCP_PRINTERS JSON."""
+        return printers.capabilities()
+
+    @mcp.tool()
+    async def printer_status(printer_id: str) -> dict[str, Any]:
+        """Query actual configured printer/job state without issuing machine commands."""
+        return await printers.status(printer_id)
+
+    @mcp.tool()
+    async def printer_upload(
+        printer_id: str, source: str, remote_name: str, expected_source_sha256: str, request_id: str
+    ) -> dict[str, Any]:
+        """Upload checksum-bound text G-code without starting it. request_id is 32 hex digits.
+
+        The provider may replace an existing remote filename. Use a unique name.
+        A repeated request ID returns its receipt; uncertain dispatch is never retried.
+        """
+        return await printers.dispatch(
+            printer_id, request_id, "upload", remote_name, files, source, expected_source_sha256
+        )
+
+    @mcp.tool()
+    async def printer_command(
+        printer_id: str, action: str, request_id: str, remote_name: str | None = None
+    ) -> dict[str, Any]:
+        """Send an explicit physical printer command: start/pause/resume/cancel.
+
+        start requires an uploaded remote_name; upload never starts a print.
+        Use a fresh 32-hex request_id only for a new authorized action. Reuse it
+        to retrieve acknowledgement after interruption. Query actual state afterward.
+        """
+        return await printers.dispatch(printer_id, request_id, action, remote_name)
+
+    @mcp.tool()
+    def printer_request_status(request_id: str) -> dict[str, Any]:
+        """Retrieve durable printer dispatch receipt without repeating the command."""
+        return printers.result(request_id)
 
     @mcp.tool()
     def host_bridge_status() -> dict[str, Any]:
@@ -366,6 +410,55 @@ def create_server() -> FastMCP:
             expected_source_sha256,
             metadata_member=metadata_member,
             metadata_text=text,
+        )
+
+    @mcp.tool()
+    def mesh_inspect(source: str, expected_source_sha256: str) -> dict[str, Any]:
+        """Measure an STL/PLY: bounds, volume, triangles, watertightness. Needs [geometry]."""
+        return meshes.inspect(files, source, expected_source_sha256)
+
+    @mcp.tool()
+    def mesh_operation(
+        sources: list[dict[str, str]],
+        destination_directory: str,
+        action: str,
+        parameters: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
+        """Offline mesh repair/split/cut/merge/union/difference/intersection/hull/simplify/transform.
+
+        sources: [{path,sha256}]. action convex_hull for hull. cut takes origin/normal
+        XYZ vectors and optional cap (true); simplify takes face_count; transform takes
+        a 4x4 column-vector affine matrix. Inputs STL/PLY, outputs new STL files in a new
+        directory with measured result/checkpoint. Requires [geometry]. STL units assumed
+        millimeters. Reimport output into Orca; settings and facet painting do not transfer.
+        """
+        return meshes.operation(files, sources, destination_directory, action, parameters)
+
+    @mcp.tool()
+    def calibration_series_create(
+        source: str,
+        destination_directory: str,
+        expected_source_sha256: str,
+        kind: str,
+        values: list[float],
+        filament_slot: int = 1,
+    ) -> dict[str, Any]:
+        """Create resumable temperature/flow_ratio/pressure_advance/max_volumetric_speed coupons.
+
+        Uses the supplied calibration model in a 3MF, one constant-setting project per
+        value. Preserves other filament slots. PA is explicitly enabled for its slot.
+        This does not generate Orca's native towers, select a winner or start a print.
+        Use batch_slice on the completed paths. Inspect/measure coupons before applying
+        a selected result to a profile with the existing settings/profile tools.
+        """
+        return calibration.series(
+            files,
+            source,
+            destination_directory,
+            expected_source_sha256,
+            kind,
+            values,
+            filament_slot,
         )
 
     @mcp.tool()

@@ -39,6 +39,7 @@ def test_transform_preserves_payload_masks_and_extension_prefix(scene):
         assert archive.comment == b"retain"
         assert archive.read("unknown.bin") == b"\x00\xffopaque"
         raw = archive.read("3D/3dmodel.model")
+        assert raw.startswith(b"<model ") and b"<ns0:" not in raw
         assert b"xmlns:p=" in raw and b'requiredextensions="p"' in raw
         assert b'paint_color="0C"' in raw and b'future="keep"' in raw
         assert not any("gcode" in n for n in archive.namelist())

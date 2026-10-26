@@ -102,3 +102,18 @@ nur bei `status: succeeded` vor. Native Dialoge k√∂nnen eine lokale Antwort ben√
 one, pass `profile_version` explicitly (for example the generating engine version).
 The source must declare `type` as machine, process or filament; validation happens
 before any file is written.
+
+## Extended operations (0.4.0)
+
+See [EXTENDED_OPERATIONS.md](EXTENDED_OPERATIONS.md) for contracts and examples.
+
+| Tools | Purpose |
+| --- | --- |
+| project_geometry_read / project_transform_write | Inspect and replace build/component transforms in a new revision-bound 3MF |
+| project_painting_read / project_painting_write | Triangle/subtriangle support, seam, material and fuzzy masks |
+| mesh_inspect / mesh_operation | Measured optional offline topology operations on STL/PLY |
+| calibration_series_create | Resumable four-type constant-setting coupon series |
+| host_model_detail / host_printer_read | Identity-bound detailed scene and redacted selected-printer reads |
+| host_slicing_events | Native synchronous stage observations with epoch/cursor/gap |
+| printer_capabilities / printer_status | Configured Moonraker/OctoPrint hosts and actual job status |
+| printer_upload / printer_command / printer_request_status | Separate upload and explicit physical job command with durable request IDs |

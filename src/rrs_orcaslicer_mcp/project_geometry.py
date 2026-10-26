@@ -4,6 +4,7 @@ import io
 import math
 import re
 import zipfile
+import threading
 from xml.sax.saxutils import quoteattr
 from xml.etree import ElementTree as ET
 
@@ -17,6 +18,7 @@ PAINT = {
     "material": "paint_color",
     "fuzzy_skin": "paint_fuzzy_skin",
 }
+XML_ENCODING_LOCK = threading.Lock()
 IDENTITY = [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0]
 
 
@@ -28,15 +30,20 @@ def parse(raw):
 
 
 def encode(root, namespaces):
-    # Preserve extension declarations even when only used in requiredextensions values.
-    # Explicit prefix registration is unnecessary: ET may use ns0, but extension
-    # values still refer to the original prefix, which we retain as an alias.
-    raw = ET.tostring(root, encoding="unicode")
-    head, tail = raw.split(">", 1)
-    for prefix, uri in namespaces.items():
-        if prefix and f"xmlns:{prefix}=" not in head:
-            head += f" xmlns:{prefix}={quoteattr(uri)}"
-    return (head + ">" + tail).encode()
+    # Orca's Expat handlers compare lexical tag names, not expanded namespaces.
+    # Preserve its unprefixed core tags and original extension prefixes. Merely
+    # equivalent XML using ns0:model is rejected as an empty model by stock Orca.
+    with XML_ENCODING_LOCK:
+        for prefix, uri in namespaces.items():
+            if prefix and not re.fullmatch(r"ns[0-9]+", prefix):
+                ET.register_namespace(prefix, uri)
+        ET.register_namespace("", CORE)
+        raw = ET.tostring(root, encoding="unicode")
+        head, tail = raw.split(">", 1)
+        for prefix, uri in namespaces.items():
+            if prefix and f"xmlns:{prefix}=" not in head:
+                head += f" xmlns:{prefix}={quoteattr(uri)}"
+        return (head + ">" + tail).encode()
 
 
 def load(files: Files, path: str, member: str):

@@ -68,3 +68,21 @@ CI scripts now exercise stock Orca reopen/reslice of transformed four-channel pa
 and detailed GUI reads plus actual pipeline events. Native results are pending;
 only prior 0.3.0 operations currently have completed native evidence.
 Next: inspect CI; independent provider operations and calibration sweep semantics.
+
+## Extension checkpoint — offline geometry, calibration and print hosts
+
+Source saved: meshes.py (repair/split/cut/booleans/merge/hull/simplify/transform),
+calibration.py (four types of resumable constant-setting coupon series), printers.py
+(configured Moonraker/OctoPrint status/upload/job commands with durable dispatch IDs).
+Documentation: EXTENDED_OPERATIONS.md and BUSINESS_LOGIC.md.
+Optional geometry dependency group added; geometry tests use measured STL volumes,
+including union=1500, difference=500, intersection=500 mm3 for overlapping cubes.
+No physical device connected. New native evidence/0.4.0 release remains pending.
+CI dependency installation is bounded so unrelated apt repositories cannot consume
+an entire native-test run. Next: full checks, native CI, then release evidence.
+
+Local full suite: 58 passed, evidence saved in extended-unit-0.4.0.txt.
+Native test on 5dda5fd discovered Orca compares lexical XML core tag names:
+ElementTree's namespace-equivalent ns0:model was interpreted as empty. Fixed
+serialization to retain unprefixed core tags/original extension prefixes and added
+an explicit lexical regression assertion. New native run must confirm this fix.

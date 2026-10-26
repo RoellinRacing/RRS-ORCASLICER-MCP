@@ -3,6 +3,7 @@
 import json
 import os
 import sys
+import tomllib
 from pathlib import Path
 
 from rrs_orcaslicer_mcp.storage import atomic_json, digest
@@ -31,5 +32,6 @@ result = {
         else None
     ),
 }
-atomic_json(root / "docs/evidence/host-0.3.0.json", result)
+package_version = tomllib.loads((root / "pyproject.toml").read_text())["project"]["version"]
+atomic_json(root / f"docs/evidence/host-{package_version}.json", result)
 print("Recorded native evidence matching plugin SHA256", prepared["plugin_sha256"])

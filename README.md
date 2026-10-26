@@ -1,3 +1,9 @@
+> **0.4.0 extension:** 54 MCP tools. Added typed project transforms and four-channel
+> facet painting, optional mesh topology tools, calibration coupon series, native
+> stage observations and configured Moonraker/OctoPrint adapters. See
+> [extended operations](docs/EXTENDED_OPERATIONS.md). Full native GUI coverage and
+> all-version compatibility remain explicit unfulfilled requirements.
+
 # RRS-ORCASLICER-MCP
 
 Separate MCP-Schnittstelle für **OrcaSlicer**. OrcaSlicer bleibt unverändert installiert;

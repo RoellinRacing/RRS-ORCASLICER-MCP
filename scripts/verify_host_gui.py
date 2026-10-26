@@ -83,7 +83,7 @@ def prepare():
         install / ".install_state.json",
         {
             "installed_from": "local",
-            "installed_version": "0.3.0",
+            "installed_version": "0.4.0",
             "plugin_name": "RRS OrcaSlicer Bridge",
             "enabled": True,
             "capabilities": [{"RRS MCP local bridge": True}, {"RRS MCP slicing observer": True}],

@@ -35,23 +35,23 @@
     },
     {
       "feature": "Mesh repair, split, cut, Boolean operations and embossing",
-      "route": "CLI where advertised; otherwise desktop",
-      "status": "not_a_complete_semantic_api"
+      "route": "mesh_operation with optional geometry engines: repair/split/cut/booleans/merge/hull/simplify/transform",
+      "status": "offline_mesh_operations_embossing_not_implemented"
     },
     {
       "feature": "Support, seam and multi-color painting",
-      "route": "desktop screenshots and input",
-      "status": "gui_only_not_semantically_automated"
+      "route": "project_painting_read/write: support, seam, material and fuzzy skin facet trees",
+      "status": "offline_3mf_semantic_edits_native_roundtrip_pending"
     },
     {
       "feature": "Calibration generators and dialogs",
-      "route": "desktop",
-      "status": "gui_only_not_semantically_automated"
+      "route": "calibration_series_create: four controlled coupon series from supplied model",
+      "status": "independent_parameter_sweeps_native_generators_not_bound"
     },
     {
       "feature": "Printer connection, cloud login, AMS/MMU and physical printing",
-      "route": "Orca desktop/provider",
-      "status": "no_independent_printer_api"
+      "route": "printer_capabilities/status/upload/command/request_status for configured Moonraker/OctoPrint",
+      "status": "independent_http_adapters_no_cloud_ams_or_real_printer_acceptance"
     },
     {
       "feature": "Live GUI preset transactions",
@@ -75,16 +75,31 @@
     },
     {
       "feature": "Live geometry mutation and slicing hooks",
-      "route": "Official host capabilities not yet integrated",
-      "status": "not_implemented"
+      "route": "host_slicing_events via optional observer; live model mutations not exposed upstream",
+      "status": "synchronous_stage_observer_implemented_live_mutation_gap"
     },
     {
       "feature": "Live project copy with unsaved settings",
       "route": "host_project_export via official Plater API",
       "status": "implemented_when_advertised_by_host"
+    },
+    {
+      "feature": "3MF build/component affine transforms",
+      "route": "project_geometry_read/project_transform_write",
+      "status": "revision_bound_new_project_copy"
+    },
+    {
+      "feature": "Live volume and instance diagnostics",
+      "route": "host_model_detail",
+      "status": "identity_bound_paged_copied_reads"
+    },
+    {
+      "feature": "Selected live printer diagnostics",
+      "route": "host_printer_read",
+      "status": "redacted_read_when_host_exposes_it"
     }
   ],
   "upstream_discussion": "https://github.com/OrcaSlicer/OrcaSlicer/discussions/14878",
   "upstream_dev_category": "https://github.com/OrcaSlicer/OrcaSlicer/discussions/categories/dev",
-  "source_revision": "5817a76da6a783a992009c8f3aa6cd6b88efc9b8"
+  "source_revision": "1433316b550bac676136f618e215ece8c884bb8c"
 }

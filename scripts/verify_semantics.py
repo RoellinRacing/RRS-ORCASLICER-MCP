@@ -109,7 +109,11 @@ async def main():
             if state["status"] != "running":
                 break
             await asyncio.sleep(0.1)
-        assert state["status"] == "succeeded", state
+        if state["status"] != "succeeded":
+            for entry in state["entries"]:
+                if entry.get("log"):
+                    print(Path(entry["log"]).read_text(errors="replace")[-12000:], flush=True)
+            raise AssertionError(state)
         sliced = Path(state["entries"][0]["output_directory"]) / "sliced.3mf"
         masks = []
         from xml.etree import ElementTree as ET

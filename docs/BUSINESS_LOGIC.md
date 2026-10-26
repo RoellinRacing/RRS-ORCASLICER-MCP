@@ -183,3 +183,23 @@ handles or accesses GUI/files/network from a slicing worker. A locked 512-event
 ring bounds memory; sequence/epoch and a gap flag expose loss/reload. Observation
 requires the capability to be enabled and selected in slicing_pipeline_plugin.
 These stages are not percentages, successful exports or physical print evidence.
+
+## Independent geometry, calibration and printer providers
+
+See EXTENDED_OPERATIONS.md for input units and supported contracts. Topology edits
+operate on explicit checksum-bound STL/PLY snapshots with optional trimesh/manifold
+engines, checkpoint intent before computation and measure serialized outputs. These
+new STLs intentionally do not inherit project settings/painting. No pointer writes
+or unreviewed eval are used to bypass Orca's read-only native model binding.
+
+Calibration is a recoverable controlled parameter sweep from a supplied test model,
+not an automatic quality judgment. Baseline settings for all filament slots must
+exist; only the chosen slot changes, and PA also enables its matching slot. A series
+is bound to input checksum/parameters. Completed outputs are checked before reuse.
+
+Printer commands use only administrator-configured URLs and named secret env vars.
+An upload never starts a print. Print commands are separate explicit operations;
+HTTP acknowledgements do not prove device execution. Durable exclusive request-ID
+reservation prevents concurrent/restarted clients from dispatching the same ID
+twice. Transport uncertainty is retained, not automatically retried. This trades
+availability for avoiding duplicate physical actions. Cloud/AMS is an explicit gap.

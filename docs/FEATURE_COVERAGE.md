@@ -1,3 +1,18 @@
+## Stand 0.4.0
+
+Neue semantische Wege: `project_geometry_read/project_transform_write`,
+`project_painting_read/write` (vier Kanäle samt Unterdreiecken), `mesh_operation`
+(Reparieren, Teilen, Schneiden, Booleans, Verbinden, Hülle, Vereinfachen, Transformieren),
+`calibration_series_create` (vier Parameterreihen), `host_model_detail`,
+`host_printer_read`, `host_slicing_events` und konfigurierte Moonraker-/OctoPrint-
+Adapter. Details und Grenzen: [EXTENDED_OPERATIONS.md](EXTENDED_OPERATIONS.md).
+Die frühere Tabelle unten beschreibt den Ausgangsstand 0.3.0; aktuelle
+maschinenlesbare Wege stehen in `data/coverage.json`.
+
+Live-Modelländerungen mit Undo, Text/Embossing, die nativen Kalibrierungsdialoge,
+Cloud/AMS/MMU und vollständige native GUI-Steuerung bleiben offen. Ein generischer
+Maus-/Tastaturzugriff ist kein Ersatz für deren semantische Implementierung.
+
 # Vollständigkeit: was unterstützt wird und was noch fehlt
 
 **Die Schnittstelle ist keine vollständige semantische API für alle Orca-Funktionen.**
