@@ -100,6 +100,7 @@ class Engine:
         self.binary = binary or find_binary()
         self.tasks: dict[str, asyncio.Task] = {}
         self.processes: dict[str, asyncio.subprocess.Process] = {}
+        self.submissions = asyncio.Lock()
         self.slots = asyncio.Semaphore(1)  # Slicing is memory intensive; avoid resource contention.
         self._capabilities = None
         for path in self.state.glob("*/job.json"):
@@ -152,42 +153,47 @@ class Engine:
         ident = job_id or uuid.uuid4().hex
         if not re.fullmatch(r"[0-9a-f]{32}", ident):
             raise ValueError("Invalid job ID")
-        if (self.state / ident / "job.json").exists():
-            existing = self.get(ident)
-            if (
-                existing["arguments"] != arguments
-                or existing["timeout"] != timeout
-                or existing.get("expected_files", {}) != (expected_files or {})
-            ):
-                raise ValueError("Job ID was already used with different inputs")
-            return existing
-        caps = await self.capabilities(refresh=True)
-        if not caps["available"]:
-            raise ValueError(caps["reason"])
-        for argument in arguments:
-            if argument.startswith("--") and argument != "--":
-                flag = argument[2:].split("=", 1)[0]
-                if flag not in caps["flags"]:
-                    raise ValueError(
-                        f"Installed OrcaSlicer does not advertise --{flag}; refresh capabilities"
-                    )
-            elif re.match(r"^-[A-Za-z]", argument):
-                raise ValueError("Use documented long flags, not short aliases")
-        folder = self.state / ident
-        folder.mkdir()
-        job = {
-            "id": ident,
-            "status": "queued",
-            "arguments": arguments,
-            "timeout": timeout,
-            "created": time.time(),
-            "directory": str(folder),
-            "log": str(folder / "output.log"),
-            "expected_files": expected_files or {},
-        }
-        atomic_json(folder / "job.json", job)
-        self.tasks[ident] = asyncio.create_task(self._run(job))
-        return job
+        # A capability probe yields; reserve/check IDs under one lock so two
+        # reconnects cannot both create the same durable job.
+        async with self.submissions:
+            if (self.state / ident / "job.json").exists():
+                existing = self.get(ident)
+                if (
+                    existing["arguments"] != arguments
+                    or existing["timeout"] != timeout
+                    or existing.get("expected_files", {}) != (expected_files or {})
+                ):
+                    raise ValueError("Job ID was already used with different inputs")
+                return existing
+            caps = await self.capabilities(refresh=True)
+            if not caps["available"]:
+                raise ValueError(caps["reason"])
+            for argument in arguments:
+                if argument.startswith("--") and argument != "--":
+                    flag = argument[2:].split("=", 1)[0]
+                    if flag not in caps["flags"]:
+                        raise ValueError(
+                            f"Installed OrcaSlicer does not advertise --{flag}; refresh capabilities"
+                        )
+                elif re.match(r"^-[A-Za-z]", argument):
+                    raise ValueError("Use documented long flags, not short aliases")
+            folder = self.state / ident
+            # A crash between mkdir and the receipt write leaves an empty folder
+            # without job.json: nothing ran, so the same key may claim it again.
+            folder.mkdir(exist_ok=True)
+            job = {
+                "id": ident,
+                "status": "queued",
+                "arguments": arguments,
+                "timeout": timeout,
+                "created": time.time(),
+                "directory": str(folder),
+                "log": str(folder / "output.log"),
+                "expected_files": expected_files or {},
+            }
+            atomic_json(folder / "job.json", job)
+            self.tasks[ident] = asyncio.create_task(self._run(job))
+            return job
 
     def get(self, ident: str) -> dict:
         import json
@@ -198,6 +204,55 @@ class Engine:
         if not path.is_file():
             raise ValueError("Unknown job ID")
         return json.loads(path.read_text(encoding="utf-8"))
+
+    def read_log(self, ident: str, offset: int = 0, limit: int = 8000) -> dict:
+        """Read bounded byte ranges. The returned cursor is reusable after reconnect."""
+        if offset < 0 or not 1 <= limit <= 100000:
+            raise ValueError("Log offset must be >= 0 and limit 1..100000 bytes")
+        job = self.get(ident)
+        path = Path(job["log"])
+        size = path.stat().st_size if path.exists() else 0
+        if offset > size:
+            raise ValueError("Log offset exceeds saved log size")
+        raw = b""
+        if size:
+            with path.open("rb") as stream:
+                stream.seek(offset)
+                raw = stream.read(limit)
+        # Decode complete UTF-8 sequences only; leave a split suffix for the next
+        # read. A caller-supplied cursor inside a sequence uses replacement text.
+        end = offset + len(raw)
+        import codecs
+
+        terminal = job["status"] not in ("queued", "running")
+        decoder = codecs.getincrementaldecoder("utf-8")(errors="replace")
+        text = decoder.decode(raw, final=terminal and end == size)
+        pending = decoder.getstate()[0]
+        end -= len(pending)
+        if pending and end == offset and offset + len(raw) < size:
+            raise ValueError("Log limit is too small for the next UTF-8 character")
+        return {
+            "id": ident,
+            "status": job["status"],
+            "offset": offset,
+            "next_offset": end,
+            "size_bytes": size,
+            "text": text,
+            "at_end": end == size,
+            "log_truncated": job.get("log_truncated", False),
+        }
+
+    async def wait(self, ident: str, timeout: float = 10) -> dict:
+        """Bounded observation: neither timeout nor caller cancellation cancels work."""
+        import math
+
+        if not math.isfinite(timeout) or not 0 <= timeout <= 30:
+            raise ValueError("Wait timeout must be finite and 0..30 seconds")
+        self.get(ident)
+        task = self.tasks.get(ident)
+        if task and not task.done() and timeout:
+            await asyncio.wait({task}, timeout=timeout)
+        return self.get(ident)
 
     async def _run(self, job: dict) -> None:
         path = Path(job["directory"]) / "job.json"
@@ -226,8 +281,9 @@ class Engine:
                     size = 0
                     with Path(job["log"]).open("wb") as log:
                         while chunk := await process.stdout.read(65536):
-                            if size < 10 * 1024 * 1024:
-                                log.write(chunk)
+                            remaining = max(0, 10 * 1024 * 1024 - size)
+                            if remaining:
+                                log.write(chunk[:remaining])
                                 log.flush()
                             size += len(chunk)
                     job["log_truncated"] = size > 10 * 1024 * 1024

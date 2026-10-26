@@ -1,4 +1,4 @@
-"""Verify downloaded 0.5.0 assets against checksums and operation-level acceptance.
+"""Verify downloaded release assets against checksums and operation-level acceptance.
 
 Purpose: a successful build does not prove that the published files contain the
 tested native workflows. Bind all distributions, native receipts and optional
@@ -22,8 +22,9 @@ def main():
     parser.add_argument("directory", type=Path)
     parser.add_argument("output", type=Path)
     parser.add_argument("--release-metadata", type=Path)
+    parser.add_argument("--version", default="0.5.1")
     args = parser.parse_args()
-    directory, version = args.directory, "0.5.0"
+    directory, version = args.directory, args.version
     expected = {
         f"rrs-orcaslicer-mcp-{version}.zip",
         f"rrs_orcaslicer_mcp-{version}-py3-none-any.whl",

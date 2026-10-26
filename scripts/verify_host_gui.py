@@ -18,6 +18,7 @@ import zipfile
 from pathlib import Path
 from types import SimpleNamespace
 
+from rrs_orcaslicer_mcp import __version__
 from rrs_orcaslicer_mcp.native_ui import NativeControls
 
 from rrs_orcaslicer_mcp.host_bridge.client import HostClient
@@ -88,7 +89,7 @@ def prepare():
         install / ".install_state.json",
         {
             "installed_from": "local",
-            "installed_version": "0.5.0",
+            "installed_version": __version__,
             "plugin_name": "RRS OrcaSlicer Bridge",
             "enabled": True,
             "capabilities": [{"RRS MCP local bridge": True}, {"RRS MCP slicing observer": True}],

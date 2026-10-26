@@ -1,0 +1,28 @@
+{
+  "status": "succeeded",
+  "scope": "local_candidate_not_public_release",
+  "packaged_module_data_files": 26,
+  "artifacts": [
+    {
+      "name": "rrs-orcaslicer-mcp-0.5.1.zip",
+      "sha256": "2a9a581e2f77bbd32a2d60f0bbf348f00de8fac554ee207da9476187e47d799f",
+      "size": 350432
+    },
+    {
+      "name": "rrs_orcaslicer_bridge.py",
+      "sha256": "0ed3ed5e7bfecaaef02f732b2abc1f251f25b68d1add28ee259fc92f67022c17",
+      "size": 27960
+    },
+    {
+      "name": "rrs_orcaslicer_mcp-0.5.1-py3-none-any.whl",
+      "sha256": "081881464abd3df7b2c40ed961e7870e6317cde64ab099c52405eb81aab5a91f",
+      "size": 169916
+    },
+    {
+      "name": "rrs_orcaslicer_mcp-0.5.1.tar.gz",
+      "sha256": "b016a9ce64bb4f2177965e81653d1b6fddfe8de4628007ef2c80d9a0873f00f2",
+      "size": 293244
+    }
+  ],
+  "native_0_5_1_acceptance": "not_run_upload_blocked"
+}

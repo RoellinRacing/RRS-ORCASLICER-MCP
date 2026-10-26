@@ -1,3 +1,16 @@
+# Lokaler Kandidat 0.5.1 — öffentliche Abnahme ausstehend
+
+Die vollständige lokale Suite besteht 103 Tests. Einzel-Slicing wird auf
+Wiederholungsschutz, Modell-/Profiländerungen und Serverneustart geprüft;
+Log-Cursor, UTF-8-Grenzen, die 10-MiB-Obergrenze und abgebrochene Beobachter
+werden geprüft. Neue Status-/Log-Abfragen laufen zusätzlich über echten MCP-stdio.
+Das sind Auftrags-/Protokolltests, kein neuer nativer Orca-Abnahmebericht.
+
+Reproduzierbares echtes CLI-Slicing ist in scripts/verify_resumable_jobs.py
+vorbereitet und im Smoke-CI-Schritt eingebunden. Diese CI und die erneute native
+Gesamtabnahme warten auf Freigabe des öffentlichen Uploads. 0.5.1 ist hier ein
+lokaler Prüfkandidat; der veröffentlichte stabile Stand ist weiterhin 0.5.0.
+
 # Abnahme für 0.5.0
 
 [CI 40373662076](https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/actions/runs/40373662076)

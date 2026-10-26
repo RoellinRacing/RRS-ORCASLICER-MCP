@@ -64,5 +64,11 @@ async def test_disconnect_cancels_running_job(tmp_path):
                 await asyncio.sleep(0.01)
             else:
                 raise AssertionError("Worker did not start")
+            waited = await client.call_tool("job_wait", {"job_id": ident, "timeout_seconds": 0.01})
+            assert not waited.isError and waited.structuredContent["status"] == "running"
+            logged = await client.call_tool("job_log", {"job_id": ident, "offset": 0})
+            assert not logged.isError
+            assert logged.structuredContent["next_offset"] == 0
+            assert logged.structuredContent["text"] == ""
     saved = json.loads((tmp_path / "state/jobs" / ident / "job.json").read_text(encoding="utf-8"))
     assert saved["status"] == "cancelled"

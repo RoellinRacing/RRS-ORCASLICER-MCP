@@ -1,26 +1,19 @@
-# RRS OrcaSlicer MCP 0.5.0
+# RRS OrcaSlicer MCP 0.5.1
 
-61 tools in the independent MCP server, including seven typed native workflows.
-The stock Orca binary remains unchanged; the optional official bridge supplies
-copied native state while the desktop adapter drives Orca's own visible controls.
+63 tools. Reconnect-safe individual CLI slicing adds an optional idempotency key
+bound to arguments, timeout and model/profile SHA256. Concurrent identical keys
+produce one saved job. Queued inputs are checked before Orca starts.
 
-New operations:
-- Observed scene revisions and durable no-repeat GUI receipts with screenshots.
-- Native move/rotate/scale gizmos with actual pose readback and actual Undo/Redo.
-- Native editable text/emboss/engrave, verified in exported 3MF text/shape metadata.
-- Original calibration dialogs/generators, with unsaved-project backups and explicit
-  scene replacement, distinct from independent 0.4.0 coupon parameter sweeps.
+New job_log returns bounded log ranges with reusable byte cursors; job_wait waits
+up to 30 seconds without cancelling computation on observation timeout. Saved logs
+are capped at exactly 10 MiB while the child output continues to be drained.
 
-Install [desktop], system Tesseract and a working clipboard backend (e.g. xclip on
-X11), set ORCA_MCP_DESKTOP=1 and keep the official bridge running. Initial native
-acceptance is Linux X11 / English UI. Transforms/text currently require one object
-and one instance. Native operation evidence and exact tested generator families
-are bundled in docs/evidence/host-0.5.0.json and the native GUI CI artifact.
-Native Undo/Redo uses explicit steps; a compound workflow can create several steps.
-A scene revision covers exposed identities/poses/bounds/settings, not all mesh bytes.
+The existing native 0.5.0 workflows remain: move/rotate/scale with Undo/Redo,
+editable text and nine original calibration generator families. Native acceptance
+is Linux X11 / English UI / documented layout, one object and one instance for
+transforms/text. Additional GUI platforms, locales and firmware variants need
+separate acceptance. No cloud/AMS/MMU API or every-version guarantee is claimed.
 
-Other layouts/locales/platforms and firmware-specific generator dialogs require
-acceptance. Missing or ambiguous controls fail closed. No physical print was started.
-No claim of every Orca function, all-version compatibility, cloud or AMS/MMU control.
-
-Code and business rules: docs/NATIVE_WORKFLOWS.md and docs/BUSINESS_LOGIC.md.
+Installation is described in README.md. Business rules and usage are in
+RESUMABLE_JOBS.md, NATIVE_WORKFLOWS.md and BUSINESS_LOGIC.md. No physical print
+was started during development.

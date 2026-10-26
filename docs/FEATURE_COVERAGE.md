@@ -1,3 +1,10 @@
+## Stand 0.5.1 — einzelne CLI-Aufträge wiederaufnehmen
+
+63 Werkzeuge. Einzel-Slicing kann mit optionalem Wiederholungsschlüssel an
+Modell-/Profilinhalte gebunden werden. `job_log` setzt Log-Lesen per Byte-Cursor
+fort; `job_wait` wartet begrenzt ohne Abbruch der Berechnung. Einzelheiten:
+[RESUMABLE_JOBS.md](RESUMABLE_JOBS.md). Diese Erweiterung ergänzt keine GUI-Job-API.
+
 ## Stand 0.5.0 — gezielte native Bedienabläufe
 
 `native_transform` bearbeitet Live-Position/Drehung/Skalierung und liest die echte

@@ -292,3 +292,25 @@ the immutable release source; native receipts additionally bind the plugin/build
 operation results and workflow. The installed public-wheel pytest/stdio stage is
 recorded separately, since file inspection alone cannot establish installed behavior.
 Later documentation/evidence commits retain the release source identity 1101d5f.
+
+## Reconnect-safe individual slicing (0.5.1)
+
+A client can lose a response after Orca was already queued. An optional namespaced
+idempotency key on slice_project identifies that same saved job. Arguments, timeout
+and SHA256 of every input and explicit profile must match; otherwise the retry is
+rejected. The key is not permission to rerun a failed/interrupted job: an intentional
+retry requires a new key. Without a key each call remains a new job, for compatibility.
+Single slicing now verifies hashes just before process creation, like batches.
+A lock covers receipt lookup, asynchronous capability probing and receipt creation,
+so concurrent submissions cannot both reserve one ID. Files remain mutable after
+verification: callers must not change them during slicing; this is not a snapshot.
+
+job_wait observes a task with asyncio.wait rather than wait_for, so a timeout or
+cancelled observer never cancels computation. Actual server disconnect still uses
+the existing lifespan cleanup to terminate its children and persist cancellation.
+Restarted queued/running jobs remain interrupted; no automatic repeat is introduced.
+job_log returns bounded byte ranges and next_offset from saved capped logs; at_end
+only describes the current log size, while status describes job completion. UTF-8
+characters split at a range boundary are carried into the next read. Truncation is
+explicit after completion; the drain continues beyond the exact 10 MiB saved cap to
+avoid blocking the child. No GUI job API or physical printer command is added.
