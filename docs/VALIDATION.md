@@ -56,3 +56,13 @@ keine GUI-Aktionen und keinen praktischen Windows-/macOS-Lauf. Die CI-Matrix pr�
 Python-/Protokollfunktionen auf allen drei Betriebssystemen, sobald GitHub Actions
 läuft. Für GUI-only-Funktionen und zukünftige Orca-Versionen bestehen die im
 README dokumentierten Grenzen.
+
+## Abschliessender GitHub-Nachweis
+
+[Workflow 40276480510](https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/actions/runs/40276480510)
+ist vollständig erfolgreich: **14 Tests je Matrixeintrag**, Windows/macOS/Linux mit
+Python 3.11 und 3.13, echter OrcaSlicer-Slicing-/MCP-Roundtrip sowie Paketbau.
+Release **v0.1.1** wurde auf Commit `b801692e51f5bfba880466941eac258e0781dcc3`
+veröffentlicht. Das öffentliche ZIP wurde wieder heruntergeladen und gegen die
+veröffentlichten SHA256SUMS sowie auf ZIP-Integrität geprüft.
+[Maschinenlesbare Releaseprüfung](evidence/github-release.json).

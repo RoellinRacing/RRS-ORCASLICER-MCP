@@ -1,0 +1,20 @@
+{
+  "release": "v0.1.1",
+  "release_commit": "b801692e51f5bfba880466941eac258e0781dcc3",
+  "workflow_run": 40276480510,
+  "workflow_url": "https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/actions/runs/40276480510",
+  "tests_per_matrix_entry": 14,
+  "matrix": [
+    "Windows Python 3.11",
+    "Windows Python 3.13",
+    "macOS Python 3.11",
+    "macOS Python 3.13",
+    "Linux Python 3.11",
+    "Linux Python 3.13"
+  ],
+  "all_tests_and_engine_smoke": "success",
+  "package_url": "https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/releases/download/v0.1.1/rrs-orcaslicer-mcp-0.1.1.zip",
+  "downloaded_zip_sha256": "4ac3373d31523d3c5283a30add1f2c61f448e5d1a345e292757cd986be38e7c1",
+  "published_checksum_matches": true,
+  "zip_integrity": "passed"
+}
