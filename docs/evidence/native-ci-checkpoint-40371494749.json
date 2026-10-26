@@ -1,0 +1,115 @@
+{
+  "source_commit": "bf644ebfcb9dd77c327793ab6c6d193c322340bc",
+  "run": 40371494749,
+  "jobs": [
+    {
+      "id": 121743130099,
+      "name": "smoke",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 121743130748,
+      "name": "test (ubuntu-latest, 3.11)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 121743130777,
+      "name": "test (windows-latest, 3.11)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 121743130791,
+      "name": "test (macos-latest, 3.11)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 121743130900,
+      "name": "test (windows-latest, 3.13)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 121743130914,
+      "name": "test (ubuntu-latest, 3.13)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 121743131219,
+      "name": "test (macos-latest, 3.13)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 121743637993,
+      "name": "host_gui (max_volumetric_speed)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 121743638003,
+      "name": "host_gui (pressure_advance)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 121743638005,
+      "name": "host_gui (all)",
+      "status": "in_progress",
+      "conclusion": null
+    },
+    {
+      "id": 121743638035,
+      "name": "host_gui (flow_ratio)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 121743638072,
+      "name": "host_gui (input_shaping_frequency)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 121743638121,
+      "name": "host_gui (input_shaping_damping)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 121743638125,
+      "name": "host_gui (temperature)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 121743638128,
+      "name": "host_gui (cornering)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 121743638137,
+      "name": "host_gui (vfa)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 121743638338,
+      "name": "host_gui (retraction)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 121743638342,
+      "name": "host_gui (text)",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "next": "Inspect combined result; package and public-asset verification remain gated on success"
+}
