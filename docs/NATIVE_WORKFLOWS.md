@@ -61,3 +61,7 @@ Before native input the adapter parks the still-running modeless bridge compactl
 at the bottom-left, leaving the native viewport/gizmos visible. This is a desktop
 window placement change, not a model mutation. Mac window placement needs separate
 acceptance; the initial driver fails before model input there.
+
+Native Modifier text requires Orca Advanced/Expert mode; Orca hides this radio
+button in Simple mode. The disposable acceptance fixture uses Expert. The adapter
+does not change an existing user's mode automatically.

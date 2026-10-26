@@ -62,6 +62,7 @@ def prepare():
                 "version": "2.5.0",
                 "preset_folder": "default",
                 "translation_language": "en_US",
+                "user_mode": "expert",
                 "stealth_mode": True,
                 "sync_system_preset": False,
                 "sync_user_preset": False,
