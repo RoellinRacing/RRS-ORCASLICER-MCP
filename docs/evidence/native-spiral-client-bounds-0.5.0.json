@@ -1,0 +1,38 @@
+{
+  "status": "succeeded",
+  "no_desktop_input": true,
+  "cases": [
+    {
+      "source_job": 121715776092,
+      "bounds": [
+        228,
+        403,
+        1172,
+        614
+      ],
+      "image_sha256": "8efdbbe5fba50d3b24993b6da986560af0debd241e35c9fa0de06e2c5b24e3a0",
+      "target": {
+        "x": 1061,
+        "y": 571,
+        "w": 100,
+        "h": 32
+      }
+    },
+    {
+      "source_job": 121734080618,
+      "bounds": [
+        229,
+        442,
+        1172,
+        633
+      ],
+      "image_sha256": "8efdbbe5fba50d3b24993b6da986560af0debd241e35c9fa0de06e2c5b24e3a0",
+      "target": {
+        "x": 1102.5,
+        "y": 581.0,
+        "w": 17.5,
+        "h": 11.0
+      }
+    }
+  ]
+}

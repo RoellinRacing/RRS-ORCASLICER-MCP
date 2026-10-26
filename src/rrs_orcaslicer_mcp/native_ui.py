@@ -348,10 +348,16 @@ class NativeControls:
         if kind != "flow_ratio" or title not in ("Orca Slicer info", "OrcaSlicer info"):
             return None
         left, top, right, bottom = self.bounds()
-        body = (left + 90, top + 30, right - 10, bottom - 50)
+        # Re-read the whole active dialog on each observation. A cached crop
+        # or another title-bar inset can clip its first line while wx fits it.
+        body = None
+        screenshot = self.capture("inherited_spiral_prompt")
+        atomic_json(
+            self.evidence / "spiral_dialog_bounds.json",
+            {"title": title, "bounds": [left, top, right, bottom], "body": body},
+        )
         self.label("Spiral mode only works", body, psm=6)
         self.label("Cancel enabling spiral mode", body, psm=6)
-        screenshot = self.capture("inherited_spiral_prompt")
         # Flow calibration loads flat coupons. Decline re-enabling inherited
         # vase mode, rather than accepting automatic wall/infill/support edits.
         # The body repeats "No"; only the bottom button row may receive input.

@@ -1,3 +1,31 @@
+# Flow-dialog observation correction — pending full native acceptance
+
+Last successful step: 97 local tests, static checks, bridge consistency and both
+actual spiral-dialog geometry replays passed. The narrow correction re-reads the
+whole active info dialog instead of applying a stale/title-offset text rectangle.
+Next: inspect the full GitHub run for this committed source, require all native
+checks, publish 0.5.0, then verify public downloads and the separately installed wheel.
+Keep main fixed during that acceptance/package run; save supplemental evidence
+only after release so metadata-only commits do not cancel a successful native run.
+
+## Archived development checkpoints
+
+# Earlier acceptance — 2dc6758 (2026-10-26 17:29 UTC)
+
+The corrected product source is ALREADY PUSHED on main at
+2dc67584fd042c2d0c811dadc4a7abbf4ab30dff. Current full acceptance run:
+https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/actions/runs/40368784963
+
+Next: inspect this run and finish the immutable v0.5.0 publication/download check.
+Keep main at this source commit while that acceptance/package run is active;
+pushing additional evidence-only docs/tests now would cancel and restart it.
+The extra local primary-button manifest/replay/tests are useful supplemental
+proof and should be preserved for the final evidence checkpoint AFTER release.
+Do not repeat the already successful selector investigation. The corrected
+source uses connected components and scopes grey fallback to the exact No prompt.
+
+## Earlier source checkpoints
+
 # Published checkpoint — 0.4.0
 
 Last successful step: official native integration and all six Windows/macOS/Linux
@@ -240,3 +268,14 @@ and native-primary-buttons-0.5.0.json retain the exact targets. A regression cov
 unrelated grey panels and a radio mark above the button. Next: require new full
 native acceptance after this isolated selector correction; do not release on the
 older failed pilot or on screenshot-only results.
+
+2dc6758 / CI 40368784963: all six matrix entries, all nine native generators and
+all three text modes passed independently. Combined operations again reached Flow
+Ratio after 25 successful steps, but the spiral prompt's first line was clipped:
+actual X11 client bounds were 229,442,1172,633, while the old body added another
+30px title inset. The old replay used outer-frame bounds and did not expose that
+clipping. Removed the redundant inset; saved actual observed geometry before
+matching, and proved the No target against BOTH real screenshots/geometries.
+Actual two-image proof: native-spiral-client-bounds-0.5.0.json. Two regressions bind
+the first body line for outer/client coordinates. Next: push this narrow correction,
+require the complete native run, then publish and verify the immutable assets.

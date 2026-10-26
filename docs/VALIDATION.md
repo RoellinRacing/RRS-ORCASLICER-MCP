@@ -7,7 +7,7 @@ Source-Commit und CI-Lauf. `evidence/native-workflows-0.5.0.json` enthält die e
 Operationsquittungen für Transformation/Undo/Redo, Join/Cut/Modifier-Text und neun
 native Generatorfamilien. Die unabhängigen Diagnoseläufe allein geben kein Paket frei.
 
-95 lokale Tests bestanden im Fortsetzungsstand. Zehn tatsächliche Fehler-/Commitbilder
+97 lokale Tests bestanden im Fortsetzungsstand. Zehn tatsächliche Fehler-/Commitbilder
 wurden zusätzlich ohne Eingaben gegen exakte Zahlen/Radioziele geprüft:
 [evidence/native-calibration-ocr-0.5.0.json](evidence/native-calibration-ocr-0.5.0.json).
 Das ist ein Selector-Nachweis; die native Gesamtabnahme bleibt zusätzlich erforderlich.

@@ -13,6 +13,8 @@ parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("image", type=Path)
 parser.add_argument("--bounds", nargs=4, type=int, required=True)
 parser.add_argument("--output", type=Path, required=True)
+parser.add_argument("--source-run", type=int)
+parser.add_argument("--source-artifact", type=int)
 args = parser.parse_args()
 picture = Image.open(args.image)
 ui = NativeControls(
@@ -29,8 +31,8 @@ receipt = {
     "status": "succeeded",
     "test": "Read-only exact native spiral prompt replay; no desktop input",
     "source_image_sha256": hashlib.sha256(args.image.read_bytes()).hexdigest(),
-    "source_artifact": 12669488298,
-    "source_run": 40363467681,
+    "source_artifact": args.source_artifact,
+    "source_run": args.source_run,
     "target": clicked[0],
     "cancelled_inherited_spiral_mode": result["cancelled_inherited_spiral_mode"],
     "upstream_source": "https://github.com/OrcaSlicer/OrcaSlicer/blob/0b4e7e9e2a7968df544e7f52e71e18dac8041d85/src/slic3r/GUI/ConfigManipulation.cpp",

@@ -571,3 +571,19 @@ def test_primary_button_fallback_ignores_unrelated_grey_panels(tmp_path, monkeyp
     ui.dialog_button("OK", "Temperature calibration")
     assert len(clicked) == 1 and clicked[0]["x"] == 220
     assert clicked[0]["y"] == 150 and clicked[0]["h"] == 35
+
+
+@pytest.mark.parametrize("bounds", [(228, 403, 1172, 614), (229, 442, 1172, 633)])
+def test_spiral_body_keeps_first_line_for_client_and_outer_bounds(tmp_path, monkeypatch, bounds):
+    from rrs_orcaslicer_mcp import native_ui
+
+    ui = NativeControls(None, tmp_path)
+    ui.window_title = lambda: "Orca Slicer info"
+    ui.bounds = lambda: bounds
+    regions = []
+    ui.label = lambda phrase, region=None, **kwargs: regions.append(region)
+    ui.capture = lambda phase: phase
+    ui.dialog_button = lambda *a, **k: None
+    monkeypatch.setattr(native_ui.time, "sleep", lambda _: None)
+    assert ui.resolve_calibration_dialog("flow_ratio")["cancelled_inherited_spiral_mode"]
+    assert regions == [None, None]

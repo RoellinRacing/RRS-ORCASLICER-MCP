@@ -270,3 +270,9 @@ thin borders and separate radio marks above a button cannot merge into its bound
 Six actual primary-dialog screenshots and the separate spiral No screenshot are
 replayed without input; the synthetic regression includes a grey panel and a radio
 mark directly above a primary button.
+
+The spiral prompt is read from the whole current active-dialog bounds on each
+OCR observation. It does not reuse a cached crop or add another title-bar inset:
+actual X11/wx window fitting clipped the first explanatory line with that inset.
+Both observed outer/client geometries are replayed. The title, observed bounds and
+crop choice are saved before matching/input for future layout diagnosis.
