@@ -83,3 +83,15 @@ acceptance script. 65-test suite is being rechecked before the next native run.
 65 local tests now passed. Follow-up source/coverage/docs are synchronized for
 61 tools and explicit native UI limits. Native acceptance is expanded to three
 text volume modes and nine generator families; it still must pass actual CI.
+
+Native pilot 9793298 reached real controls and stopped before any model mutation:
+Slice plate is disabled/poorly recognized in Preview after the baseline slice.
+MainFrame detection now uses stable Prepare/Project view labels. The modeless bridge
+is compacted/parked bottom-left (still running) so it cannot cover native gizmos.
+No bridge/app binary modification is used. The failed native screenshot is retained
+in CI 40335959668, artifact 12657167909. Next: rerun actual edit/history/text/generators.
+The revised MainFrame detector passed a read-only replay of the actual failed
+Preview screenshot. Proof and reusable script: native-ui-preflight-0.5.0.json and
+scripts/replay_native_ocr.py. OCR is now cropped to the target region, bounded to
+12 seconds and single-threaded per child; it cannot consume minutes on a dense
+viewport composition. Desktop-window placement is journaled before native input.

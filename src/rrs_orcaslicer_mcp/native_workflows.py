@@ -356,6 +356,8 @@ class NativeWorkflows:
                 atomic_json(path, record)
 
             try:
+                phase("parking_modeless_bridge")
+                record["bridge_window"] = await asyncio.to_thread(ui.park_bridge)
                 record["before_screenshot"] = await asyncio.to_thread(ui.capture, "before")
                 await asyncio.to_thread(ui.key, "escape")
                 await asyncio.to_thread(ui.canvas)

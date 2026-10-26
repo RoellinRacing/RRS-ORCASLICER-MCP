@@ -1,6 +1,8 @@
 """Version-sensitive native GUI controls with semantic locators, never caller coordinates."""
 
 import io
+import csv
+import os
 import math
 import re
 import subprocess
@@ -19,6 +21,7 @@ def tokens(text):
 class NativeControls:
     def __init__(self, desktop: Desktop, evidence: Path):
         self.desktop, self.evidence = desktop, evidence
+        self.main_bounds = None
 
     def bounds(self):
         # Also checks the owning process, including native Orca dialogs.
@@ -49,31 +52,50 @@ class NativeControls:
         x, y, width, height = [int(data[k]) for k in ("X", "Y", "WIDTH", "HEIGHT")]
         return x, y, x + width, y + height
 
-    def words(self):
-        import pytesseract
+    def words(self, region=None):
 
         api = self.desktop._api()
         left, top, right, bottom = self.bounds()
         image = api.screenshot()
         left, top = max(left, 0), max(top, 0)
         right, bottom = min(right, image.width), min(bottom, image.height)
+        if region is None and self.main_bounds == (left, top, right, bottom):
+            region = (left + (right - left) * 0.36, top + 110, right, bottom)
+        if region:
+            left, top = max(left, int(region[0])), max(top, int(region[1]))
+            right, bottom = min(right, int(region[2])), min(bottom, int(region[3]))
         crop = image.crop((left, top, right, bottom)).convert("RGB")
-        data = pytesseract.image_to_data(
-            crop.resize((crop.width * 2, crop.height * 2)),
-            config="--psm 11",
-            output_type=pytesseract.Output.DICT,
-        )
+        stream = io.BytesIO()
+        crop.resize((crop.width * 2, crop.height * 2)).save(stream, format="PNG")
+        # Bound OCR wall time and use a per-child OpenMP setting. Full-screen
+        # Tesseract can otherwise spend minutes on a dense GL/UI composition.
+        try:
+            response = subprocess.run(
+                ["tesseract", "stdin", "stdout", "--psm", "11", "tsv"],
+                input=stream.getvalue(),
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                env={**os.environ, "OMP_THREAD_LIMIT": "1"},
+                timeout=12,
+                check=True,
+            )
+        except (subprocess.TimeoutExpired, subprocess.CalledProcessError, FileNotFoundError):
+            raise ValueError(
+                "Native OCR did not complete; check system Tesseract and visible controls"
+            ) from None
+        rows = csv.DictReader(io.StringIO(response.stdout.decode("utf-8")), delimiter="\t")
         result = []
-        for n, text in enumerate(data["text"]):
+        for row in rows:
+            text = row.get("text", "")
             if tokens(text):
                 result.append(
                     {
                         "text": text,
                         "tokens": tokens(text),
-                        "x": left + data["left"][n] / 2,
-                        "y": top + data["top"][n] / 2,
-                        "w": data["width"][n] / 2,
-                        "h": data["height"][n] / 2,
+                        "x": left + int(row["left"]) / 2,
+                        "y": top + int(row["top"]) / 2,
+                        "w": int(row["width"]) / 2,
+                        "h": int(row["height"]) / 2,
                     }
                 )
         return result
@@ -121,7 +143,7 @@ class NativeControls:
         return candidates[0]
 
     def label(self, phrase, region=None):
-        return self.locate(self.words(), phrase, region)
+        return self.locate(self.words(region), phrase, region)
 
     def click(self, phrase, region=None):
         box = self.label(phrase, region)
@@ -145,7 +167,7 @@ class NativeControls:
             pyperclip.copy(previous)
 
     def read_numeric(self, label, region=None, index=0, columns=None, required_unit=None):
-        words = self.words()
+        words = self.words(region)
         rows = []
         for anchor in self.locate(words, label, region, all_matches=True):
             mid = anchor["y"] + anchor["h"] / 2
@@ -212,8 +234,44 @@ class NativeControls:
     def main(self):
         left, top, right, _ = self.bounds()
         # Dialogs/bridge panels do not satisfy the native MainFrame toolbar check.
-        self.label("Slice plate", (left, top, right, top + 110))
+        self.label("Prepare", (left, top, right, top + 110))
+        self.label("Project", (left, top, right, top + 110))
+        self.main_bounds = self.bounds()
         return left, top, right
+
+    def park_bridge(self):
+        api = self.desktop._api()
+        _, screen_height = api.size()
+        if sys.platform == "win32":
+            import pygetwindow
+
+            windows = [
+                w
+                for w in pygetwindow.getWindowsWithTitle("RRS MCP Bridge")
+                if w.title == "RRS MCP Bridge"
+            ]
+            if len(windows) != 1:
+                raise ValueError("Expected one modeless RRS MCP Bridge window")
+            windows[0].resizeTo(350, 180)
+            windows[0].moveTo(0, screen_height - 200)
+        elif sys.platform == "darwin":
+            raise ValueError("Native window parking on macOS needs separate acceptance")
+        else:
+            pid = subprocess.check_output(
+                ["xdotool", "getactivewindow", "getwindowpid"], text=True
+            ).strip()
+            windows = subprocess.check_output(
+                ["xdotool", "search", "--onlyvisible", "--pid", pid, "--name", "^RRS MCP Bridge$"],
+                text=True,
+            ).splitlines()
+            if len(windows) != 1:
+                raise ValueError("Expected one modeless RRS MCP Bridge window in this Orca process")
+            subprocess.run(["xdotool", "windowsize", windows[0], "350", "180"], check=True)
+            subprocess.run(
+                ["xdotool", "windowmove", windows[0], "0", str(screen_height - 200)], check=True
+            )
+        time.sleep(0.3)
+        return {"title": "RRS MCP Bridge", "placement": "compact_bottom_left", "kept_running": True}
 
     def canvas(self):
         left, top, right = self.main()

@@ -1,0 +1,19 @@
+{
+  "status": "succeeded",
+  "test": "Read-only replay of a saved native screenshot; no input/app mutation",
+  "source_image_sha256": "82bd54f6cfec8a1219711ccdc7015a63da1fb3154d5cd5d383b79fcf363c5b32",
+  "driver_sha256": "98771b0c5772f80917b5002e3c32329cbb2b8cd09604dd6a881effa16870c4f1",
+  "source_artifact": "https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/actions/runs/40335959668/artifacts/12657167909",
+  "tesseract": "tesseract 5.3.4",
+  "observed_mainframe": [
+    122,
+    113,
+    1318
+  ],
+  "selectors": [
+    "Prepare",
+    "Project"
+  ],
+  "ocr_timeout_seconds": 12,
+  "omp_thread_limit_per_child": 1
+}

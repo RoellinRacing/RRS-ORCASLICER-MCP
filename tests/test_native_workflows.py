@@ -87,6 +87,9 @@ async def test_native_receipt_no_replay_and_stale_revision_rejection(tmp_path):
         def main(self):
             return (0, 0, 100)
 
+        def park_bridge(self):
+            return {"kept_running": True}
+
         def canvas(self):
             pass
 
@@ -131,6 +134,9 @@ async def test_partial_native_input_retains_uncertainty(tmp_path):
 
         def main(self):
             return (0, 0, 100)
+
+        def park_bridge(self):
+            return {"kept_running": True}
 
         def canvas(self):
             pass

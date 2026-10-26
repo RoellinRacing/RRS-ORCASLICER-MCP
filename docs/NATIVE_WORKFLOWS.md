@@ -56,3 +56,8 @@ custom shortcut remappings are outside this pack's acceptance scope. Pose
 operations verify requested-axis native readback; generator numeric fields are
 read back before clicking OK. Native calibration success also requires nonempty
 exported geometry. Text operation type is verified as model part/negative/modifier.
+
+Before native input the adapter parks the still-running modeless bridge compactly
+at the bottom-left, leaving the native viewport/gizmos visible. This is a desktop
+window placement change, not a model mutation. Mac window placement needs separate
+acceptance; the initial driver fails before model input there.
