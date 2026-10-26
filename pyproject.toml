@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rrs-orcaslicer-mcp"
+version = "0.1.0"
+description = "Standalone MCP bridge for OrcaSlicer CLI, profiles, 3MF projects and desktop"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "AGPL-3.0-or-later"
+dependencies = ["mcp>=1.20,<2"]
+
+[project.optional-dependencies]
+desktop = ["PyAutoGUI>=0.9.54", "Pillow>=10", "pyperclip>=1.9", "PyGetWindow>=0.0.9; sys_platform == 'win32'"]
+test = ["pytest>=8", "pytest-asyncio>=0.24", "ruff>=0.9", "build>=1"]
+
+[project.scripts]
+rrs-orcaslicer-mcp = "rrs_orcaslicer_mcp.server:main"
+
+[tool.setuptools.package-data]
+rrs_orcaslicer_mcp = ["data/*.json"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "B"]
+
