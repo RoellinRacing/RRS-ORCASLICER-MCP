@@ -91,3 +91,13 @@ Nightly ausgeführt und ist keine implementierte Funktion dieser Veröffentlichu
 
 Auch das separat installierte 0.2.0-Wheel bestand dieselben 25 Tests:
 [evidence/wheel-tests-0.2.0.txt](evidence/wheel-tests-0.2.0.txt).
+
+## Öffentliche Freigabe von 0.2.0
+
+[GitHub-Lauf 40278472600](https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/actions/runs/40278472600)
+ist vollständig erfolgreich: 25 Tests je OS-/Python-Matrixeintrag, bestehende echte
+Engine-Prüfungen sowie der neue semantische Objekt-/Platten-/Profil-/Stapel-Test.
+Release-Commit: `735a5f0e4d18beeda71e86ffacb13431a09b5da7`.
+Das veröffentlichte ZIP wurde heruntergeladen und gegen die öffentlichen
+SHA256SUMS sowie auf Archivintegrität geprüft.
+[Release-Prüfung](evidence/github-release-0.2.0.json).

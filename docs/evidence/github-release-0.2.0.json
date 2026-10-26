@@ -1,0 +1,31 @@
+{
+  "release": "v0.2.0",
+  "release_commit": "735a5f0e4d18beeda71e86ffacb13431a09b5da7",
+  "workflow_run": 40278472600,
+  "tests_per_matrix_entry": 25,
+  "matrix": [
+    "Windows Python 3.11",
+    "Windows Python 3.13",
+    "macOS Python 3.11",
+    "macOS Python 3.13",
+    "Linux Python 3.11",
+    "Linux Python 3.13"
+  ],
+  "ci_conclusion": "success",
+  "real_engine_tests": [
+    "reference slicing",
+    "global settings MCP roundtrip",
+    "semantic object and plate edits",
+    "profile helpers",
+    "two-input batch and idempotency",
+    "G-code summaries"
+  ],
+  "zip_url": "https://github.com/RoellinRacing/RRS-ORCASLICER-MCP/releases/download/v0.2.0/rrs-orcaslicer-mcp-0.2.0.zip",
+  "zip_bytes": 152158,
+  "zip_sha256": "739e3821f25cce76ff39c6db4fa3cb2b697db90dbf35d6ccdd67311e6d695174",
+  "published_checksum_matches": true,
+  "zip_integrity": "passed",
+  "complete_orcaslicer_api": false,
+  "upstream_discussion": "https://github.com/OrcaSlicer/OrcaSlicer/discussions/14878",
+  "upstream_posted": false
+}
