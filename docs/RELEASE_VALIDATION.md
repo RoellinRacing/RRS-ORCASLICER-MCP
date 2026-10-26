@@ -1,0 +1,5 @@
+# Release verification business rules
+
+A successful build alone does not establish that published assets contain the accepted native workflows. Run scripts/verify_release_bundle.py on the downloaded release bundle and optionally pass --release-metadata with the GitHub release JSON. The verifier requires the four expected distribution checksums, matching source/wheel native controls and bridge code, source business rules, the combined thirty-operation native success receipt, all three text modes, all nine generator families and exact source-commit provenance. With release metadata it also compares every public asset digest. Installed-wheel tests follow separately. Failure must preserve the preceding accepted release and must never authorize publication from independent native reports alone.
+
+Current main correction: bf644ebfcb9dd77c327793ab6c6d193c322340bc. Native run 40371494749 is in progress; the earlier 40368784963 passed all independent sections but failed the combined inherited-spiral prompt crop. Its independent receipts remain in docs/evidence/native-independent-0.5.0.json. Do not treat that failed combined run as release acceptance.
