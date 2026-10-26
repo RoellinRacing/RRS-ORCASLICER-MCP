@@ -1,5 +1,6 @@
 import copy
 import sys
+import types
 import json
 import zipfile
 
@@ -179,3 +180,27 @@ def test_native_metadata_accepts_upstream_unbound_slic3rpe_names(tmp_path):
         )
         archive.writestr("Metadata/project_settings.config", "{}")
     assert archive_metadata(path)["editable_texts"][0]["text"]["text"] == "RRS"
+
+
+def test_bridge_window_search_intersects_title_and_pid(tmp_path, monkeypatch):
+    from rrs_orcaslicer_mcp import native_ui
+
+    actions = []
+
+    def output(command, **kwargs):
+        if command[1] == "getactivewindow":
+            return "4242\n"
+        assert command[1] == "search"
+        assert "--all" in command
+        assert command[command.index("--pid") + 1] == "4242"
+        return "12345\n"
+
+    monkeypatch.setattr(native_ui.sys, "platform", "linux")
+    monkeypatch.setattr(native_ui.subprocess, "check_output", output)
+    monkeypatch.setattr(native_ui.subprocess, "run", lambda args, **kw: actions.append(args))
+    monkeypatch.setattr(native_ui.time, "sleep", lambda _: None)
+    desktop = types.SimpleNamespace(_api=lambda: types.SimpleNamespace(size=lambda: (1440, 1000)))
+    ui = NativeControls(desktop, tmp_path)
+    assert ui.park_bridge()["kept_running"]
+    assert actions[0] == ["xdotool", "windowsize", "12345", "350", "180"]
+    assert actions[1] == ["xdotool", "windowmove", "12345", "0", "800"]

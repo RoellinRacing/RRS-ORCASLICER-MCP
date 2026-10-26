@@ -261,7 +261,16 @@ class NativeControls:
                 ["xdotool", "getactivewindow", "getwindowpid"], text=True
             ).strip()
             windows = subprocess.check_output(
-                ["xdotool", "search", "--onlyvisible", "--pid", pid, "--name", "^RRS MCP Bridge$"],
+                [
+                    "xdotool",
+                    "search",
+                    "--all",
+                    "--onlyvisible",
+                    "--pid",
+                    pid,
+                    "--name",
+                    "^RRS MCP Bridge$",
+                ],
                 text=True,
             ).splitlines()
             if len(windows) != 1:

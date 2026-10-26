@@ -95,3 +95,8 @@ Preview screenshot. Proof and reusable script: native-ui-preflight-0.5.0.json an
 scripts/replay_native_ocr.py. OCR is now cropped to the target region, bounded to
 12 seconds and single-threaded per child; it cannot consume minutes on a dense
 viewport composition. Desktop-window placement is journaled before native input.
+
+Native pilot 8a7c479 passed MainFrame detection and reached window parking; no
+model action executed. xdotool combines multiple search criteria with OR by default,
+so PID+title returned more than the intended bridge window. Added explicit --all
+(AND) and a regression test for the exact PID/title intersection before any move.
