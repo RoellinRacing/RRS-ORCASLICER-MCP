@@ -17,7 +17,10 @@ from rrs_orcaslicer_mcp.storage import atomic_json, digest
 async def main():
     root = Path(os.environ["ORCA_TEST_OUTPUT"]).resolve()
     report_path = root / "roundtrip-report.json"
-    if report_path.exists() and json.loads(report_path.read_text()).get("status") == "succeeded":
+    if (
+        report_path.exists()
+        and json.loads(report_path.read_text(encoding="utf-8")).get("status") == "succeeded"
+    ):
         print("Verified roundtrip already saved; use a new ORCA_TEST_OUTPUT to run another test.")
         return
     source = root / "output/cube-sliced.3mf"

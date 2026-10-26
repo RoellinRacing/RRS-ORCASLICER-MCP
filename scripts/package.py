@@ -8,7 +8,7 @@ import zipfile
 from pathlib import Path
 
 root = Path(__file__).resolve().parents[1]
-version = tomllib.loads((root / "pyproject.toml").read_text())["project"]["version"]
+version = tomllib.loads((root / "pyproject.toml").read_text(encoding="utf-8"))["project"]["version"]
 subprocess.run([sys.executable, "-m", "build", "--no-isolation"], cwd=root, check=True)
 dist = root / "dist"
 name = f"rrs-orcaslicer-mcp-{version}"

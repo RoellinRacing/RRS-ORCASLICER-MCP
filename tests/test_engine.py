@@ -24,14 +24,14 @@ async def wait(engine, ident):
 
 
 async def test_jobs_success_failure_no_shell_and_logs(engine, tmp_path):
-    script = tmp_path / "worker.py"
+    script = tmp_path / "worker-温度.py"
     script.write_text("import sys; print(sys.argv[1]); sys.exit(3 if '--fail' in sys.argv else 0)")
     marker = tmp_path / "must-not-exist"
     job = await engine.submit([str(script), f"$(touch {marker})"])
     done = await wait(engine, job["id"])
     assert done["status"] == "succeeded"
     assert not marker.exists()
-    assert "$(touch" in (tmp_path / "jobs" / job["id"] / "output.log").read_text()
+    assert "$(touch" in (tmp_path / "jobs" / job["id"] / "output.log").read_text(encoding="utf-8")
     failed = await engine.submit([str(script), "--fail"])
     assert (await wait(engine, failed["id"]))["returncode"] == 3
     with pytest.raises(ValueError, match="does not advertise"):

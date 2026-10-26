@@ -97,7 +97,7 @@ async def main():
         ]
         atomic_json(root / "report.json", report)
         if job["status"] != "succeeded" or not any(p.suffix == ".gcode" for p in artifacts):
-            print(Path(job["log"]).read_text(errors="replace")[-10000:])
+            print(Path(job["log"]).read_text(encoding="utf-8", errors="replace")[-10000:])
             raise SystemExit("Real OrcaSlicer slicing did not produce G-code")
         print(json.dumps({"status": job["status"], "artifacts": report["artifacts"]}, indent=2))
     finally:

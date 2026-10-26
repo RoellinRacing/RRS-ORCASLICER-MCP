@@ -105,7 +105,7 @@ class Engine:
         for path in self.state.glob("*/job.json"):
             import json
 
-            job = json.loads(path.read_text())
+            job = json.loads(path.read_text(encoding="utf-8"))
             if job["status"] in ("queued", "running"):
                 job.update(
                     status="interrupted",
@@ -179,7 +179,7 @@ class Engine:
         path = self.state / ident / "job.json"
         if not path.is_file():
             raise ValueError("Unknown job ID")
-        return json.loads(path.read_text())
+        return json.loads(path.read_text(encoding="utf-8"))
 
     async def _run(self, job: dict) -> None:
         path = Path(job["directory"]) / "job.json"

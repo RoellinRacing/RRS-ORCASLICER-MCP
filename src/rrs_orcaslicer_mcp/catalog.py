@@ -43,7 +43,9 @@ def extract(source: str) -> dict:
 
 
 def snapshot() -> dict:
-    return json.loads(files("rrs_orcaslicer_mcp").joinpath("data/options.json").read_text())
+    return json.loads(
+        files("rrs_orcaslicer_mcp").joinpath("data/options.json").read_text(encoding="utf-8")
+    )
 
 
 def search(query: str = "", offset: int = 0, limit: int = 50) -> dict:

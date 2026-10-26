@@ -10,4 +10,9 @@ Files: src/, scripts/, tests/, docs/, pyproject.toml, LICENSE, NOTICE, CI workfl
 GitHub checkpoint already confirmed: d419a69c28844596f476c388c7c883dd6b9475a1.
 Distribution built: wheel, source tarball, source ZIP and SHA256SUMS in dist/.
 Installed-wheel check: same 13 tests passed using the installed distribution.
-Next: publish final source and inspect GitHub CI/release results. Desktop and physical printing are not locally validated.
+Published source: f45ee121d44688e64c0a4dad2ce220979b78c4e4.
+First CI: Linux/macOS passed; Windows exposed default codepage decoding of UTF-8
+catalog, now fixed explicitly for all JSON/state readers. Added Unicode job-path
+coverage. Linux runner lacked OpenGL runtime; CI dependencies corrected.
+Next: rerun CI and publish version 0.1.0 assets after all checks pass.
+Desktop and physical printing remain unvalidated.

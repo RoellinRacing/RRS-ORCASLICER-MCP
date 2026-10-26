@@ -21,8 +21,8 @@ data = {
         "revision": revision,
         "file": "src/libslic3r/PrintConfig.cpp",
     },
-    "options": extract(source.read_text()),
+    "options": extract(source.read_text(encoding="utf-8")),
 }
 args.output.parent.mkdir(parents=True, exist_ok=True)
-args.output.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n")
+args.output.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 print(f"Saved {len(data['options'])} option definitions to {args.output}")

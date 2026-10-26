@@ -49,4 +49,4 @@ config = {
 }
 atomic_json(args.output.resolve(), config)
 print(f"Saved {args.output.resolve()}")
-print(json.dumps(config, ensure_ascii=False, indent=2))
+print(json.dumps(config, ensure_ascii=True, indent=2))
