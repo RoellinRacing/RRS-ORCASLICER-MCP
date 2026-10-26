@@ -1,0 +1,66 @@
+{
+  "status": "succeeded",
+  "test": "Read-only exact primary OK button replays; no desktop input",
+  "cases": [
+    {
+      "kind": "input_shaping_damping",
+      "sha256": "1abc30662be34e113ba3308a420feb3db8c644863ba288415d677226da47c1d0",
+      "target": {
+        "x": 811,
+        "y": 765,
+        "w": 100,
+        "h": 32
+      }
+    },
+    {
+      "kind": "cornering",
+      "sha256": "5e530e9ff55ffc2da159abd4cfb514f2afe77ac11bd6d4e388f94e8128cf5cf8",
+      "target": {
+        "x": 700,
+        "y": 652,
+        "w": 100,
+        "h": 32
+      }
+    },
+    {
+      "kind": "pressure_advance",
+      "sha256": "b93b6b611d17bea23123826db8a7beda3e72f5e89f0ee2ba8883c1043d7b9cea",
+      "target": {
+        "x": 714,
+        "y": 724,
+        "w": 100,
+        "h": 32
+      }
+    },
+    {
+      "kind": "max_volumetric_speed",
+      "sha256": "ba6faa2f7c9cd23108b4e84cb06c0f95407db59f525f7f66d0b3a039811d7c80",
+      "target": {
+        "x": 714,
+        "y": 502,
+        "w": 100,
+        "h": 32
+      }
+    },
+    {
+      "kind": "retraction",
+      "sha256": "1d0fa6463e3ccbfdc061c9aba4622f6767d1beae1825dc001b93dfa3847246c0",
+      "target": {
+        "x": 712,
+        "y": 507,
+        "w": 100,
+        "h": 32
+      }
+    },
+    {
+      "kind": "flow_ratio",
+      "sha256": "620226dc550d88b30372e5b8fa2f817c4852901d0d68d1b3e48f3564ebac66be",
+      "target": {
+        "x": 685,
+        "y": 587,
+        "w": 100,
+        "h": 32
+      }
+    }
+  ]
+}

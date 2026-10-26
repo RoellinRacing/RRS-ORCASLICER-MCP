@@ -275,39 +275,50 @@ class NativeControls:
         top = max(top, bottom - footer_height)
         picture = self.desktop._api().screenshot().crop((left, top, right, bottom)).convert("RGB")
         pixels = picture.load()
-        colored = {}
-        for x in range(picture.width):
-            ys = [
-                y
-                for y in range(picture.height)
-                if (
-                    pixels[x, y][0] <= 50
-                    and 100 <= pixels[x, y][1] <= 190
-                    and 80 <= pixels[x, y][2] <= 180
-                )
-                or (max(pixels[x, y]) - min(pixels[x, y]) <= 3 and 210 <= pixels[x, y][0] <= 235)
-            ]
-            if len(ys) >= 12:
-                colored[x] = ys
-        groups = []
-        for x in sorted(colored):
-            if not groups or x > groups[-1][-1] + 1:
-                groups.append([])
-            groups[-1].append(x)
+        secondary_grey = (
+            phrase == "No"
+            and footer_height == 55
+            and expected_title in ("Orca Slicer info", "OrcaSlicer info")
+        )
+        pending = {
+            (x, y)
+            for x in range(picture.width)
+            for y in range(picture.height)
+            if (
+                pixels[x, y][0] <= 50
+                and 100 <= pixels[x, y][1] <= 190
+                and 80 <= pixels[x, y][2] <= 180
+            )
+            or (
+                secondary_grey
+                and max(pixels[x, y]) - min(pixels[x, y]) <= 3
+                and 210 <= pixels[x, y][0] <= 235
+            )
+        }
         matches = []
-        for group in groups:
-            x0, x1 = group[0], group[-1] + 1
-            ys = [y for x in group for y in colored[x]]
-            y0, y1 = min(ys), max(ys) + 1
-            if x1 - x0 < 50 or y1 - y0 < 20 or len(ys) < (x1 - x0) * (y1 - y0) * 0.45:
+        while pending:
+            component = []
+            stack = [pending.pop()]
+            while stack:
+                x, y = stack.pop()
+                component.append((x, y))
+                for adjacent in ((x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)):
+                    if adjacent in pending:
+                        pending.remove(adjacent)
+                        stack.append(adjacent)
+            # Separate actual connected buttons from field borders/radio marks,
+            # including marks directly above a button in the same X columns.
+            x0, x1 = min(x for x, _ in component), max(x for x, _ in component) + 1
+            y0, y1 = min(y for _, y in component), max(y for _, y in component) + 1
+            if x1 - x0 < 50 or y1 - y0 < 20 or len(component) < (x1 - x0) * (y1 - y0) * 0.45:
                 continue
             grey = (
-                sum(
+                secondary_grey
+                and sum(
                     max(pixels[x, y]) - min(pixels[x, y]) <= 3 and 210 <= pixels[x, y][0] <= 235
-                    for x in group
-                    for y in colored[x]
+                    for x, y in component
                 )
-                > len(ys) * 0.5
+                > len(component) * 0.5
             )
             inset = picture.crop((x0 + 5, y0 + 4, x1 - 5, y1 - 4)).convert("L")
             inset = ImageOps.expand(

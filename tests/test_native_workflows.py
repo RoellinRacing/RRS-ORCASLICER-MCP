@@ -542,3 +542,32 @@ def test_prepare_readiness_waits_for_loaded_sidebar_without_input(tmp_path, monk
     ui.words = lambda region=None: [word("Prepare")]
     with pytest.raises(ValueError, match="did not finish loading"):
         ui.wait_prepared(timeout=0)
+
+
+def test_primary_button_fallback_ignores_unrelated_grey_panels(tmp_path, monkeypatch):
+    from rrs_orcaslicer_mcp import native_ui
+
+    image_module = pytest.importorskip("PIL.Image")
+    picture = image_module.new("RGB", (400, 200), "white")
+    picture.paste((223, 223, 223), (10, 135, 180, 185))
+    picture.paste((0, 150, 136), (220, 150, 320, 185))
+    picture.paste((0, 150, 136), (250, 133, 263, 146))
+    ui = NativeControls(
+        types.SimpleNamespace(_api=lambda: types.SimpleNamespace(screenshot=lambda: picture)),
+        tmp_path,
+    )
+    ui.bounds = lambda: (0, 0, 400, 200)
+    ui.window_title = lambda: "Temperature calibration"
+
+    def missing(*a, **k):
+        raise ValueError("sparse OCR misses label")
+
+    ui.label = missing
+    clicked = []
+    ui.point_click = clicked.append
+    monkeypatch.setattr(
+        native_ui.subprocess, "run", lambda *a, **k: types.SimpleNamespace(stdout=b"OK")
+    )
+    ui.dialog_button("OK", "Temperature calibration")
+    assert len(clicked) == 1 and clicked[0]["x"] == 220
+    assert clicked[0]["y"] == 150 and clicked[0]["h"] == 35

@@ -229,3 +229,14 @@ checks, push, require the full combined native session and publish/verify 0.5.0.
 The exact real spiral prompt replay and 94 local tests passed. Static checks and
 bridge consistency passed. Source/business rules/actual partial native results and
 prompt replay are saved before the next full native run. No physical print started.
+
+82ecd65 native pilot exposed a selector regression before generator dispatch:
+allowing grey secondary controls globally polluted primary OK rectangle detection.
+Grey fallback is now allowed only for the exact spiral-info No route. Actual 2D
+connected components replace overlapping-X grouping, which also prevents a radio
+mark above Flow Ratio OK from stretching the click rectangle. Six real primary
+button replays plus the real spiral No replay passed; scripts/replay_native_buttons.py
+and native-primary-buttons-0.5.0.json retain the exact targets. A regression covers
+unrelated grey panels and a radio mark above the button. Next: require new full
+native acceptance after this isolated selector correction; do not release on the
+older failed pilot or on screenshot-only results.

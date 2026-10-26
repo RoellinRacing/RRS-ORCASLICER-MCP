@@ -262,3 +262,11 @@ Grey secondary-button rectangles receive cropped black-text OCR; geometry/color
 alone never authorizes a click. Thin grey separator lines cannot join buttons.
 The isolated GUI fixture waits for Filament/Process/Quality before moving/clicking
 the real MainFrame, avoiding interaction with a startup/splash frame.
+
+Grey fallback is restricted to the exact spiral-info No route with its narrow
+55-pixel button row. All primary calibration OK buttons retain teal-only fallback.
+Two-dimensional connected components identify actual buttons; unrelated grey panels,
+thin borders and separate radio marks above a button cannot merge into its bounds.
+Six actual primary-dialog screenshots and the separate spiral No screenshot are
+replayed without input; the synthetic regression includes a grey panel and a radio
+mark directly above a primary button.
