@@ -93,6 +93,11 @@ jobs:
         run: |
           version=$(python -c "import tomllib; print(tomllib.load(open('pyproject.toml','rb'))['project']['version'])")
           tag="v$version"
+          current=$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/main" --jq .object.sha)
+          if [[ "$current" != "$GITHUB_SHA" ]]; then
+            echo "A newer source commit exists; only release the current main branch."
+            exit 0
+          fi
           if gh release view "$tag" >/dev/null 2>&1; then
             echo "Release $tag already exists; keeping published assets immutable."
           else

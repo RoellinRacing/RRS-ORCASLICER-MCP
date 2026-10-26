@@ -1,4 +1,4 @@
-# 0.1.0
+# 0.1.1
 
 Standalone local stdio MCP bridge for an unmodified OrcaSlicer installation.
 

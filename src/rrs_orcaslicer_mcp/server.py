@@ -7,6 +7,7 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Any
 
+import anyio
 from mcp.server.fastmcp import FastMCP, Image
 
 from . import __version__, catalog, profiles, projects
@@ -36,9 +37,14 @@ def create_server() -> FastMCP:
 
     @asynccontextmanager
     async def lifespan(server):
-        yield {}
-        if engine:
-            await engine.close()
+        try:
+            yield {}
+        finally:
+            # Client disconnect may cancel the MCP task group. Shield cleanup so
+            # process termination and the final job checkpoint still complete.
+            with anyio.CancelScope(shield=True):
+                if engine:
+                    await engine.close()
 
     mcp = FastMCP(
         "RRS OrcaSlicer MCP",

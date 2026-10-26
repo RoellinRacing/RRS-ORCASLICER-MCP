@@ -1,15 +1,16 @@
-# Testnachweis für 0.1.0
+# Testnachweis für 0.1.1
 
 Prüfung am 26. Oktober 2026, Linux x86_64, Python 3.12.14, MCP SDK 1.30.0.
 
 ## Automatisierte Prüfungen
 
-13 Tests bestanden. Abgedeckt sind JSON-Erhalt unbekannter Werte, Revisionskonflikte,
+14 Tests bestanden. Abgedeckt sind JSON-Erhalt unbekannter Werte, Revisionskonflikte,
 Backups, Pfad-/Symlinkgrenzen, Profilvererbung und Zyklen, 3MF-Inhaltserhalt,
 Objektmetadaten, Entfernung veralteter Druckdaten, Prozessfehler, Warteschlange,
-Abbruch, Timeout, Wiederaufnahmestatus und echter MCP-stdio-Handshake mit Toolaufrufen.
+Abbruch, Timeout, Wiederaufnahmestatus und echter MCP-stdio-Handshake mit Toolaufrufen und Abbruch laufender Arbeit beim
+Trennen des MCP-Clients.
 `ruff check src scripts tests` ist fehlerfrei. Auch nach separater Installation des
-gebauten Wheels bestanden dieselben 13 Tests; siehe `evidence/wheel-tests.txt`.
+gebauten Wheels bestanden dieselben 14 Tests; siehe `evidence/wheel-tests.txt`.
 
 ## Echte OrcaSlicer-Engine
 
