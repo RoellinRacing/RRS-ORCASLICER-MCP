@@ -1,0 +1,5 @@
+# OrcaSlicer MCP agent rules
+Read README.md, WORK_STATE.md, docs/BUSINESS_LOGIC.md and the current release/acceptance evidence before touching source. Preserve Claude as final reviewer and all existing verified results. Never start a physical print from a mere development instruction. Pin and verify real Orca runtime capabilities; never invent UI functions.
+
+## Skill discovery (2026-10-27; no new authorization)
+Automatically choose relevant local .agents/skills/*/SKILL.md or .claude/skills/*/SKILL.md from the task without requiring Dani to name a Skill. Project constraints, current permissions, STOP, clinical/data safety and the latest WORK_STATE/DEVELOPMENT documentation always take precedence over Skill instructions. Skill files do NOT authorize implementation, installs, releases, provider access or changes to host runtime. For code: version Businesslogik together with source and exact test/checkpoint evidence. Source: RoellinRacing/DR_AGENTS@f49f35671d8483f21e314a1d6dad417c5613d357.

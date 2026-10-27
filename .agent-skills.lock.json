@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "central_repo": "RoellinRacing/DR_AGENTS",
+  "central_commit": "f49f35671d8483f21e314a1d6dad417c5613d357",
+  "skills": [
+    "engineering",
+    "release-review"
+  ],
+  "mirrors": [
+    ".agents/skills",
+    ".claude/skills"
+  ],
+  "installed_in_agent_runtime": false,
+  "host_automatic_discovery": "unverified; pending live host checks"
+}

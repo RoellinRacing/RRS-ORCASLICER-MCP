@@ -1,0 +1,2 @@
+# Claude Code automatic skill discovery
+Read AGENTS.md, project status and the task before working. Select fitting .claude/skills/*/SKILL.md automatically without a reminder from Dani, but project permission and STOP always win. Research/code/release Skills are guidance, not fresh authorization; maintain business logic, tests and checkpoints. No third-party software or browser profile installation by default.
