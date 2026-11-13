@@ -20,3 +20,10 @@ Local YAML parsing and semantic checks passed for all 12 maintenance workflows /
 Rollback: restore the original workflow blob above in a new commit after checking the current branch. Do not reset history, remove Releases or restore an old production database. The local account inventory and installer backup receipts are retained under outputs/github-storage-20261113 in the authorised operator workspace; no credentials are included in repository evidence.
 
 Keep future upload-artifact steps at 3 days. A justified diagnostic extension may use at most 7 days and must state why. Avoid uploading broad build directories or duplicate installed dependencies. Use same-run artifacts for job transport and Releases for durable product retrieval. Concurrent large builds can still exceed 500 MB; a retention period is not an account-wide byte reservation. Billing's included-storage display is not an exact live artifact-byte measurement.
+
+
+## Applied cleanup and final scope
+
+The owner-approved fixed manifest removed 160 artifacts from completed failed/cancelled runs (348,946,740 bytes). Runs 43408478313 and 43408813218 validate all metadata before deletion and verify disappearance. Initial immediate readback encountered GitHub propagation delay; the bounded continuation skipped missing IDs and only retried GET checks. Existing product releases/assets are preserved byte-for-byte. The temporary manual cleanup workflow is removed after successful verification; no persistent write job or new credential remains.
+
+Pushes affecting only docs/operations or the retired one-time cleanup workflow no longer launch the expensive native matrix. Any source, test, package, general documentation or CI change still triggers normal push CI. Pull-request, manual and weekly scheduled checks are unchanged. All jobs and commands are identical. This prevents maintenance receipts from generating duplicate engine evidence without suppressing product verification. Future artifact uploads retain the existing explicit 3-day expiry.

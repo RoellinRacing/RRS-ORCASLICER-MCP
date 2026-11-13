@@ -3,6 +3,9 @@ name: Test, verify OrcaSlicer and publish package
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - 'docs/operations/**'
+      - '.github/workflows/storage-cleanup-20261113.yml'
   pull_request:
   workflow_dispatch:
   schedule:
